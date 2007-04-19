@@ -31,7 +31,7 @@
 %define lib_glib_name   %mklibname %{glib_name} %{glib_major}
 %define lib_howl_name   %mklibname %{howl_name} %{howl_major}
 %define lib_qt3_name    %mklibname %{qt3_name}_ %{qt3_major}
-%define lib_qt4_name    %mklibname %{qt4_name}_ %{qt3_major}
+%define lib_qt4_name    %mklibname %{qt4_name}_ %{qt4_major}
 
 %define lib_dns_sd_old_name %mklibname %{dns_sd_old_name} 1
 %define lib_howl_old_name   %mklibname %{howl_old_name} 0
