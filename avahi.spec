@@ -57,6 +57,7 @@ Name: %{name}
 Version: %{version}
 Release: %{release}
 Source0: http://avahi.org/download/%{name}-%{version}.tar.bz2
+Patch0:	 avahi-0.6.18-inotify.patch
 License: LGPL
 Group: System/Servers
 Url: http://avahi.org/
@@ -281,6 +282,7 @@ Devel library for avahi-qt4.
 
 %prep
 %setup -q
+%patch0 -p1 -b .inotify
 
 %build
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
