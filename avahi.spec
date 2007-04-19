@@ -283,6 +283,7 @@ Devel library for avahi-qt4.
 %setup -q
 
 %build
+export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %configure2_5x \
 %if !%build_mono
     --disable-mono \
