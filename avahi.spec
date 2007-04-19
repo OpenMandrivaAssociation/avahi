@@ -11,6 +11,7 @@
 %define howl_name       %{name}-compat-howl
 %define qt3_name        %{name}-qt3
 %define qt4_name        %{name}-qt4
+%define ui_name         %{name}-ui
 
 %define dns_sd_old_name mDNSResponder
 %define howl_old_name   howl
@@ -23,6 +24,7 @@
 %define howl_major 0
 %define qt3_major 1
 %define qt4_major 1
+%define ui_major 0
 
 %define lib_client_name %mklibname %{client_name} %{client_major}
 %define lib_common_name %mklibname %{common_name} %{common_major}
@@ -32,6 +34,7 @@
 %define lib_howl_name   %mklibname %{howl_name} %{howl_major}
 %define lib_qt3_name    %mklibname %{qt3_name}_ %{qt3_major}
 %define lib_qt4_name    %mklibname %{qt4_name}_ %{qt4_major}
+%define lib_ui_name     %mklibname %{ui_name} %{qt3_major}
 
 %define lib_dns_sd_old_name %mklibname %{dns_sd_old_name} 1
 %define lib_howl_old_name   %mklibname %{howl_old_name} 0
@@ -280,6 +283,21 @@ Requires: %{lib_qt4_name} = %{version}
 Devel library for avahi-qt4.
 %endif
 
+%package -n %{lib_ui_name}
+Group: System/Libraries
+Summary: Library for avahi-ui
+%description -n %{lib_ui_name}
+Library for avahi-ui.
+
+%package -n %{lib_ui_name}-devel
+Group: Development/C
+Summary: Devel library for avahi-ui
+Provides: %{ui_name}-devel = %{version}-%{release}
+Provides: lib%{ui_name}-devel = %{version}-%{release}
+Requires: %{lib_ui_name} = %{version}
+%description -n %{lib_ui_name}-devel
+Devel library for avahi-ui.
+
 %prep
 %setup -q
 %patch0 -p1 -b .inotify
@@ -425,6 +443,9 @@ fi
 %files x11
 %defattr(-,root,root)
 %{_bindir}/%{name}-discover-standalone
+%{_bindir}/zssh
+%{_bindir}/zvnc
+%{_datadir}/applications/*.desktop
 
 %files python
 %defattr(-,root,root)
@@ -483,6 +504,10 @@ fi
 %defattr(-,root,root)
 %{_libdir}/lib%{name}-qt4.so.%{qt4_major}*
 %endif
+
+%files -n %{lib_ui_name}
+%defattr(-,root,root)
+%{_libdir}/lib%{name}-ui.so.%{ui_major}*
 
 %files -n %{lib_client_name}-devel
 %defattr(-,root,root)
@@ -550,4 +575,10 @@ fi
 %{_libdir}/pkgconfig/%{name}-qt4.pc
 %endif
 
-
+%files -n %{lib_ui_name}-devel
+%defattr(-,root,root)
+%{_includedir}/%{name}-ui
+%{_libdir}/lib%{name}-ui.a
+%attr(644,root,root) %{_libdir}/lib%{name}-ui.la
+%{_libdir}/lib%{name}-ui.so
+%{_libdir}/pkgconfig/%{name}-ui.pc
