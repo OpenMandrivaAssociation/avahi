@@ -1,5 +1,5 @@
 %define name avahi
-%define version 0.6.18
+%define version 0.6.19
 
 %define release %mkrel 1
 
@@ -61,6 +61,8 @@ Version: %{version}
 Release: %{release}
 Source0: http://avahi.org/download/%{name}-%{version}.tar.bz2
 Patch0:	 avahi-0.6.18-inotify.patch
+Patch1:	 avahi-0.6.19-fix-zssh-build.patch
+Patch2:	 avahi-0.6.19-fix-zssh-build-deps.patch
 License: LGPL
 Group: System/Servers
 Url: http://avahi.org/
@@ -73,6 +75,8 @@ BuildRequires:	libgdbm-devel
 BuildRequires:	libglade2.0-devel
 BuildRequires:	pygtk2.0
 BuildRequires:	qt3-devel
+# (blino) for Patch1 and Patch2
+BuildRequires:	automake
 %if %build_qt4
 BuildRequires:	qt4-devel
 %endif
@@ -301,6 +305,10 @@ Devel library for avahi-ui.
 %prep
 %setup -q
 %patch0 -p1 -b .inotify
+%patch1 -p1 -b .zssh_build
+%patch2 -p1 -b .zssh_build_deps
+# (blino) for Patch1 and Patch2
+./autogen.sh
 
 %build
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
@@ -326,7 +334,7 @@ ln -s avahi-compat-howl.pc %buildroot%_libdir/pkgconfig/howl.pc
 %if "%_lib" != "lib" && %build_mono
 mkdir -p %buildroot%_prefix/lib
 mv %buildroot%_libdir/mono %buildroot%_prefix/lib
-perl -pi -e "s/%_lib/lib/" %buildroot%_libdir/pkgconfig/avahi-sharp.pc
+perl -pi -e "s/%_lib/lib/" %buildroot%_libdir/pkgconfig/avahi-{,ui-}sharp.pc
 %endif
 
 %clean
@@ -443,9 +451,11 @@ fi
 %files x11
 %defattr(-,root,root)
 %{_bindir}/%{name}-discover-standalone
-%{_bindir}/zssh
-%{_bindir}/zvnc
+%{_bindir}/bssh
+%{_bindir}/bvnc
 %{_datadir}/applications/*.desktop
+%{_mandir}/man1/bssh.1*
+%{_mandir}/man1/bvnc.1*
 
 %files python
 %defattr(-,root,root)
@@ -463,12 +473,18 @@ fi
 %{_prefix}/lib/mono/%{name}-sharp/%{name}-sharp.dll
 %{_prefix}/lib/mono/gac/%{name}-sharp/
 %{_libdir}/pkgconfig/%{name}-sharp.pc
+%{_prefix}/lib/mono/%{name}-ui-sharp/%{name}-ui-sharp.dll
+%{_prefix}/lib/mono/gac/%{name}-ui-sharp/
+%{_libdir}/pkgconfig/%{name}-ui-sharp.pc
 
 %files sharp-doc
 %defattr(-,root,root)
 %{_usr}/lib/monodoc/sources/%{name}-sharp-docs.source
 %{_usr}/lib/monodoc/sources/%{name}-sharp-docs.tree
 %{_usr}/lib/monodoc/sources/%{name}-sharp-docs.zip
+%{_usr}/lib/monodoc/sources/%{name}-ui-sharp-docs.source
+%{_usr}/lib/monodoc/sources/%{name}-ui-sharp-docs.tree
+%{_usr}/lib/monodoc/sources/%{name}-ui-sharp-docs.zip
 %endif
 
 %files -n %{lib_client_name}
