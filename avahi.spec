@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.19
 
-%define release %mkrel 1
+%define release %mkrel 2
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -70,7 +70,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	daemon-devel
 BuildRequires:	dbus-devel
 BuildRequires:	dbus-python
-BuildRequires:	libexpat-devel
+BuildRequires:	libexpat-devel >= 2.0.1
 BuildRequires:	libgdbm-devel
 BuildRequires:	libglade2.0-devel
 BuildRequires:	pygtk2.0
