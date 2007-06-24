@@ -1,5 +1,5 @@
 %define name avahi
-%define version 0.6.19
+%define version 0.6.20
 
 %define release %mkrel 2
 
@@ -61,8 +61,6 @@ Version: %{version}
 Release: %{release}
 Source0: http://avahi.org/download/%{name}-%{version}.tar.bz2
 Patch0:	 avahi-0.6.18-inotify.patch
-Patch1:	 avahi-0.6.19-fix-zssh-build.patch
-Patch2:	 avahi-0.6.19-fix-zssh-build-deps.patch
 License: LGPL
 Group: System/Servers
 Url: http://avahi.org/
@@ -305,10 +303,6 @@ Devel library for avahi-ui.
 %prep
 %setup -q
 %patch0 -p1 -b .inotify
-%patch1 -p1 -b .zssh_build
-%patch2 -p1 -b .zssh_build_deps
-# (blino) for Patch1 and Patch2
-./autogen.sh
 
 %build
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
