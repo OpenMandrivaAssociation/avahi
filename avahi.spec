@@ -61,6 +61,7 @@ Version: %{version}
 Release: %{release}
 Source0: http://avahi.org/download/%{name}-%{version}.tar.bz2
 Patch0:	 avahi-0.6.18-inotify.patch
+Patch1:	 avahi-0.6.21-dbus-1.0.patch
 License: LGPL
 Group: System/Servers
 Url: http://avahi.org/
@@ -303,6 +304,7 @@ Devel library for avahi-ui.
 %prep
 %setup -q
 %patch0 -p1 -b .inotify
+%patch1 -p1 -b .dbus-1.0
 
 %build
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
