@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.21
 
-%define release %mkrel 3
+%define release %mkrel 4
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -142,6 +142,8 @@ It includes avahi-bookmarks and avahi-discover.
 Group: System/Libraries
 Summary: Mono bindings for Avahi
 BuildRequires: mono-devel mono-tools
+#gw this is needed by mono-find-requires:
+BuildRequires: avahi-ui-devel
 Requires: %lib_client_name = %version
 Requires: %lib_common_name = %version
 Requires: %lib_glib_name = %version
