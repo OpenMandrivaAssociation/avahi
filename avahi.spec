@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.21
 
-%define release %mkrel 2
+%define release %mkrel 3
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -27,14 +27,23 @@
 %define ui_major 0
 
 %define lib_client_name %mklibname %{client_name} %{client_major}
+%define develnameclient %mklibname -d %client_name
 %define lib_common_name %mklibname %{common_name} %{common_major}
+%define develnamecommon %mklibname -d %common_name
 %define lib_core_name   %mklibname %{core_name} %{core_major}
+%define develnamecore   %mklibname -d %core_name
 %define lib_dns_sd_name %mklibname %{dns_sd_name} %{dns_sd_major}
+%define develnamedns_sd %mklibname -d %dns_sd_name
 %define lib_glib_name   %mklibname %{glib_name} %{glib_major}
+%define develnameglib   %mklibname -d %glib_name
 %define lib_howl_name   %mklibname %{howl_name} %{howl_major}
+%define develnamehowl   %mklibname -d %howl_name
 %define lib_qt3_name    %mklibname %{qt3_name}_ %{qt3_major}
+%define develnameqt3    %mklibname -d %{qt3_name}
 %define lib_qt4_name    %mklibname %{qt4_name}_ %{qt4_major}
+%define develnameqt4	%mklibname -d %qt4_name
 %define lib_ui_name     %mklibname %{ui_name} %{qt3_major}
+%define develnameui     %mklibname -d %ui_name
 
 %define lib_dns_sd_old_name %mklibname %{dns_sd_old_name} 1
 %define lib_howl_old_name   %mklibname %{howl_old_name} 0
@@ -158,13 +167,15 @@ Requires: %{name} = %{version}
 %description -n %{lib_client_name}
 Library for avahi-client.
 
-%package -n %{lib_client_name}-devel
+%package -n %develnameclient
 Group: Development/C
 Summary: Devel library for avahi-client
 Provides: %{client_name}-devel = %{version}-%{release}
 Provides: lib%{client_name}-devel = %{version}-%{release}
 Requires: %{lib_client_name} = %{version}
-%description -n %{lib_client_name}-devel
+Obsoletes: %mklibname -d %client_name 3
+
+%description -n %develnameclient
 Devel library for avahi-client.
 
 %package -n %{lib_common_name}
@@ -173,13 +184,15 @@ Summary: Library for avahi-common
 %description -n %{lib_common_name}
 Library for avahi-common.
 
-%package -n %{lib_common_name}-devel
+%package -n %develnamecommon
 Group: Development/C
 Summary: Devel library for avahi-common
 Provides: %{common_name}-devel = %{version}-%{release}
 Provides: lib%{common_name}-devel = %{version}-%{release}
 Requires: %{lib_common_name} = %{version}
-%description -n %{lib_common_name}-devel
+Obsoletes: %mklibname -d %common_name 3
+
+%description -n %develnamecommon
 Devel library for avahi-common.
 
 %package -n %{lib_core_name}
@@ -188,13 +201,15 @@ Summary: Library for avahi-core
 %description -n %{lib_core_name}
 Library for avahi-core.
 
-%package -n %{lib_core_name}-devel
+%package -n %develnamecore
 Group: Development/C
 Summary: Devel library for avahi-core
 Provides: %{core_name}-devel = %{version}-%{release}
 Provides: lib%{core_name}-devel = %{version}-%{release}
 Requires: %{lib_core_name} = %{version}
-%description -n %{lib_core_name}-devel
+Obsoletes: %mklibname -d %core_name 5
+
+%description -n %develnamecore
 Devel library for avahi-core.
 
 %package -n %{lib_dns_sd_name}
@@ -205,7 +220,7 @@ Provides: %{lib_dns_sd_old_name}
 %description -n %{lib_dns_sd_name}
 Avahi compatibility library for libdns_sd
 
-%package -n %{lib_dns_sd_name}-devel
+%package -n %develnamedns_sd
 Group: Development/C
 Summary: Avahi devel compatibility library for libdns_sd
 Provides: %{dns_sd_name}-devel = %{version}-%{release}
@@ -215,7 +230,9 @@ Obsoletes: %{lib_dns_sd_old_name}-devel
 Provides: %{lib_dns_sd_old_name}-devel
 Provides: %{dns_sd_old_name}-devel = %{version}-%{release}
 Provides: lib%{dns_sd_old_name}-devel = %{version}-%{release}
-%description -n %{lib_dns_sd_name}-devel
+Obsoletes: %mklibname -d %dns_sd_name 1
+
+%description -n %develnamedns_sd
 Avahi devel compatibility library for libdns_sd.
 
 %package -n %{lib_glib_name}
@@ -224,13 +241,15 @@ Summary: Library for avahi-glib
 %description -n %{lib_glib_name}
 Library for avahi-glib.
 
-%package -n %{lib_glib_name}-devel
+%package -n %develnameglib
 Group: Development/C
 Summary: Devel library for avahi-glib
 Provides: %{glib_name}-devel = %{version}-%{release}
 Provides: lib%{glib_name}-devel = %{version}-%{release}
 Requires: %{lib_glib_name} = %{version}
-%description -n %{lib_glib_name}-devel
+Obsoletes: %mklibname -d %glib_name 1
+
+%description -n %develnameglib
 Devel library for avahi-glib.
 
 %package -n %{lib_howl_name}
@@ -241,7 +260,7 @@ Provides: %{lib_howl_old_name} = %{lib_howl_fake_EVR}
 %description -n %{lib_howl_name}
 Avahi compatibility library for howl.
 
-%package -n %{lib_howl_name}-devel
+%package -n %develnamehowl
 Group: Development/C
 Summary: Avahi devel compatibility library for libdns_sd for howl
 Provides: %{howl_name}-devel = %{version}-%{release}
@@ -251,7 +270,10 @@ Obsoletes: %{lib_howl_old_name}-devel
 Provides: %{lib_howl_old_name}-devel = %{lib_howl_fake_EVR}
 Provides: %{howl_old_name}-devel = %{version}-%{release}
 Provides: lib%{howl_old_name}-devel = %{version}-%{release}
-%description -n %{lib_howl_name}-devel
+Obsoletes: %mklibname -d %howl_name 0
+
+
+%description -n %develnamehowl
 Avahi devel compatibility library for libdns_sd for howl.
 
 %package -n %{lib_qt3_name}
@@ -260,13 +282,15 @@ Summary: Library for avahi-qt3
 %description -n %{lib_qt3_name}
 Library for avahi-qt3.
 
-%package -n %{lib_qt3_name}-devel
+%package -n %develnameqt3
 Group: Development/C
 Summary: Devel library for avahi-qt3
 Provides: %{qt3_name}-devel = %{version}-%{release}
 Provides: lib%{qt3_name}-devel = %{version}-%{release}
 Requires: %{lib_qt3_name} = %{version}
-%description -n %{lib_qt3_name}-devel
+Obsoletes: %mklibname -d %qt3_name 1
+
+%description -n %{develnameqt3}
 Devel library for avahi-qt3.
 
 %if %build_qt4
@@ -276,13 +300,15 @@ Summary: Library for avahi-qt4
 %description -n %{lib_qt4_name}
 Library for avahi-qt4.
 
-%package -n %{lib_qt4_name}-devel
+%package -n %develnameqt4
 Group: Development/C
 Summary: Devel library for avahi-qt4
 Provides: %{qt4_name}-devel = %{version}-%{release}
 Provides: lib%{qt4_name}-devel = %{version}-%{release}
 Requires: %{lib_qt4_name} = %{version}
-%description -n %{lib_qt4_name}-devel
+Obsoletes: %mklibname -d %qt4_name 1
+
+%description -n %develnameqt4
 Devel library for avahi-qt4.
 %endif
 
@@ -292,18 +318,20 @@ Summary: Library for avahi-ui
 %description -n %{lib_ui_name}
 Library for avahi-ui.
 
-%package -n %{lib_ui_name}-devel
+%package -n %develnameui
 Group: Development/C
 Summary: Devel library for avahi-ui
 Provides: %{ui_name}-devel = %{version}-%{release}
 Provides: lib%{ui_name}-devel = %{version}-%{release}
 Requires: %{lib_ui_name} = %{version}
-%description -n %{lib_ui_name}-devel
+Obsoletes: %mklibname -d %{ui_name} 0
+
+%description -n %develnameui
 Devel library for avahi-ui.
 
 %prep
 %setup -q
-%patch0 -p1 -b .inotify
+#%patch0 -p1 -b .inotify
 %patch1 -p1 -b .dbus-1.0
 
 %build
@@ -522,7 +550,7 @@ fi
 %defattr(-,root,root)
 %{_libdir}/lib%{name}-ui.so.%{ui_major}*
 
-%files -n %{lib_client_name}-devel
+%files -n %develnameclient
 %defattr(-,root,root)
 %{_includedir}/%{name}-client
 %{_libdir}/lib%{name}-client.a
@@ -530,14 +558,14 @@ fi
 %{_libdir}/lib%{name}-client.so
 %{_libdir}/pkgconfig/%{name}-client.pc
 
-%files -n %{lib_common_name}-devel
+%files -n %develnamecommon
 %defattr(-,root,root)
 %{_includedir}/%{name}-common
 %{_libdir}/lib%{name}-common.a
 %attr(644,root,root) %{_libdir}/lib%{name}-common.la
 %{_libdir}/lib%{name}-common.so
 
-%files -n %{lib_core_name}-devel
+%files -n %develnamecore
 %defattr(-,root,root)
 %{_includedir}/%{name}-core
 %{_libdir}/lib%{name}-core.a
@@ -545,7 +573,7 @@ fi
 %{_libdir}/lib%{name}-core.so
 %{_libdir}/pkgconfig/%{name}-core.pc
 
-%files -n %{lib_dns_sd_name}-devel
+%files -n %develnamedns_sd
 %defattr(-,root,root)
 %{_includedir}/%{name}-compat-libdns_sd
 %{_libdir}/libdns_sd.a
@@ -553,7 +581,7 @@ fi
 %{_libdir}/libdns_sd.so
 %{_libdir}/pkgconfig/%{name}-compat-libdns_sd.pc
 
-%files -n %{lib_glib_name}-devel
+%files -n %develnameglib
 %defattr(-,root,root)
 %{_includedir}/%{name}-glib
 %{_libdir}/lib%{name}-glib.a
@@ -561,7 +589,7 @@ fi
 %{_libdir}/lib%{name}-glib.so
 %{_libdir}/pkgconfig/%{name}-glib.pc
 
-%files -n %{lib_howl_name}-devel
+%files -n %develnamehowl
 %defattr(-,root,root)
 %{_includedir}/%{name}-compat-howl
 %{_libdir}/libhowl.a
@@ -570,7 +598,7 @@ fi
 %{_libdir}/pkgconfig/%{name}-compat-howl.pc
 %{_libdir}/pkgconfig/howl.pc
 
-%files -n %{lib_qt3_name}-devel
+%files -n %develnameqt3
 %defattr(-,root,root)
 %{_includedir}/%{name}-qt3
 %{_libdir}/lib%{name}-qt3.a
@@ -579,7 +607,7 @@ fi
 %{_libdir}/pkgconfig/%{name}-qt3.pc
 
 %if %build_qt4
-%files -n %{lib_qt4_name}-devel
+%files -n %develnameqt4
 %defattr(-,root,root)
 %{_includedir}/%{name}-qt4
 %{_libdir}/lib%{name}-qt4.a
@@ -588,7 +616,7 @@ fi
 %{_libdir}/pkgconfig/%{name}-qt4.pc
 %endif
 
-%files -n %{lib_ui_name}-devel
+%files -n %develnameui
 %defattr(-,root,root)
 %{_includedir}/%{name}-ui
 %{_libdir}/lib%{name}-ui.a
