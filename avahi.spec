@@ -74,7 +74,6 @@ Patch1:	 avahi-0.6.21-dbus-1.0.patch
 License: LGPL
 Group: System/Servers
 Url: http://avahi.org/
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	daemon-devel
 BuildRequires:	dbus-devel
 BuildRequires:	dbus-python
