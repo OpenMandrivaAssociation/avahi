@@ -1,13 +1,14 @@
 %define name avahi
-%define version 0.6.21
+%define version 0.6.22
 
-%define release %mkrel 5
+%define release %mkrel 1
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
 %define core_name       %{name}-core
 %define dns_sd_name     %{name}-compat-libdns_sd
 %define glib_name       %{name}-glib
+%define gobject_name    %name-gobject
 %define howl_name       %{name}-compat-howl
 %define qt3_name        %{name}-qt3
 %define qt4_name        %{name}-qt4
@@ -21,6 +22,7 @@
 %define core_major 5
 %define dns_sd_major 1
 %define glib_major 1
+%define gobject_major 0
 %define howl_major 0
 %define qt3_major 1
 %define qt4_major 1
@@ -36,6 +38,8 @@
 %define develnamedns_sd %mklibname -d %dns_sd_name
 %define lib_glib_name   %mklibname %{glib_name} %{glib_major}
 %define develnameglib   %mklibname -d %glib_name
+%define lib_gobject_name   %mklibname %{gobject_name} %{gobject_major}
+%define develnamegobject   %mklibname -d %gobject_name
 %define lib_howl_name   %mklibname %{howl_name} %{howl_major}
 %define develnamehowl   %mklibname -d %howl_name
 %define lib_qt3_name    %mklibname %{qt3_name}_ %{qt3_major}
@@ -68,9 +72,7 @@ Summary: Avahi service discovery (mDNS/DNS-SD) suite
 Name: %{name}
 Version: %{version}
 Release: %{release}
-Source0: http://avahi.org/download/%{name}-%{version}.tar.bz2
-Patch0:	 avahi-0.6.18-inotify.patch
-Patch1:	 avahi-0.6.21-dbus-1.0.patch
+Source0: http://avahi.org/download/%{name}-%{version}.tar.gz
 License: LGPL
 Group: System/Servers
 Url: http://avahi.org/
@@ -82,8 +84,6 @@ BuildRequires:	libgdbm-devel
 BuildRequires:	libglade2.0-devel
 BuildRequires:	pygtk2.0
 BuildRequires:	qt3-devel
-# (blino) for Patch1 and Patch2
-BuildRequires:	automake
 %if %build_qt4
 BuildRequires:	qt4-devel
 %endif
@@ -253,6 +253,22 @@ Obsoletes: %mklibname -d %glib_name 1
 %description -n %develnameglib
 Devel library for avahi-glib.
 
+%package -n %{lib_gobject_name}
+Group: System/Libraries
+Summary: Library for avahi-gobject
+%description -n %{lib_gobject_name}
+Library for avahi-gobject.
+
+%package -n %develnamegobject
+Group: Development/C
+Summary: Devel library for avahi-gobject
+Provides: %{gobject_name}-devel = %{version}-%{release}
+Provides: lib%{gobject_name}-devel = %{version}-%{release}
+Requires: %{lib_gobject_name} = %{version}
+
+%description -n %develnamegobject
+Devel library for avahi-gobject.
+
 %package -n %{lib_howl_name}
 Group: System/Libraries
 Summary: Avahi compatibility library for howl
@@ -332,8 +348,6 @@ Devel library for avahi-ui.
 
 %prep
 %setup -q
-#%patch0 -p1 -b .inotify
-%patch1 -p1 -b .dbus-1.0
 
 %build
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
@@ -361,6 +375,8 @@ mkdir -p %buildroot%_prefix/lib
 mv %buildroot%_libdir/mono %buildroot%_prefix/lib
 perl -pi -e "s/%_lib/lib/" %buildroot%_libdir/pkgconfig/avahi-{,ui-}sharp.pc
 %endif
+
+%find_lang avahi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -398,6 +414,9 @@ rm -rf $RPM_BUILD_ROOT
 %post -n %{lib_glib_name} -p /sbin/ldconfig
 %postun -n %{lib_glib_name} -p /sbin/ldconfig
 
+%post -n %{lib_gobject_name} -p /sbin/ldconfig
+%postun -n %{lib_gobject_name} -p /sbin/ldconfig
+
 %post -n %{lib_howl_name} -p /sbin/ldconfig
 %postun -n %{lib_howl_name} -p /sbin/ldconfig
 
@@ -417,7 +436,7 @@ if [ "$1" = "0" -a -x %_bindir/monodoc ]; then %_bindir/monodoc --make-index > /
 fi
 %endif
 
-%files
+%files -f avahi.lang
 %defattr(-,root,root)
 %dir %{_sysconfdir}/%{name}/
 %dir %{_sysconfdir}/%{name}/services/
@@ -449,7 +468,6 @@ fi
 %{_datadir}/%{name}/introspection/ServiceResolver.introspect
 %{_datadir}/%{name}/introspection/ServiceTypeBrowser.introspect
 %{_datadir}/%{name}/service-types
-%{_datadir}/%{name}/service-types.db
 %{_mandir}/man1/%{name}-browse-domains.1*
 %{_mandir}/man1/%{name}-browse.1*
 %{_mandir}/man1/%{name}-publish.1*
@@ -464,6 +482,8 @@ fi
 %{_mandir}/man5/%{name}.service.5*
 %{_mandir}/man8/%{name}-daemon.8*
 %{_mandir}/man8/avahi-autoipd*
+%dir %_libdir/avahi
+%_libdir/avahi/service-types.db
 
 %files dnsconfd
 %defattr(-,root,root)
@@ -476,6 +496,7 @@ fi
 %files x11
 %defattr(-,root,root)
 %{_bindir}/%{name}-discover-standalone
+%{_bindir}/bshell
 %{_bindir}/bssh
 %{_bindir}/bvnc
 %{_datadir}/applications/bssh.desktop
@@ -488,6 +509,7 @@ fi
 %{_bindir}/%{name}-bookmarks
 %{_bindir}/%{name}-discover
 %{py_puresitedir}/%{name}/*.py*
+%{py_puresitedir}/avahi_discover/
 %{_datadir}/applications/%{name}-discover.desktop
 %{_datadir}/%{name}/interfaces/%{name}-discover.glade
 %{_mandir}/man1/%{name}-discover.1*
@@ -532,6 +554,10 @@ fi
 %files -n %{lib_glib_name}
 %defattr(-,root,root)
 %{_libdir}/lib%{name}-glib.so.%{glib_major}*
+
+%files -n %{lib_gobject_name}
+%defattr(-,root,root)
+%{_libdir}/lib%{name}-gobject.so.%{gobject_major}*
 
 %files -n %{lib_howl_name}
 %defattr(-,root,root)
@@ -589,6 +615,15 @@ fi
 %attr(644,root,root) %{_libdir}/lib%{name}-glib.la
 %{_libdir}/lib%{name}-glib.so
 %{_libdir}/pkgconfig/%{name}-glib.pc
+
+%files -n %develnamegobject
+%defattr(-,root,root)
+%{_includedir}/%{name}-gobject
+%{_libdir}/lib%{name}-gobject.a
+%attr(644,root,root) %{_libdir}/lib%{name}-gobject.la
+%{_libdir}/lib%{name}-gobject.so
+%{_libdir}/pkgconfig/%{name}-gobject.pc
+
 
 %files -n %develnamehowl
 %defattr(-,root,root)
