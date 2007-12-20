@@ -76,6 +76,7 @@ Source0: http://avahi.org/download/%{name}-%{version}.tar.gz
 License: LGPL
 Group: System/Servers
 Url: http://avahi.org/
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	daemon-devel
 BuildRequires:	dbus-devel
 BuildRequires:	dbus-python
