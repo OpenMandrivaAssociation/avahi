@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.22
 
-%define release %mkrel 1
+%define release %mkrel 2
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -306,7 +306,7 @@ Summary: Devel library for avahi-qt3
 Provides: %{qt3_name}-devel = %{version}-%{release}
 Provides: lib%{qt3_name}-devel = %{version}-%{release}
 Requires: %{lib_qt3_name} = %{version}
-Obsoletes: %mklibname -d %qt3_name 1
+Obsoletes: %mklibname -d %{qt3_name}_ 1
 
 %description -n %{develnameqt3}
 Devel library for avahi-qt3.
@@ -324,7 +324,7 @@ Summary: Devel library for avahi-qt4
 Provides: %{qt4_name}-devel = %{version}-%{release}
 Provides: lib%{qt4_name}-devel = %{version}-%{release}
 Requires: %{lib_qt4_name} = %{version}
-Obsoletes: %mklibname -d %qt4_name 1
+Obsoletes: %mklibname -d %{qt4_name}_ 1
 
 %description -n %develnameqt4
 Devel library for avahi-qt4.
@@ -342,7 +342,7 @@ Summary: Devel library for avahi-ui
 Provides: %{ui_name}-devel = %{version}-%{release}
 Provides: lib%{ui_name}-devel = %{version}-%{release}
 Requires: %{lib_ui_name} = %{version}
-Obsoletes: %mklibname -d %{ui_name} 0
+Obsoletes: %mklibname -d %{ui_name} 1
 
 %description -n %develnameui
 Devel library for avahi-ui.
