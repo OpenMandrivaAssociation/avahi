@@ -165,7 +165,7 @@ Monodoc format.
 %package -n %{lib_client_name}
 Group: System/Libraries
 Summary: Library for avahi-client
-Requires: %{name} = %{version}
+Requires: %{name} >= %{version}
 %description -n %{lib_client_name}
 Library for avahi-client.
 
