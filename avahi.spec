@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.22
 
-%define release %mkrel 2
+%define release %mkrel 3
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -384,9 +384,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 %_pre_useradd %{name} %{_var}/%{name} /bin/false
+%_pre_useradd %{name}-autoipd %{_var}/%{name} /bin/false
 
 %postun
 %_postun_userdel %{name}
+%_postun_userdel %{name}-autoipd
 
 %post
 %_post_service %{name}-daemon
