@@ -90,6 +90,8 @@ BuildRequires:	qt3-devel
 %if %build_qt4
 BuildRequires:	qt4-devel
 %endif
+#needed by autoreconf
+BuildRequires: intltool
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
 Requires(post): rpm-helper
