@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.22
 
-%define release %mkrel 3
+%define release %mkrel 4
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
