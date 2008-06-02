@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.22
 
-%define release %mkrel 4
+%define release %mkrel 5
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -73,6 +73,8 @@ Name: %{name}
 Version: %{version}
 Release: %{release}
 Source0: http://avahi.org/download/%{name}-%{version}.tar.gz
+# (fc) 0.6.22-5mdv fix typo in Makefile.am (SVN)
+Patch0:	avahi-0.6.22-fixtypo.patch
 License: LGPL
 Group: System/Servers
 Url: http://avahi.org/
@@ -349,6 +351,10 @@ Devel library for avahi-ui.
 
 %prep
 %setup -q
+%patch0 -p1 -b .fixtypo
+
+#needed by patch0
+autoreconf
 
 %build
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
@@ -361,7 +367,6 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %endif
   --localstatedir=%{_var} \
   --with-avahi-priv-access-group="avahi" \
-  --with-dbus-system-address="unix:path=%{_var}/run/dbus/system_dbus_socket" \
   --enable-compat-libdns_sd \
   --enable-compat-howl
 %make
