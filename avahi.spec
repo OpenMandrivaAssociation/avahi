@@ -409,33 +409,69 @@ rm -rf $RPM_BUILD_ROOT
 %preun dnsconfd
 %_preun_service %{name}-dnsconfd
 
+%if %mdkversion < 200900
 %post -n %{lib_client_name} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{lib_client_name} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n %{lib_common_name} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{lib_common_name} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n %{lib_core_name} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{lib_core_name} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n %{lib_dns_sd_name} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{lib_dns_sd_name} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n %{lib_glib_name} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{lib_glib_name} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n %{lib_gobject_name} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{lib_gobject_name} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n %{lib_howl_name} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{lib_howl_name} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n %{lib_qt3_name} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{lib_qt3_name} -p /sbin/ldconfig
+%endif
 
 %if %build_qt4
+%if %mdkversion < 200900
 %post -n %{lib_qt4_name} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{lib_qt4_name} -p /sbin/ldconfig
+%endif
 %endif
 
 %if %build_mono
