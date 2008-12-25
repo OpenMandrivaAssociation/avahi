@@ -19,7 +19,7 @@
 
 %define client_major 3
 %define common_major 3
-%define core_major 5
+%define core_major 6
 %define dns_sd_major 1
 %define glib_major 1
 %define gobject_major 0
