@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.25
 
-%define release %mkrel 2
+%define release %mkrel 3
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -56,6 +56,10 @@
 %define build_mono 1
 %{?_with_mono: %{expand: %%global build_mono 1}} 
 %{?_without_mono: %{expand: %%global build_mono 0}} 
+
+%ifarch %arm %mips
+%define build_mono 0
+%endif
 
 %define build_qt4 1
 %{?_with_qt4: %{expand: %%global build_qt4 1}}
