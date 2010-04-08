@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.25
 
-%define release %mkrel 4
+%define release %mkrel 5
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -77,6 +77,7 @@ Name: %{name}
 Version: %{version}
 Release: %{release}
 Source0: http://avahi.org/download/%{name}-%{version}.tar.gz
+Source1: avahi-hostname.sh
 Patch0: avahi-0.6.25-fix-chroot.patch
 License: LGPLv2+
 Group: System/Servers
@@ -107,6 +108,7 @@ Obsoletes: tmdns
 Provides: tmdns
 Obsoletes: mDNSResponder
 Provides: mDNSResponder
+Suggests: nss_mdns
 
 %description
 Avahi is a system which facilitates service discovery on a local
@@ -140,6 +142,7 @@ Group: System/Libraries
 Summary: Python bindings and utilities for Avahi
 Requires: pygtk2.0-libglade python-twisted-core
 Requires: python-twisted-web dbus-python avahi 
+Requires: %{name}-x11
 %description python
 Python bindings and utilities for Avahi.
 It includes avahi-bookmarks and avahi-discover.
@@ -357,6 +360,7 @@ Devel library for avahi-ui.
 %prep
 %setup -q
 %patch0 -p1 -b fix-chroot
+cp %{SOURCE1} avahi-hostname.sh
 
 %build
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
@@ -383,6 +387,10 @@ mkdir -p %buildroot%_prefix/lib
 mv %buildroot%_libdir/mono %buildroot%_prefix/lib
 perl -pi -e "s/%_lib/lib/" %buildroot%_libdir/pkgconfig/avahi-{,ui-}sharp.pc
 %endif
+
+# install hostname.d hook
+mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/
+install -m755 avahi-hostname.sh $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 
 %find_lang avahi
 
@@ -492,6 +500,7 @@ fi
 %config(noreplace) %{_sysconfdir}/%{name}/services/sftp-ssh.service
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/%{name}-dbus.conf
 %{_initrddir}/%{name}-daemon
+%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 %{_bindir}/%{name}-browse
 %{_bindir}/%{name}-browse-domains
 %{_bindir}/%{name}-publish
@@ -549,6 +558,8 @@ fi
 %{_datadir}/applications/bvnc.desktop
 %{_mandir}/man1/bssh.1*
 %{_mandir}/man1/bvnc.1*
+%{_datadir}/applications/%{name}-discover.desktop
+%{_datadir}/%{name}/interfaces/%{name}-discover.glade
 
 %files python
 %defattr(-,root,root)
@@ -556,8 +567,6 @@ fi
 %{_bindir}/%{name}-discover
 %{py_puresitedir}/%{name}/*.py*
 %{py_puresitedir}/avahi_discover/
-%{_datadir}/applications/%{name}-discover.desktop
-%{_datadir}/%{name}/interfaces/%{name}-discover.glade
 %{_mandir}/man1/%{name}-discover.1*
 %{_mandir}/man1/%{name}-bookmarks.1*
 
