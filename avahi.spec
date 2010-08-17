@@ -1,7 +1,7 @@
 %define name avahi
-%define version 0.6.25
+%define version 0.6.27
 
-%define release %mkrel 5
+%define release %mkrel 1
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -19,7 +19,7 @@
 
 %define client_major 3
 %define common_major 3
-%define core_major 6
+%define core_major 7
 %define dns_sd_major 1
 %define glib_major 1
 %define gobject_major 0
@@ -78,7 +78,7 @@ Version: %{version}
 Release: %{release}
 Source0: http://avahi.org/download/%{name}-%{version}.tar.gz
 Source1: avahi-hostname.sh
-Patch0: avahi-0.6.25-fix-chroot.patch
+#Patch0: avahi-0.6.25-fix-chroot.patch
 License: LGPLv2+
 Group: System/Servers
 Url: http://avahi.org/
@@ -91,6 +91,7 @@ BuildRequires:	libgdbm-devel
 BuildRequires:	libglade2.0-devel
 BuildRequires:	pygtk2.0
 BuildRequires:	qt3-devel
+BuildRequires:  libcap-devel
 %if %build_qt4
 BuildRequires:	qt4-devel
 %endif
@@ -359,7 +360,7 @@ Devel library for avahi-ui.
 
 %prep
 %setup -q
-%patch0 -p1 -b fix-chroot
+#%patch0 -p1 -b fix-chroot
 cp %{SOURCE1} avahi-hostname.sh
 
 %build
@@ -374,13 +375,16 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
   --localstatedir=%{_var} \
   --with-avahi-priv-access-group="avahi" \
   --enable-compat-libdns_sd \
-  --enable-compat-howl
+  --enable-compat-howl \
+  --enable-introspection=no \
+  --disable-gtk3
+
 %make
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 %makeinstall_std
-rm -f $RPM_BUILD_ROOT/%{_sysconfdir}/%{name}/services/ssh.service
+rm -f %{buildroot}/%{_sysconfdir}/%{name}/services/ssh.service
 ln -s avahi-compat-howl.pc %buildroot%_libdir/pkgconfig/howl.pc
 %if "%_lib" != "lib" && %build_mono
 mkdir -p %buildroot%_prefix/lib
@@ -389,13 +393,13 @@ perl -pi -e "s/%_lib/lib/" %buildroot%_libdir/pkgconfig/avahi-{,ui-}sharp.pc
 %endif
 
 # install hostname.d hook
-mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/
-install -m755 avahi-hostname.sh $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
+mkdir -p %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/
+install -m755 avahi-hostname.sh %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 
 %find_lang avahi
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %pre
 %_pre_useradd %{name} %{_var}/%{name} /bin/false
@@ -513,15 +517,16 @@ fi
 %{_sbindir}/%{name}-daemon
 %{_sbindir}/avahi-autoipd
 %{_datadir}/%{name}/%{name}-service.dtd
-%{_datadir}/%{name}/introspection/AddressResolver.introspect
-%{_datadir}/%{name}/introspection/DomainBrowser.introspect
-%{_datadir}/%{name}/introspection/EntryGroup.introspect
-%{_datadir}/%{name}/introspection/HostNameResolver.introspect
-%{_datadir}/%{name}/introspection/RecordBrowser.introspect
-%{_datadir}/%{name}/introspection/Server.introspect
-%{_datadir}/%{name}/introspection/ServiceBrowser.introspect
-%{_datadir}/%{name}/introspection/ServiceResolver.introspect
-%{_datadir}/%{name}/introspection/ServiceTypeBrowser.introspect
+%{_datadir}/dbus-1/interfaces/*.xml
+#%{_datadir}/%{name}/introspection/AddressResolver.introspect
+#%{_datadir}/%{name}/introspection/DomainBrowser.introspect
+#%{_datadir}/%{name}/introspection/EntryGroup.introspect
+#%{_datadir}/%{name}/introspection/HostNameResolver.introspect
+#%{_datadir}/%{name}/introspection/RecordBrowser.introspect
+#%{_datadir}/%{name}/introspection/Server.introspect
+#%{_datadir}/%{name}/introspection/ServiceBrowser.introspect
+#%{_datadir}/%{name}/introspection/ServiceResolver.introspect
+#%{_datadir}/%{name}/introspection/ServiceTypeBrowser.introspect
 %{_datadir}/%{name}/service-types
 %{_mandir}/man1/%{name}-browse-domains.1*
 %{_mandir}/man1/%{name}-browse.1*
@@ -559,7 +564,7 @@ fi
 %{_mandir}/man1/bssh.1*
 %{_mandir}/man1/bvnc.1*
 %{_datadir}/applications/%{name}-discover.desktop
-%{_datadir}/%{name}/interfaces/%{name}-discover.glade
+%{_datadir}/%{name}/interfaces/%{name}-discover.ui
 
 %files python
 %defattr(-,root,root)
