@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.27
 
-%define release %mkrel 3
+%define release %mkrel 4
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -97,6 +97,7 @@ BuildRequires:	qt4-devel
 %endif
 #needed by autoreconf
 BuildRequires: intltool
+BuildRequires: python-devel
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
 Requires(post): rpm-helper
