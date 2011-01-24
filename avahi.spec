@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.28
 
-%define release %mkrel 1
+%define release %mkrel 2
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -72,6 +72,8 @@
 %define build_qt4 0
 %endif
 
+%define _with_systemd 1
+
 Summary: Avahi service discovery (mDNS/DNS-SD) suite
 Name: %{name}
 Version: %{version}
@@ -97,6 +99,9 @@ BuildRequires:	qt4-devel
 %endif
 #needed by autoreconf
 BuildRequires: intltool
+%if %{_with_systemd}
+BuildRequires:	systemd-units
+%endif
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
 Requires(post): rpm-helper
@@ -377,6 +382,9 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
   --enable-compat-libdns_sd \
   --enable-compat-howl \
   --enable-introspection=no \
+%if !%{_with_systemd}
+  --without-systemdsystemunitdir \
+%endif
   --disable-gtk3
 
 %make
@@ -544,6 +552,12 @@ fi
 %{_mandir}/man8/avahi-autoipd*
 %dir %_libdir/avahi
 %_libdir/avahi/service-types.db
+%if %{_with_systemd}
+/lib/systemd/system/avahi-daemon.service
+/lib/systemd/system/avahi-daemon.socket
+/lib/systemd/system/avahi-dnsconfd.service
+%{_datadir}/dbus-1/system-services/org.freedesktop.Avahi.service
+%endif
 
 %files dnsconfd
 %defattr(-,root,root)
