@@ -1,7 +1,7 @@
 %define name avahi
 %define version 0.6.28
 
-%define release %mkrel 2
+%define release %mkrel 3
 
 %define client_name     %{name}-client
 %define common_name     %{name}-common
@@ -80,7 +80,7 @@ Version: %{version}
 Release: %{release}
 Source0: http://avahi.org/download/%{name}-%{version}.tar.gz
 Source1: avahi-hostname.sh
-#Patch0: avahi-0.6.25-fix-chroot.patch
+Patch0: avahi-0.6.28-CVE-2011-1002.diff
 License: LGPLv2+
 Group: System/Servers
 Url: http://avahi.org/
@@ -365,7 +365,8 @@ Devel library for avahi-ui.
 
 %prep
 %setup -q
-#%patch0 -p1 -b fix-chroot
+%patch0 -p0 -b .CVE-2011-1002
+
 cp %{SOURCE1} avahi-hostname.sh
 
 %build
