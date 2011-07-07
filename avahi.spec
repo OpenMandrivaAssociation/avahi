@@ -61,18 +61,24 @@
 %define build_mono 0
 %endif
 
+%define build_qt3 1
+%{?_with_qt3: %{expand: %%global build_qt3 1}}
+%{?_without_qt3: %{expand: %%global build_qt3 0}}
+
 %define build_qt4 1
 %{?_with_qt4: %{expand: %%global build_qt4 1}}
 %{?_without_qt4: %{expand: %%global build_qt4 0}}
+
+%define _with_systemd 1
 
 %define build_bootstrap 0
 %{?_with_bootstrap: %{expand: %%global build_bootstrap 1}}
 %if %{build_bootstrap}
 %define build_mono 0
+%define build_qt3 0
 %define build_qt4 0
+%define _with_systemd 0
 %endif
-
-%define _with_systemd 1
 
 Summary: Avahi service discovery (mDNS/DNS-SD) suite
 Name: %{name}
@@ -91,7 +97,9 @@ BuildRequires:	libexpat-devel >= 2.0.1
 BuildRequires:	libgdbm-devel
 BuildRequires:	libglade2.0-devel
 BuildRequires:	pygtk2.0
+%if %build_qt3
 BuildRequires:	qt3-devel
+%endif
 BuildRequires:  libcap-devel
 %if %build_qt4
 BuildRequires:	qt4-devel
@@ -309,6 +317,7 @@ Obsoletes: %mklibname -d %howl_name 0
 %description -n %develnamehowl
 Avahi devel compatibility library for libdns_sd for howl.
 
+%if %build_qt3
 %package -n %{lib_qt3_name}
 Group: System/Libraries
 Summary: Library for avahi-qt3
@@ -325,6 +334,7 @@ Obsoletes: %mklibname -d %{qt3_name}_ 1
 
 %description -n %{develnameqt3}
 Devel library for avahi-qt3.
+%endif
 
 %if %build_qt4
 %package -n %{lib_qt4_name}
@@ -372,6 +382,9 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %configure2_5x \
 %if !%build_mono
     --disable-mono \
+%endif
+%if !%build_qt3
+    --disable-qt3 \
 %endif
 %if !%build_qt4
     --disable-qt4 \
@@ -477,11 +490,13 @@ rm -rf %{buildroot}
 %postun -n %{lib_howl_name} -p /sbin/ldconfig
 %endif
 
+%if %build_qt3
 %if %mdkversion < 200900
 %post -n %{lib_qt3_name} -p /sbin/ldconfig
 %endif
 %if %mdkversion < 200900
 %postun -n %{lib_qt3_name} -p /sbin/ldconfig
+%endif
 %endif
 
 %if %build_qt4
@@ -636,9 +651,11 @@ fi
 %defattr(-,root,root)
 %{_libdir}/libhowl.so.%{howl_major}*
 
+%if %build_qt3
 %files -n %{lib_qt3_name}
 %defattr(-,root,root)
 %{_libdir}/lib%{name}-qt3.so.%{qt3_major}*
+%endif
 
 %if %build_qt4
 %files -n %{lib_qt4_name}
@@ -707,6 +724,7 @@ fi
 %{_libdir}/pkgconfig/%{name}-compat-howl.pc
 %{_libdir}/pkgconfig/howl.pc
 
+%if %build_qt3
 %files -n %develnameqt3
 %defattr(-,root,root)
 %{_includedir}/%{name}-qt3
@@ -714,6 +732,7 @@ fi
 %attr(644,root,root) %{_libdir}/lib%{name}-qt3.la
 %{_libdir}/lib%{name}-qt3.so
 %{_libdir}/pkgconfig/%{name}-qt3.pc
+%endif
 
 %if %build_qt4
 %files -n %develnameqt4
