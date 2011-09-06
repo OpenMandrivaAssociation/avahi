@@ -1,5 +1,5 @@
 %define name avahi
-%define version 0.6.29
+%define version 0.6.30
 
 %define release %mkrel 1
 
