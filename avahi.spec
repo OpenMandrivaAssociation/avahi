@@ -8,7 +8,7 @@
 %define qt3_name		%{name}-qt3
 %define qt4_name		%{name}-qt4
 %define ui_name			%{name}-ui
-%define ui-gtk3_name	%{name}-ui-gtk3
+%define ui_gtk3_name	%{name}-ui-gtk3
 
 %define dns_sd_old_name	mDNSResponder
 %define howl_old_name	howl
@@ -23,7 +23,7 @@
 %define qt3_major		1
 %define qt4_major		1
 %define ui_major		0
-%define ui-gtk3_major	0
+%define ui_gtk3_major	0
 
 %define lib_client_name	%mklibname %{client_name} %{client_major}
 %define develnameclient	%mklibname -d %{client_name}
@@ -45,8 +45,8 @@
 %define develnameqt4	%mklibname -d %{qt4_name}
 %define lib_ui_name		%mklibname %{ui_name} %{qt3_major}
 %define develnameui		%mklibname -d %{ui_name}
-%define lib_ui-gtk3_name	%mklibname %{ui-gtk3_name} %{ui-gtk3_major}
-%define develnameui-gtk3	%mklibname -d %{ui-gtk3_name}
+%define lib_ui_gtk3_name	%mklibname %{ui_gtk3_name} %{ui_gtk3_major}
+%define develnameui_gtk3	%mklibname -d %{ui_gtk3_name}
 
 %define lib_dns_sd_old_name	%mklibname %{dns_sd_old_name} 1
 %define lib_howl_old_name	%mklibname %{howl_old_name} 0
@@ -388,20 +388,20 @@ Obsoletes: %mklibname -d %{ui_name} 1
 Devel library for avahi-ui.
 
 %if %build_gtk3
-%package -n %{lib_ui-gtk3_name}
+%package -n %{lib_ui_gtk3_name}
 Group: System/Libraries
 Summary: Library for avahi-gtk3
 
-%description -n %{lib_ui-gtk3_name}
+%description -n %{lib_ui_gtk3_name}
 Library for avahi-gtk3.
 
-%package -n %{develnameui-gtk3}
+%package -n %{develnameui_gtk3}
 Group: Development/C
 Summary: Devel library for avahi-gtk3
-Provides: %{ui-gtk3_name}-devel = %{version}-%{release}
-Requires: %{lib_ui-gtk3_name} = %{version}
+Provides: %{ui_gtk3_name}-devel = %{version}-%{release}
+Requires: %{lib_ui_gtk3_name} = %{version}-%{release}
 
-%description -n %{develnameui-gtk3}
+%description -n %{develnameui_gtk3}
 Devel library for avahi-gtk3.
 %endif
 
@@ -674,10 +674,10 @@ fi
 %{_libdir}/pkgconfig/%{name}-ui.pc
 
 %if %build_gtk3
-%files -n %{lib_ui-gtk3_name}
+%files -n %{lib_ui_gtk3_name}
 %{_libdir}/lib%{name}-ui-gtk3.so.%{gtk3_major}*
 
-%files -n %{develnameui-gtk3}
+%files -n %{develnameui_gtk3}
 %{_libdir}/libavahi-ui-gtk3.so
 %{_libdir}/pkgconfig/avahi-ui-gtk3.pc
 %endif
