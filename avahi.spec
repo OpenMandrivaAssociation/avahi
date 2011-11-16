@@ -1,56 +1,56 @@
-%define client_name     %{name}-client
-%define common_name     %{name}-common
-%define core_name       %{name}-core
-%define dns_sd_name     %{name}-compat-libdns_sd
-%define glib_name       %{name}-glib
-%define gobject_name    %{name}-gobject
-%define howl_name       %{name}-compat-howl
-%define qt3_name        %{name}-qt3
-%define qt4_name        %{name}-qt4
-%define ui_name         %{name}-ui
-%define gtk3_name       %{name}-gkt3
+%define client_name		%{name}-client
+%define common_name		%{name}-common
+%define core_name		%{name}-core
+%define dns_sd_name		%{name}-compat-libdns_sd
+%define glib_name		%{name}-glib
+%define gobject_name	%{name}-gobject
+%define howl_name		%{name}-compat-howl
+%define qt3_name		%{name}-qt3
+%define qt4_name		%{name}-qt4
+%define ui_name			%{name}-ui
+%define ui-gtk3_name	%{name}-ui-gkt3
 
-%define dns_sd_old_name mDNSResponder
-%define howl_old_name   howl
+%define dns_sd_old_name	mDNSResponder
+%define howl_old_name	howl
 
-%define client_major 3
-%define common_major 3
-%define core_major 7
-%define dns_sd_major 1
-%define glib_major 1
-%define gobject_major 0
-%define howl_major 0
-%define qt3_major 1
-%define qt4_major 1
-%define ui_major 0
-%define gtk3_major 0
+%define client_major	3
+%define common_major	3
+%define core_major		7
+%define dns_sd_major	1
+%define glib_major		1
+%define gobject_major	0
+%define howl_major		0
+%define qt3_major		1
+%define qt4_major		1
+%define ui_major		0
+%define ui-gtk3_major	0
 
-%define lib_client_name %mklibname %{client_name} %{client_major}
-%define develnameclient %mklibname -d %{client_name}
-%define lib_common_name %mklibname %{common_name} %{common_major}
-%define develnamecommon %mklibname -d %{common_name}
-%define lib_core_name   %mklibname %{core_name} %{core_major}
-%define develnamecore   %mklibname -d %{core_name}
-%define lib_dns_sd_name %mklibname %{dns_sd_name} %{dns_sd_major}
-%define develnamedns_sd %mklibname -d %{dns_sd_name}
-%define lib_glib_name   %mklibname %{glib_name} %{glib_major}
-%define develnameglib   %mklibname -d %{glib_name}
-%define lib_gobject_name   %mklibname %{gobject_name} %{gobject_major}
-%define develnamegobject   %mklibname -d %{gobject_name}
-%define lib_howl_name   %mklibname %{howl_name} %{howl_major}
-%define develnamehowl   %mklibname -d %{howl_name}
-%define lib_qt3_name    %mklibname %{qt3_name}_ %{qt3_major}
-%define develnameqt3    %mklibname -d %{qt3_name}
-%define lib_qt4_name    %mklibname %{qt4_name}_ %{qt4_major}
+%define lib_client_name	%mklibname %{client_name} %{client_major}
+%define develnameclient	%mklibname -d %{client_name}
+%define lib_common_name	%mklibname %{common_name} %{common_major}
+%define develnamecommon	%mklibname -d %{common_name}
+%define lib_core_name	%mklibname %{core_name} %{core_major}
+%define develnamecore	%mklibname -d %{core_name}
+%define lib_dns_sd_name	%mklibname %{dns_sd_name} %{dns_sd_major}
+%define develnamedns_sd	%mklibname -d %{dns_sd_name}
+%define lib_glib_name	%mklibname %{glib_name} %{glib_major}
+%define develnameglib	%mklibname -d %{glib_name}
+%define lib_gobject_name	%mklibname %{gobject_name} %{gobject_major}
+%define develnamegobject	%mklibname -d %{gobject_name}
+%define lib_howl_name	%mklibname %{howl_name} %{howl_major}
+%define develnamehowl	%mklibname -d %{howl_name}
+%define lib_qt3_name	%mklibname %{qt3_name}_ %{qt3_major}
+%define develnameqt3	%mklibname -d %{qt3_name}
+%define lib_qt4_name	%mklibname %{qt4_name}_ %{qt4_major}
 %define develnameqt4	%mklibname -d %{qt4_name}
-%define lib_ui_name     %mklibname %{ui_name} %{qt3_major}
-%define develnameui     %mklibname -d %{ui_name}
-%define lib_gtk3_name   %mklibname %{gtk3_name} %{gtk3_major}
-%define develnamegtk3   %mklibname -d %{gtk3_name}
+%define lib_ui_name		%mklibname %{ui_name} %{qt3_major}
+%define develnameui		%mklibname -d %{ui_name}
+%define lib_ui-gtk3_name	%mklibname %{ui-gtk3_name} %{ui-gtk3_major}
+%define develnameui-gtk3	%mklibname -d %{ui-gtk3_name}
 
-%define lib_dns_sd_old_name %mklibname %{dns_sd_old_name} 1
-%define lib_howl_old_name   %mklibname %{howl_old_name} 0
-%define lib_howl_fake_EVR   1.0.0-7mdk
+%define lib_dns_sd_old_name	%mklibname %{dns_sd_old_name} 1
+%define lib_howl_old_name	%mklibname %{howl_old_name} 0
+%define lib_howl_fake_EVR   1.0.0-7
 
 %define build_mono 1
 %{?_with_mono: %{expand: %%global build_mono 1}} 
@@ -72,7 +72,9 @@
 %{?_with_gtk3: %{expand: %%global build_gtk3 1}}
 %{?_without_gtk3: %{expand: %%global build_gtk3 0}}
 
-%define _with_systemd 1
+%define build_systemd 1
+%{?_with_systemd: %{expand: %%global build_systemd 1}}
+%{?_without_systemd: %{expand: %%global build_systemd 0}}
 
 %define build_bootstrap 0
 %{?_with_bootstrap: %{expand: %%global build_bootstrap 1}}
@@ -81,7 +83,7 @@
 %define build_qt3 0
 %define build_qt4 0
 %define build_gtk3 0
-%define _with_systemd 0
+%define build_systemd 0
 %endif
 
 Summary: Avahi service discovery (mDNS/DNS-SD) suite
@@ -95,40 +97,34 @@ Url: http://avahi.org/
 Source0: http://avahi.org/download/%{name}-%{version}.tar.gz
 Source1: avahi-hostname.sh
 
-BuildRequires:	daemon-devel
-BuildRequires:	dbus-devel
-BuildRequires:	dbus-python
-BuildRequires:	libexpat-devel >= 2.0.1
-BuildRequires:	libgdbm-devel
-BuildRequires:	libglade2.0-devel
+BuildRequires:  cap-devel
+BuildRequires:	expat-devel >= 2.0.1
+BuildRequires:	gdbm-devel
+#BuildRequires: intltool
+BuildRequires:	pkgconfig(dbus-1)
+BuildRequires:	pkgconfig(dbus-python)
+BuildRequires:	pkgconfig(libdaemon)
+BuildRequires:	pkgconfig(libglade-2.0)
 BuildRequires:	pygtk2.0
 %if %build_qt3
-BuildRequires:	qt3-devel
+BuildRequires:	pkgconfig(qt-mt)
 %endif
-BuildRequires:  libcap-devel
 %if %build_qt4
-BuildRequires:	qt4-devel
+BuildRequires:	pkgconfig(QtCore)
 %endif
 %if %build_gtk3
-BuildRequires: gtk+3-devel
+BuildRequires:	pkgconfig(gtk+-3.0)
 %endif
-#needed by autoreconf
-BuildRequires: intltool
-%if %{_with_systemd}
+%if %build_systemd
 BuildRequires:	systemd-units
 %endif
+
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(post): dbus
 Requires(preun): dbus
-Obsoletes: howl
-Provides: howl
-Obsoletes: tmdns
-Provides: tmdns
-Obsoletes: mDNSResponder
-Provides: mDNSResponder
 Suggests: nss_mdns
 
 %description
@@ -392,26 +388,25 @@ Obsoletes: %mklibname -d %{ui_name} 1
 Devel library for avahi-ui.
 
 %if %build_gtk3
-%package -n %{lib_gtk3_name}
+%package -n %{lib_ui-gtk3_name}
 Group: System/Libraries
 Summary: Library for avahi-gtk3
 
-%description -n %{lib_gtk3_name}
+%description -n %{lib_ui-gtk3_name}
 Library for avahi-gtk3.
 
-%package -n %{develnamegtk3}
+%package -n %{develnameui-gtk3}
 Group: Development/C
 Summary: Devel library for avahi-gtk3
-Provides: %{gtk3_name}-devel = %{version}-%{release}
-Requires: %{lib_gtk3_name} = %{version}
+Provides: %{ui-gtk3_name}-devel = %{version}-%{release}
+Requires: %{lib_ui-gtk3_name} = %{version}
 
-%description -n %{develnamegtk3}
+%description -n %{develnameui-gtk3}
 Devel library for avahi-gtk3.
 %endif
 
 %prep
 %setup -q
-
 cp %{SOURCE1} avahi-hostname.sh
 
 %build
@@ -432,8 +427,8 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
   --enable-compat-libdns_sd \
   --enable-compat-howl \
   --enable-introspection=no \
-%if !%{_with_systemd}
-  --without-systemdsystemunitdir \
+%if %build_systemd
+  --with-systemdsystemunitdir=/lib/systemd/system \
 %endif
 %if !%build_gtk3
   --disable-gtk3
@@ -446,10 +441,10 @@ rm -rf %{buildroot}
 %makeinstall_std
 rm -f %{buildroot}/%{_sysconfdir}/%{name}/services/ssh.service
 ln -s avahi-compat-howl.pc %{buildroot}%{_libdir}/pkgconfig/howl.pc
-%if "%_lib" != "lib" && %build_mono
+%if "%{_lib}" != "lib" && %build_mono
 mkdir -p %{buildroot}%{_prefix}/lib
 mv %{buildroot}%{_libdir}/mono %{buildroot}%{_prefix}/lib
-perl -pi -e "s/%_lib/lib/" %{buildroot}%{_libdir}/pkgconfig/avahi-{,ui-}sharp.pc
+perl -pi -e "s/%{_lib}/lib/" %{buildroot}%{_libdir}/pkgconfig/avahi-{,ui-}sharp.pc
 %endif
 
 # install hostname.d hook
@@ -482,9 +477,9 @@ find %{buildroot} -name "*.la" -exec rm -rf {} \;
 
 %if %build_mono
 %post sharp-doc
-%_bindir/monodoc --make-index > /dev/null
+%{_bindir}/monodoc --make-index > /dev/null
 %postun sharp-doc
-if [ "$1" = "0" -a -x %_bindir/monodoc ]; then %_bindir/monodoc --make-index > /dev/null
+if [ "$1" = "0" -a -x %{_bindir}/monodoc ]; then %{_bindir}/monodoc --make-index > /dev/null
 fi
 %endif
 
@@ -537,7 +532,7 @@ fi
 %{_mandir}/man8/avahi-autoipd*
 %dir %{_libdir}/avahi
 %{_libdir}/avahi/service-types.db
-%if %{_with_systemd}
+%if %build_systemd
 /lib/systemd/system/avahi-daemon.service
 /lib/systemd/system/avahi-daemon.socket
 /lib/systemd/system/avahi-dnsconfd.service
@@ -679,10 +674,10 @@ fi
 %{_libdir}/pkgconfig/%{name}-ui.pc
 
 %if %build_gtk3
-%files -n %{lib_gtk3_name}
+%files -n %{lib_ui-gtk3_name}
 %{_libdir}/lib%{name}-ui-gtk3.so.%{gtk3_major}*
 
-%files -n %develnamegtk3
+%files -n %{develname-ui-gtk3}
 %{_libdir}/libavahi-ui-gtk3.so
 %{_libdir}/pkgconfig/avahi-ui-gtk3.pc
 %endif
