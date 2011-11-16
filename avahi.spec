@@ -100,7 +100,7 @@ Source1: avahi-hostname.sh
 BuildRequires:  cap-devel
 BuildRequires:	expat-devel >= 2.0.1
 BuildRequires:	gdbm-devel
-#BuildRequires: intltool
+BuildRequires:	intltool
 BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	pkgconfig(dbus-python)
 BuildRequires:	pkgconfig(libdaemon)
