@@ -8,7 +8,7 @@
 %define qt3_name		%{name}-qt3
 %define qt4_name		%{name}-qt4
 %define ui_name			%{name}-ui
-%define ui-gtk3_name	%{name}-ui-gkt3
+%define ui-gtk3_name	%{name}-ui-gtk3
 
 %define dns_sd_old_name	mDNSResponder
 %define howl_old_name	howl
@@ -677,7 +677,7 @@ fi
 %files -n %{lib_ui-gtk3_name}
 %{_libdir}/lib%{name}-ui-gtk3.so.%{gtk3_major}*
 
-%files -n %{develname-ui-gtk3}
+%files -n %{develnameui-gtk3}
 %{_libdir}/libavahi-ui-gtk3.so
 %{_libdir}/pkgconfig/avahi-ui-gtk3.pc
 %endif
