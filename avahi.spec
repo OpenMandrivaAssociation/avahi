@@ -43,6 +43,7 @@
 %define develnameqt3	%mklibname -d %{qt3_name}
 %define lib_qt4_name	%mklibname %{qt4_name}_ %{qt4_major}
 %define develnameqt4	%mklibname -d %{qt4_name}
+### not worth it to fix now b/c 1 > 0, but ui_major should be used not qt3_major
 %define lib_ui_name		%mklibname %{ui_name} %{qt3_major}
 %define develnameui		%mklibname -d %{ui_name}
 %define lib_ui_gtk3_name	%mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
