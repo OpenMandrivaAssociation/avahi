@@ -45,7 +45,7 @@
 %define develnameqt4	%mklibname -d %{qt4_name}
 %define lib_ui_name		%mklibname %{ui_name} %{qt3_major}
 %define develnameui		%mklibname -d %{ui_name}
-%define lib_ui_gtk3_name	%mklibname %{ui_gtk3_name} %{ui_gtk3_major}
+%define lib_ui_gtk3_name	%mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
 %define develnameui_gtk3	%mklibname -d %{ui_gtk3_name}
 
 %define lib_dns_sd_old_name	%mklibname %{dns_sd_old_name} 1
@@ -89,7 +89,7 @@
 Summary: Avahi service discovery (mDNS/DNS-SD) suite
 Name: avahi
 Version: 0.6.30
-Release: 3
+Release: 4
 License: LGPLv2+
 Group: System/Servers
 Url: http://avahi.org/
