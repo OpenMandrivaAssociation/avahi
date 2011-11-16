@@ -675,7 +675,7 @@ fi
 
 %if %build_gtk3
 %files -n %{lib_ui_gtk3_name}
-%{_libdir}/lib%{name}-ui-gtk3.so.%{gtk3_major}*
+%{_libdir}/lib%{name}-ui-gtk3.so.%{ui_gtk3_major}*
 
 %files -n %{develnameui_gtk3}
 %{_libdir}/libavahi-ui-gtk3.so
