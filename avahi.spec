@@ -90,7 +90,7 @@
 Summary: Avahi service discovery (mDNS/DNS-SD) suite
 Name: avahi
 Version: 0.6.30
-Release: 4
+Release: 5
 License: LGPLv2+
 Group: System/Servers
 Url: http://avahi.org/
@@ -196,7 +196,6 @@ Monodoc format.
 %package -n %{lib_client_name}
 Group: System/Libraries
 Summary: Library for avahi-client
-Requires: %{name} >= %{version}-%{release}
 
 %description -n %{lib_client_name}
 Library for avahi-client.
