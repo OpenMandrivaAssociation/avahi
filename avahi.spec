@@ -53,7 +53,7 @@
 %define lib_howl_old_name	%mklibname %{howl_old_name} 0
 %define lib_howl_fake_EVR   1.0.0-7
 
-%define build_mono 1
+%define build_mono 0
 %{?_with_mono: %{expand: %%global build_mono 1}} 
 %{?_without_mono: %{expand: %%global build_mono 0}} 
 
