@@ -53,7 +53,7 @@
 %define lib_howl_old_name	%mklibname %{howl_old_name} 0
 %define lib_howl_fake_EVR   1.0.0-7
 
-%define build_mono 0
+%define build_mono 1
 %{?_with_mono: %{expand: %%global build_mono 1}} 
 %{?_without_mono: %{expand: %%global build_mono 0}} 
 
@@ -90,7 +90,7 @@
 Summary: Avahi service discovery (mDNS/DNS-SD) suite
 Name: avahi
 Version: 0.6.31
-Release: 1
+Release: 2
 License: LGPLv2+
 Group: System/Servers
 Url: http://avahi.org/
