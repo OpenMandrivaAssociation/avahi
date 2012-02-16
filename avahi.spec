@@ -89,8 +89,8 @@
 
 Summary: Avahi service discovery (mDNS/DNS-SD) suite
 Name: avahi
-Version: 0.6.30
-Release: 5
+Version: 0.6.31
+Release: 1
 License: LGPLv2+
 Group: System/Servers
 Url: http://avahi.org/
@@ -107,16 +107,16 @@ BuildRequires:	pkgconfig(dbus-python)
 BuildRequires:	pkgconfig(libdaemon)
 BuildRequires:	pkgconfig(libglade-2.0)
 BuildRequires:	pygtk2.0
-%if %build_qt3
+%if %{build_qt3}
 BuildRequires:	pkgconfig(qt-mt)
 %endif
-%if %build_qt4
+%if %{build_qt4}
 BuildRequires:	pkgconfig(QtCore)
 %endif
-%if %build_gtk3
+%if %{build_gtk3}
 BuildRequires:	pkgconfig(gtk+-3.0)
 %endif
-%if %build_systemd
+%if %{build_systemd}
 BuildRequires:	systemd-units
 %endif
 
@@ -168,7 +168,7 @@ Requires: %{name}-x11
 Python bindings and utilities for Avahi.
 It includes avahi-bookmarks and avahi-discover.
 
-%if %build_mono
+%if %{build_mono}
 %package sharp
 Group: System/Libraries
 Summary: Mono bindings for Avahi
@@ -330,7 +330,7 @@ Obsoletes: %mklibname -d %{howl_name} 0
 %description -n %{develnamehowl}
 Avahi devel compatibility library for libdns_sd for howl.
 
-%if %build_qt3
+%if %{build_qt3}
 %package -n %{lib_qt3_name}
 Group: System/Libraries
 Summary: Library for avahi-qt3
@@ -350,7 +350,7 @@ Obsoletes: %mklibname -d %{qt3_name}_ 1
 Devel library for avahi-qt3.
 %endif
 
-%if %build_qt4
+%if %{build_qt4}
 %package -n %{lib_qt4_name}
 Group: System/Libraries
 Summary: Library for avahi-qt4
@@ -387,7 +387,7 @@ Obsoletes: %mklibname -d %{ui_name} 1
 %description -n %{develnameui}
 Devel library for avahi-ui.
 
-%if %build_gtk3
+%if %{build_gtk3}
 %package -n %{lib_ui_gtk3_name}
 Group: System/Libraries
 Summary: Library for avahi-gtk3
@@ -413,13 +413,13 @@ cp %{SOURCE1} avahi-hostname.sh
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %configure2_5x \
 	--disable-static \
-%if !%build_mono
+%if !%{build_mono}
     --disable-mono \
 %endif
-%if !%build_qt3
+%if !%{build_qt3}
     --disable-qt3 \
 %endif
-%if !%build_qt4
+%if !%{build_qt4}
     --disable-qt4 \
 %endif
   --localstatedir=%{_var} \
@@ -427,10 +427,10 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
   --enable-compat-libdns_sd \
   --enable-compat-howl \
   --enable-introspection=no \
-%if %build_systemd
+%if %{build_systemd}
   --with-systemdsystemunitdir=/lib/systemd/system \
 %endif
-%if !%build_gtk3
+%if !%{build_gtk3}
   --disable-gtk3
 %endif
 
@@ -441,7 +441,7 @@ rm -rf %{buildroot}
 %makeinstall_std
 rm -f %{buildroot}/%{_sysconfdir}/%{name}/services/ssh.service
 ln -s avahi-compat-howl.pc %{buildroot}%{_libdir}/pkgconfig/howl.pc
-%if "%{_lib}" != "lib" && %build_mono
+%if "%{_lib}" != "lib" && %{build_mono}
 mkdir -p %{buildroot}%{_prefix}/lib
 mv %{buildroot}%{_libdir}/mono %{buildroot}%{_prefix}/lib
 perl -pi -e "s/%{_lib}/lib/" %{buildroot}%{_libdir}/pkgconfig/avahi-{,ui-}sharp.pc
@@ -475,7 +475,7 @@ find %{buildroot} -name "*.la" -exec rm -rf {} \;
 %preun dnsconfd
 %_preun_service %{name}-dnsconfd
 
-%if %build_mono
+%if %{build_mono}
 %post sharp-doc
 %{_bindir}/monodoc --make-index > /dev/null
 %postun sharp-doc
@@ -532,7 +532,7 @@ fi
 %{_mandir}/man8/avahi-autoipd*
 %dir %{_libdir}/avahi
 %{_libdir}/avahi/service-types.db
-%if %build_systemd
+%if %{build_systemd}
 /lib/systemd/system/avahi-daemon.service
 /lib/systemd/system/avahi-daemon.socket
 /lib/systemd/system/avahi-dnsconfd.service
@@ -566,7 +566,7 @@ fi
 %{_mandir}/man1/%{name}-discover.1*
 %{_mandir}/man1/%{name}-bookmarks.1*
 
-%if %build_mono
+%if %{build_mono}
 %files sharp
 %{_prefix}/lib/mono/%{name}-sharp/%{name}-sharp.dll
 %{_prefix}/lib/mono/gac/%{name}-sharp/
@@ -605,12 +605,12 @@ fi
 %files -n %{lib_howl_name}
 %{_libdir}/libhowl.so.%{howl_major}*
 
-%if %build_qt3
+%if %{build_qt3}
 %files -n %{lib_qt3_name}
 %{_libdir}/lib%{name}-qt3.so.%{qt3_major}*
 %endif
 
-%if %build_qt4
+%if %{build_qt4}
 %files -n %{lib_qt4_name}
 %{_libdir}/lib%{name}-qt4.so.%{qt4_major}*
 %endif
@@ -654,14 +654,14 @@ fi
 %{_libdir}/pkgconfig/%{name}-compat-howl.pc
 %{_libdir}/pkgconfig/howl.pc
 
-%if %build_qt3
+%if %{build_qt3}
 %files -n %{develnameqt3}
 %{_includedir}/%{name}-qt3
 %{_libdir}/lib%{name}-qt3.so
 %{_libdir}/pkgconfig/%{name}-qt3.pc
 %endif
 
-%if %build_qt4
+%if %{build_qt4}
 %files -n %{develnameqt4}
 %{_includedir}/%{name}-qt4
 %{_libdir}/lib%{name}-qt4.so
@@ -673,7 +673,7 @@ fi
 %{_libdir}/lib%{name}-ui.so
 %{_libdir}/pkgconfig/%{name}-ui.pc
 
-%if %build_gtk3
+%if %{build_gtk3}
 %files -n %{lib_ui_gtk3_name}
 %{_libdir}/lib%{name}-ui-gtk3.so.%{ui_gtk3_major}*
 
