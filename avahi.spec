@@ -456,7 +456,7 @@ perl -pi -e "s/%{_lib}/lib/" %{buildroot}%{_libdir}/pkgconfig/avahi-{,ui-}sharp.
 mkdir -p %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/
 install -m755 avahi-hostname.sh %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 
-%if !%{build_systemd}
+%if %{build_systemd}
 rm -rf %{_initrddir}/%{name}-daemon
 rm -rf %{_initrddir}/%{name}-dnsconfd
 %endif
