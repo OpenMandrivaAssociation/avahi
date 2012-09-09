@@ -90,7 +90,7 @@
 Summary: Avahi service discovery (mDNS/DNS-SD) suite
 Name: avahi
 Version: 0.6.31
-Release: 2
+Release: 3
 License: LGPLv2+
 Group: System/Servers
 Url: http://avahi.org/
@@ -428,7 +428,7 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
   --enable-compat-howl \
   --enable-introspection=no \
 %if %{build_systemd}
-  --with-systemdsystemunitdir=/lib/systemd/system \
+  --with-systemdsystemunitdir=%{_unitdir} \
 %endif
 %if !%{build_gtk3}
   --disable-gtk3
@@ -450,6 +450,11 @@ perl -pi -e "s/%{_lib}/lib/" %{buildroot}%{_libdir}/pkgconfig/avahi-{,ui-}sharp.
 # install hostname.d hook
 mkdir -p %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/
 install -m755 avahi-hostname.sh %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
+
+%if !%{build_systemd}
+rm -rf %{_initrddir}/%{name}-daemon
+rm -rf %{_initrddir}/%{name}-dnsconfd
+%endif
 
 %find_lang %{name}
 
@@ -491,7 +496,9 @@ fi
 %config(noreplace) %{_sysconfdir}/%{name}/avahi-autoipd.action
 %config(noreplace) %{_sysconfdir}/%{name}/services/sftp-ssh.service
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/%{name}-dbus.conf
+%if !%{build_systemd}
 %{_initrddir}/%{name}-daemon
+%endif
 %{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 %{_bindir}/%{name}-browse
 %{_bindir}/%{name}-browse-domains
@@ -533,15 +540,17 @@ fi
 %dir %{_libdir}/avahi
 %{_libdir}/avahi/service-types.db
 %if %{build_systemd}
-/lib/systemd/system/avahi-daemon.service
-/lib/systemd/system/avahi-daemon.socket
-/lib/systemd/system/avahi-dnsconfd.service
+%{_unitdir}/avahi-daemon.service
+%{_unitdir}/avahi-daemon.socket
+%{_unitdir}/avahi-dnsconfd.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.Avahi.service
 %endif
 
 %files dnsconfd
 %{_sysconfdir}/%{name}/%{name}-dnsconfd.action
+%if !%{build_systemd}
 %{_initrddir}/%{name}-dnsconfd
+%endif
 %{_sbindir}/%{name}-dnsconfd
 %{_mandir}/man8/%{name}-dnsconfd.8*
 %{_mandir}/man8/%{name}-dnsconfd.action.8*
@@ -681,4 +690,3 @@ fi
 %{_libdir}/libavahi-ui-gtk3.so
 %{_libdir}/pkgconfig/avahi-ui-gtk3.pc
 %endif
-
