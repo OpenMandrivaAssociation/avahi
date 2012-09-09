@@ -1,57 +1,57 @@
-%define client_name		%{name}-client
-%define common_name		%{name}-common
-%define core_name		%{name}-core
-%define dns_sd_name		%{name}-compat-libdns_sd
-%define glib_name		%{name}-glib
-%define gobject_name	%{name}-gobject
-%define howl_name		%{name}-compat-howl
-%define qt3_name		%{name}-qt3
-%define qt4_name		%{name}-qt4
-%define ui_name			%{name}-ui
-%define ui_gtk3_name	%{name}-ui-gtk3
+%define client_name %{name}-client
+%define common_name %{name}-common
+%define core_name %{name}-core
+%define dns_sd_name %{name}-compat-libdns_sd
+%define glib_name %{name}-glib
+%define gobject_name %{name}-gobject
+%define howl_name %{name}-compat-howl
+%define qt3_name %{name}-qt3
+%define qt4_name %{name}-qt4
+%define ui_name %{name}-ui
+%define ui_gtk3_name %{name}-ui-gtk3
 
-%define dns_sd_old_name	mDNSResponder
-%define howl_old_name	howl
+%define dns_sd_old_name mDNSResponder
+%define howl_old_name howl
 
-%define client_major	3
-%define common_major	3
-%define core_major		7
-%define dns_sd_major	1
-%define glib_major		1
-%define gobject_major	0
-%define howl_major		0
-%define qt3_major		1
-%define qt4_major		1
-%define ui_major		0
-%define ui_gtk3_major	0
+%define client_major 3
+%define common_major 3
+%define core_major 7
+%define dns_sd_major 1
+%define glib_major 1
+%define object_major 0
+%define howl_major 0
+%define qt3_major 1
+%define qt4_major 1
+%define ui_major 0
+%define ui_gtk3_major 0
 
-%define lib_client_name	%mklibname %{client_name} %{client_major}
-%define develnameclient	%mklibname -d %{client_name}
-%define lib_common_name	%mklibname %{common_name} %{common_major}
-%define develnamecommon	%mklibname -d %{common_name}
-%define lib_core_name	%mklibname %{core_name} %{core_major}
-%define develnamecore	%mklibname -d %{core_name}
-%define lib_dns_sd_name	%mklibname %{dns_sd_name} %{dns_sd_major}
-%define develnamedns_sd	%mklibname -d %{dns_sd_name}
-%define lib_glib_name	%mklibname %{glib_name} %{glib_major}
-%define develnameglib	%mklibname -d %{glib_name}
-%define lib_gobject_name	%mklibname %{gobject_name} %{gobject_major}
-%define develnamegobject	%mklibname -d %{gobject_name}
-%define lib_howl_name	%mklibname %{howl_name} %{howl_major}
-%define develnamehowl	%mklibname -d %{howl_name}
-%define lib_qt3_name	%mklibname %{qt3_name}_ %{qt3_major}
-%define develnameqt3	%mklibname -d %{qt3_name}
-%define lib_qt4_name	%mklibname %{qt4_name}_ %{qt4_major}
-%define develnameqt4	%mklibname -d %{qt4_name}
+%define lib_client_name %mklibname %{client_name} %{client_major}
+%define develnameclient %mklibname -d %{client_name}
+%define lib_common_name %mklibname %{common_name} %{common_major}
+%define develnamecommon %mklibname -d %{common_name}
+%define lib_core_name %mklibname %{core_name} %{core_major}
+%define develnamecore %mklibname -d %{core_name}
+%define lib_dns_sd_name %mklibname %{dns_sd_name} %{dns_sd_major}
+%define develnamedns_sd %mklibname -d %{dns_sd_name}
+%define lib_glib_name %mklibname %{glib_name} %{glib_major}
+%define develnameglib %mklibname -d %{glib_name}
+%define lib_gobject_name %mklibname %{gobject_name} %{gobject_major}
+%define develnamegobject %mklibname -d %{gobject_name}
+%define lib_howl_name %mklibname %{howl_name} %{howl_major}
+%define develnamehowl %mklibname -d %{howl_name}
+%define lib_qt3_name %mklibname %{qt3_name}_ %{qt3_major}
+%define develnameqt3 %mklibname -d %{qt3_name}
+%define lib_qt4_name %mklibname %{qt4_name}_ %{qt4_major}
+%define develnameqt4 %mklibname -d %{qt4_name}
 ### not worth it to fix now b/c 1 > 0, but ui_major should be used not qt3_major
-%define lib_ui_name		%mklibname %{ui_name} %{qt3_major}
-%define develnameui		%mklibname -d %{ui_name}
-%define lib_ui_gtk3_name	%mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
-%define develnameui_gtk3	%mklibname -d %{ui_gtk3_name}
+%define lib_ui_name %mklibname %{ui_name} %{qt3_major}
+%define develnameui %mklibname -d %{ui_name}
+%define lib_ui_gtk3_name %mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
+%define develnameui_gtk3 %mklibname -d %{ui_gtk3_name}
 
-%define lib_dns_sd_old_name	%mklibname %{dns_sd_old_name} 1
-%define lib_howl_old_name	%mklibname %{howl_old_name} 0
-%define lib_howl_fake_EVR   1.0.0-7
+%define lib_dns_sd_old_name %mklibname %{dns_sd_old_name} 1
+%define lib_howl_old_name %mklibname %{howl_old_name} 0
+%define lib_howl_fake_EVR 1.0.0-7
 
 %define build_mono 1
 %{?_with_mono: %{expand: %%global build_mono 1}} 
@@ -87,18 +87,17 @@
 %define build_systemd 0
 %endif
 
-Summary: Avahi service discovery (mDNS/DNS-SD) suite
-Name: avahi
-Version: 0.6.31
-Release: 3
-License: LGPLv2+
-Group: System/Servers
-Url: http://avahi.org/
+Summary:	Avahi service discovery (mDNS/DNS-SD) suite
+Name:		avahi
+Version:	0.6.31
+Release:	3
+License:	LGPLv2+
+Group:		System/Servers
+Url:		http://avahi.org/
+Source0:	http://avahi.org/download/%{name}-%{version}.tar.gz
+Source1:	avahi-hostname.sh
 
-Source0: http://avahi.org/download/%{name}-%{version}.tar.gz
-Source1: avahi-hostname.sh
-
-BuildRequires:  cap-devel
+BuildRequires:	cap-devel
 BuildRequires:	expat-devel >= 2.0.1
 BuildRequires:	gdbm-devel
 BuildRequires:	intltool
@@ -120,13 +119,13 @@ BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	systemd-units
 %endif
 
-Requires(pre): rpm-helper
-Requires(postun): rpm-helper
-Requires(post): rpm-helper
-Requires(preun): rpm-helper
-Requires(post): dbus
-Requires(preun): dbus
-Suggests: nss_mdns
+Requires(pre):	rpm-helper
+Requires(postun):	rpm-helper
+Requires(post):	rpm-helper
+Requires(preun):	rpm-helper
+Requires(post):	dbus
+Requires(preun):	dbus
+Suggests:	nss_mdns
 
 %description
 Avahi is a system which facilitates service discovery on a local
@@ -137,11 +136,11 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 'Bonjour' and sometimes 'ZeroConf') and is very convenient.
 
 %package dnsconfd
-Group: System/Servers
-Summary: Avahi DNS configuration server
-Requires: %{name} = %{version}-%{release}
-Requires(post): rpm-helper
-Requires(preun): rpm-helper
+Group:		System/Servers
+Summary:	Avahi DNS configuration server
+Requires:	%{name} = %{version}-%{release}
+Requires(post):	rpm-helper
+Requires(preun):	rpm-helper
 
 %description dnsconfd
 avahi-dnsconfd is a small daemon which may be used to configure
@@ -149,20 +148,23 @@ conventional DNS servers using mDNS in a DHCP-like fashion.
 Especially useful on IPv6.
 
 %package x11
-Group: System/Servers
-Summary: Graphical tools for Avahi
-Requires: %{name} = %{version}-%{release}
+Group:		System/Servers
+Summary:	Graphical tools for Avahi
+Requires:	%{name} = %{version}-%{release}
 
 %description x11
 Graphical tools for Avahi.
 It includes avahi-discover-standalone.
 
 %package python
-Group: System/Libraries
-Summary: Python bindings and utilities for Avahi
-Requires: pygtk2.0-libglade python-twisted-core
-Requires: python-twisted-web dbus-python avahi 
-Requires: %{name}-x11
+Group:		System/Libraries
+Summary:	Python bindings and utilities for Avahi
+Requires:	pygtk2.0-libglade
+Requires:	python-twisted-core
+Requires:	python-twisted-web
+Requires:	dbus-python
+Requires:	avahi = %{version}-%{release}
+Requires:	%{name}-x11 = %{version}-%{release}
 
 %description python
 Python bindings and utilities for Avahi.
@@ -170,23 +172,24 @@ It includes avahi-bookmarks and avahi-discover.
 
 %if %{build_mono}
 %package sharp
-Group: System/Libraries
-Summary: Mono bindings for Avahi
-BuildRequires: mono-devel mono-tools
+Group:		System/Libraries
+Summary:	Mono bindings for Avahi
+BuildRequires:	mono-devel
+BuildRequires:	mono-tools
 #gw this is needed by mono-find-requires:
-BuildRequires: avahi-ui-devel
-Requires: %{lib_client_name} = %{version}-%{release}
-Requires: %{lib_common_name} = %{version}-%{release}
-Requires: %{lib_glib_name} = %{version}-%{release}
+BuildRequires:	avahi-ui-devel
+Requires:	%{lib_client_name} = %{version}-%{release}
+Requires:	%{lib_common_name} = %{version}-%{release}
+Requires:	%{lib_glib_name} = %{version}-%{release}
 
 %description sharp
 Mono bindings for Avahi.
 
 %package sharp-doc
-Summary: Development documentation for avahi-sharp
-Group: Development/Other
-Requires(post): mono-tools >= 1.1.9
-Requires(postun): mono-tools >= 1.1.9
+Summary:	Development documentation for avahi-sharp
+Group:		Development/Other
+Requires(post):	mono-tools >= 1.1.9
+Requires(postun):	mono-tools >= 1.1.9
 
 %description sharp-doc
 This package contains the API documentation for the avahi-sharp in
@@ -194,157 +197,157 @@ Monodoc format.
 %endif
 
 %package -n %{lib_client_name}
-Group: System/Libraries
-Summary: Library for avahi-client
+Group:		System/Libraries
+Summary:	Library for avahi-client
 
 %description -n %{lib_client_name}
 Library for avahi-client.
 
 %package -n %{develnameclient}
-Group: Development/C
-Summary: Devel library for avahi-client
-Provides: %{client_name}-devel = %{version}-%{release}
-Provides: lib%{client_name}-devel = %{version}-%{release}
-Requires: %{lib_client_name} = %{version}-%{release}
-Obsoletes: %mklibname -d %{client_name} 3
+Group:		Development/C
+Summary:	Devel library for avahi-client
+Provides:	%{client_name}-devel = %{version}-%{release}
+Provides:	lib%{client_name}-devel = %{version}-%{release}
+Requires:	%{lib_client_name} = %{version}-%{release}
+Obsoletes:	%mklibname -d %{client_name} 3
 
 %description -n %{develnameclient}
 Devel library for avahi-client.
 
 %package -n %{lib_common_name}
-Group: System/Libraries
-Summary: Library for avahi-common
+Group:		System/Libraries
+Summary:	Library for avahi-common
 
 %description -n %{lib_common_name}
 Library for avahi-common.
 
 %package -n %{develnamecommon}
-Group: Development/C
-Summary: Devel library for avahi-common
-Provides: %{common_name}-devel = %{version}-%{release}
-Provides: lib%{common_name}-devel = %{version}-%{release}
-Requires: %{lib_common_name} = %{version}-%{release}
-Obsoletes: %mklibname -d %{common_name} 3
+Group:		Development/C
+Summary:	Devel library for avahi-common
+Provides:	%{common_name}-devel = %{version}-%{release}
+Provides:	lib%{common_name}-devel = %{version}-%{release}
+Requires:	%{lib_common_name} = %{version}-%{release}
+Obsoletes:	%mklibname -d %{common_name} 3
 
 %description -n %{develnamecommon}
 Devel library for avahi-common.
 
 %package -n %{lib_core_name}
-Group: System/Libraries
-Summary: Library for avahi-core
+Group:		System/Libraries
+Summary:	Library for avahi-core
 
 %description -n %{lib_core_name}
 Library for avahi-core.
 
 %package -n %{develnamecore}
-Group: Development/C
-Summary: Devel library for avahi-core
-Provides: %{core_name}-devel = %{version}-%{release}
-Provides: lib%{core_name}-devel = %{version}-%{release}
-Requires: %{lib_core_name} = %{version}-%{release}
-Obsoletes: %mklibname -d %{core_name} 5
+Group:		Development/C
+Summary:	Devel library for avahi-core
+Provides:	%{core_name}-devel = %{version}-%{release}
+Provides:	lib%{core_name}-devel = %{version}-%{release}
+Requires:	%{lib_core_name} = %{version}-%{release}
+Obsoletes:	%mklibname -d %{core_name} 5
 
 %description -n %{develnamecore}
 Devel library for avahi-core.
 
 %package -n %{lib_dns_sd_name}
-Group: System/Libraries
-Summary: Avahi compatibility library for libdns_sd
-Obsoletes: %{lib_dns_sd_old_name}
-Provides: %{lib_dns_sd_old_name}
+Group:		System/Libraries
+Summary:	Avahi compatibility library for libdns_sd
+Obsoletes:	%{lib_dns_sd_old_name} < %{version}
+Provides:	%{lib_dns_sd_old_name}
 
 %description -n %{lib_dns_sd_name}
 Avahi compatibility library for libdns_sd
 
 %package -n %{develnamedns_sd}
-Group: Development/C
-Summary: Avahi devel compatibility library for libdns_sd
-Provides: %{dns_sd_name}-devel = %{version}-%{release}
-Provides: lib%{dns_sd_name}-devel = %{version}-%{release}
-Requires: %{lib_dns_sd_name} = %{version}-%{release}
-Obsoletes: %{lib_dns_sd_old_name}-devel
-Provides: %{lib_dns_sd_old_name}-devel
-Provides: %{dns_sd_old_name}-devel = %{version}-%{release}
-Provides: lib%{dns_sd_old_name}-devel = %{version}-%{release}
-Obsoletes: %mklibname -d %{dns_sd_name} 1
+Group:		Development/C
+Summary:	Avahi devel compatibility library for libdns_sd
+Provides:	%{dns_sd_name}-devel = %{version}-%{release}
+Provides:	lib%{dns_sd_name}-devel = %{version}-%{release}
+Requires:	%{lib_dns_sd_name} = %{version}-%{release}
+Obsoletes:	%{lib_dns_sd_old_name}-devel < %{version}
+Provides:	%{lib_dns_sd_old_name}-devel
+Provides:	%{dns_sd_old_name}-devel = %{version}-%{release}
+Provides:	lib%{dns_sd_old_name}-devel = %{version}-%{release}
+Obsoletes:	%mklibname -d %{dns_sd_name} 1
 
 %description -n %{develnamedns_sd}
 Avahi devel compatibility library for libdns_sd.
 
 %package -n %{lib_glib_name}
-Group: System/Libraries
-Summary: Library for avahi-glib
+Group:		System/Libraries
+Summary:	Library for avahi-glib
 
 %description -n %{lib_glib_name}
 Library for avahi-glib.
 
 %package -n %{develnameglib}
-Group: Development/C
-Summary: Devel library for avahi-glib
-Provides: %{glib_name}-devel = %{version}-%{release}
-Provides: lib%{glib_name}-devel = %{version}-%{release}
-Requires: %{lib_glib_name} = %{version}-%{release}
-Obsoletes: %mklibname -d %{glib_name} 1
+Group:		Development/C
+Summary:	Devel library for avahi-glib
+Provides:	%{glib_name}-devel = %{version}-%{release}
+Provides:	lib%{glib_name}-devel = %{version}-%{release}
+Requires:	%{lib_glib_name} = %{version}-%{release}
+Obsoletes:	%mklibname -d %{glib_name} 1
 
 %description -n %{develnameglib}
 Devel library for avahi-glib.
 
 %package -n %{lib_gobject_name}
-Group: System/Libraries
-Summary: Library for avahi-gobject
+Group:		System/Libraries
+Summary:	Library for avahi-gobject
 
 %description -n %{lib_gobject_name}
 Library for avahi-gobject.
 
 %package -n %{develnamegobject}
-Group: Development/C
-Summary: Devel library for avahi-gobject
-Provides: %{gobject_name}-devel = %{version}-%{release}
-Provides: lib%{gobject_name}-devel = %{version}-%{release}
-Requires: %{lib_gobject_name} = %{version}-%{release}
+Group:		Development/C
+Summary:	Devel library for avahi-gobject
+Provides:	%{gobject_name}-devel = %{version}-%{release}
+Provides:	lib%{gobject_name}-devel = %{version}-%{release}
+Requires:	%{lib_gobject_name} = %{version}-%{release}
 
 %description -n %{develnamegobject}
 Devel library for avahi-gobject.
 
 %package -n %{lib_howl_name}
-Group: System/Libraries
-Summary: Avahi compatibility library for howl
-Obsoletes: %{lib_howl_old_name}
-Provides: %{lib_howl_old_name} = %{lib_howl_fake_EVR}
+Group:		System/Libraries
+Summary:	Avahi compatibility library for howl
+Obsoletes:	%{lib_howl_old_name} < %{lib_howl_fake_EVR}
+Provides:	%{lib_howl_old_name} = %{lib_howl_fake_EVR}
 
 %description -n %{lib_howl_name}
 Avahi compatibility library for howl.
 
 %package -n %{develnamehowl}
-Group: Development/C
-Summary: Avahi devel compatibility library for libdns_sd for howl
-Provides: %{howl_name}-devel = %{version}-%{release}
-Provides: lib%{howl_name}-devel = %{version}-%{release}
-Requires: %{lib_howl_name} = %{version}-%{release}
-Obsoletes: %{lib_howl_old_name}-devel
-Provides: %{lib_howl_old_name}-devel = %{lib_howl_fake_EVR}
-Provides: %{howl_old_name}-devel = %{version}-%{release}
-Provides: lib%{howl_old_name}-devel = %{version}-%{release}
-Obsoletes: %mklibname -d %{howl_name} 0
+Group:		Development/C
+Summary:	Avahi devel compatibility library for libdns_sd for howl
+Provides:	%{howl_name}-devel = %{version}-%{release}
+Provides:	lib%{howl_name}-devel = %{version}-%{release}
+Requires:	%{lib_howl_name} = %{version}-%{release}
+Obsoletes:	%{lib_howl_old_name}-devel < %{lib_howl_fake_EVR}
+Provides:	%{lib_howl_old_name}-devel = %{lib_howl_fake_EVR}
+Provides:	%{howl_old_name}-devel = %{version}-%{release}
+Provides:	lib%{howl_old_name}-devel = %{version}-%{release}
+Obsoletes:	%mklibname -d %{howl_name} 0
 
 %description -n %{develnamehowl}
 Avahi devel compatibility library for libdns_sd for howl.
 
 %if %{build_qt3}
 %package -n %{lib_qt3_name}
-Group: System/Libraries
-Summary: Library for avahi-qt3
+Group:		System/Libraries
+Summary:	Library for avahi-qt3
 
 %description -n %{lib_qt3_name}
 Library for avahi-qt3.
 
 %package -n %{develnameqt3}
-Group: Development/C
-Summary: Devel library for avahi-qt3
-Provides: %{qt3_name}-devel = %{version}-%{release}
-Provides: lib%{qt3_name}-devel = %{version}-%{release}
-Requires: %{lib_qt3_name} = %{version}-%{release}
-Obsoletes: %mklibname -d %{qt3_name}_ 1
+Group:		Development/C
+Summary:	Devel library for avahi-qt3
+Provides:	%{qt3_name}-devel = %{version}-%{release}
+Provides:	lib%{qt3_name}-devel = %{version}-%{release}
+Requires:	%{lib_qt3_name} = %{version}-%{release}
+Obsoletes:	%mklibname -d %{qt3_name}_ 1
 
 %description -n %{develnameqt3}
 Devel library for avahi-qt3.
@@ -352,54 +355,55 @@ Devel library for avahi-qt3.
 
 %if %{build_qt4}
 %package -n %{lib_qt4_name}
-Group: System/Libraries
-Summary: Library for avahi-qt4
+Group:		System/Libraries
+Summary:	Library for avahi-qt4
 
 %description -n %{lib_qt4_name}
 Library for avahi-qt4.
 
 %package -n %{develnameqt4}
-Group: Development/C
-Summary: Devel library for avahi-qt4
-Provides: %{qt4_name}-devel = %{version}-%{release}
-Provides: lib%{qt4_name}-devel = %{version}-%{release}
-Requires: %{lib_qt4_name} = %{version}-%{release}
-Obsoletes: %mklibname -d %{qt4_name}_ 1
+Group:		Development/C
+Summary:	Devel library for avahi-qt4
+Provides:	%{qt4_name}-devel = %{version}-%{release}
+Provides:	lib%{qt4_name}-devel = %{version}-%{release}
+Requires:	%{lib_qt4_name} = %{version}-%{release}
+Obsoletes:	%mklibname -d %{qt4_name}_ 1
 
 %description -n %{develnameqt4}
 Devel library for avahi-qt4.
 %endif
 
 %package -n %{lib_ui_name}
-Group: System/Libraries
-Summary: Library for avahi-ui
+Group:		System/Libraries
+Summary:	Library for avahi-ui
+
 %description -n %{lib_ui_name}
 Library for avahi-ui.
 
 %package -n %{develnameui}
-Group: Development/C
-Summary: Devel library for avahi-ui
-Provides: %{ui_name}-devel = %{version}-%{release}
-Provides: lib%{ui_name}-devel = %{version}-%{release}
-Requires: %{lib_ui_name} = %{version}-%{release}
-Obsoletes: %mklibname -d %{ui_name} 1
+Group:		Development/C
+Summary:	Devel library for avahi-ui
+Provides:	%{ui_name}-devel = %{version}-%{release}
+Provides:	lib%{ui_name}-devel = %{version}-%{release}
+Requires:	%{lib_ui_name} = %{version}-%{release}
+Obsoletes:	%mklibname -d %{ui_name} 1
 
 %description -n %{develnameui}
 Devel library for avahi-ui.
 
 %if %{build_gtk3}
 %package -n %{lib_ui_gtk3_name}
-Group: System/Libraries
-Summary: Library for avahi-gtk3
+Group:		System/Libraries
+Summary:	Library for avahi-gtk3
 
 %description -n %{lib_ui_gtk3_name}
 Library for avahi-gtk3.
 
 %package -n %{develnameui_gtk3}
-Group: Development/C
-Summary: Devel library for avahi-gtk3
-Provides: %{ui_gtk3_name}-devel = %{version}-%{release}
-Requires: %{lib_ui_gtk3_name} = %{version}-%{release}
+Group:		Development/C
+Summary:	Devel library for avahi-gtk3
+Provides:	%{ui_gtk3_name}-devel = %{version}-%{release}
+Requires:	%{lib_ui_gtk3_name} = %{version}-%{release}
 
 %description -n %{develnameui_gtk3}
 Devel library for avahi-gtk3.
