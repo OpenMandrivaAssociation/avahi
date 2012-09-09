@@ -19,6 +19,7 @@
 %define dns_sd_major 1
 %define glib_major 1
 %define object_major 0
+%define gobject_major 0
 %define howl_major 0
 %define qt3_major 1
 %define qt4_major 1
