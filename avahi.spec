@@ -419,33 +419,34 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %configure2_5x \
 	--disable-static \
 %if !%{build_mono}
-    --disable-mono \
+	--disable-mono \
 %endif
 %if !%{build_qt3}
-    --disable-qt3 \
+	--disable-qt3 \
 %endif
 %if !%{build_qt4}
-    --disable-qt4 \
+	--disable-qt4 \
 %endif
-  --localstatedir=%{_var} \
-  --with-avahi-priv-access-group="avahi" \
-  --enable-compat-libdns_sd \
-  --enable-compat-howl \
-  --enable-introspection=no \
+	--localstatedir=%{_var} \
+	--with-avahi-priv-access-group="avahi" \
+	--enable-compat-libdns_sd \
+	--enable-compat-howl \
+	--enable-introspection=no \
 %if %{build_systemd}
-  --with-systemdsystemunitdir=%{_unitdir} \
+	--with-systemdsystemunitdir=%{_unitdir} \
 %endif
 %if !%{build_gtk3}
-  --disable-gtk3
+	--disable-gtk3
 %endif
 
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
-rm -f %{buildroot}/%{_sysconfdir}/%{name}/services/ssh.service
+
+rm -f %{buildroot}%{_sysconfdir}/%{name}/services/ssh.service
 ln -s avahi-compat-howl.pc %{buildroot}%{_libdir}/pkgconfig/howl.pc
+
 %if "%{_lib}" != "lib" && %{build_mono}
 mkdir -p %{buildroot}%{_prefix}/lib
 mv %{buildroot}%{_libdir}/mono %{buildroot}%{_prefix}/lib
@@ -453,12 +454,12 @@ perl -pi -e "s/%{_lib}/lib/" %{buildroot}%{_libdir}/pkgconfig/avahi-{,ui-}sharp.
 %endif
 
 # install hostname.d hook
-mkdir -p %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/
-install -m755 avahi-hostname.sh %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
+mkdir -p %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/hostname.d/
+install -m755 avahi-hostname.sh %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 
 %if %{build_systemd}
-rm -rf %{_initrddir}/%{name}-daemon
-rm -rf %{_initrddir}/%{name}-dnsconfd
+rm -rf %{buildroot}%{_initrddir}/%{name}-daemon
+rm -rf %{buildroot}%{_initrddir}/%{name}-dnsconfd
 %endif
 
 %find_lang %{name}
