@@ -165,7 +165,7 @@ Summary:	Mono bindings for Avahi
 BuildRequires:	mono-devel mono-tools
 BuildRequires:	pkgconfig(gtk-sharp-2.0)
 #gw this is needed by mono-find-requires:
-BuildRequires:	avahi-ui-devel
+#BuildRequires:	avahi-ui-devel
 Requires:	%{lib_client_name} = %{version}-%{release}
 Requires:	%{lib_common_name} = %{version}-%{release}
 Requires:	%{lib_glib_name} = %{version}-%{release}
