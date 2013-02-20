@@ -10,9 +10,6 @@
 %define ui_name			%{name}-ui
 %define ui_gtk3_name	%{name}-ui-gtk3
 
-%define dns_sd_old_name	mDNSResponder
-%define howl_old_name	howl
-
 %define client_major	3
 %define common_major	3
 %define core_major	7
@@ -48,9 +45,6 @@
 %define develnameui		%mklibname -d %{ui_name}
 %define lib_ui_gtk3_name	%mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
 %define develnameui_gtk3	%mklibname -d %{ui_gtk3_name}
-
-%define lib_dns_sd_old_name	%mklibname %{dns_sd_old_name} 1
-%define lib_howl_old_name	%mklibname %{howl_old_name} 0
 
 %define build_mono 1
 %{?_with_mono: %{expand: %%global build_mono 1}} 
