@@ -89,7 +89,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.6.31
-Release:	5
+Release:	6
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -240,8 +240,6 @@ Devel library for avahi-core.
 %package -n %{lib_dns_sd_name}
 Group:		System/Libraries
 Summary:	Avahi compatibility library for libdns_sd
-Obsoletes:	%{lib_dns_sd_old_name} < 0.6.31
-Provides:	%{lib_dns_sd_old_name}
 
 %description -n %{lib_dns_sd_name}
 Avahi compatibility library for libdns_sd
@@ -351,7 +349,7 @@ Group:		Development/C
 Summary:	Devel library for avahi-ui
 Provides:	%{ui_name}-devel = %{version}-%{release}
 Requires:	%{lib_ui_name} = %{version}-%{release}
-Obsoletes:	%{_lib}avahi-ui1 < 0.6.31-5
+Obsoletes:	%{_lib}avahi-ui1 < 0.6.31-6
 
 %description -n %{develnameui}
 Devel library for avahi-ui.
