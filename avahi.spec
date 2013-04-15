@@ -83,7 +83,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.6.31
-Release:	6
+Release:	7
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -150,7 +150,7 @@ Summary:	Python bindings and utilities for Avahi
 Requires:	pygtk2.0-libglade
 Requires:	python-twisted-core
 Requires:	python-twisted-web
-Requires:	dbus-python
+Requires:	python-dbus
 Requires:	%{name} 
 Requires:	%{name}-x11
 
