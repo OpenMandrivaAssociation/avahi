@@ -1,50 +1,50 @@
-%define client_name		%{name}-client
-%define common_name		%{name}-common
-%define core_name		%{name}-core
-%define dns_sd_name		%{name}-compat-libdns_sd
-%define glib_name		%{name}-glib
-%define gobject_name	%{name}-gobject
-%define howl_name		%{name}-compat-howl
-%define qt3_name		%{name}-qt3
-%define qt4_name		%{name}-qt4
-%define ui_name			%{name}-ui
-%define ui_gtk3_name	%{name}-ui-gtk3
+%define client_name %{name}-client
+%define common_name %{name}-common
+%define core_name %{name}-core
+%define dns_sd_name %{name}-compat-libdns_sd
+%define glib_name %{name}-glib
+%define gobject_name %{name}-gobject
+%define howl_name %{name}-compat-howl
+%define qt3_name %{name}-qt3
+%define qt4_name %{name}-qt4
+%define ui_name %{name}-ui
+%define ui_gtk3_name %{name}-ui-gtk3
 
-%define client_major	3
-%define common_major	3
-%define core_major	7
-%define dns_sd_major	1
-%define glib_major	1
-%define gobject_major	0
-%define howl_major	0
-%define qt3_major	1
-%define qt4_major	1
-%define ui_major	0
-%define ui_gtk3_major	0
+%define client_major 3
+%define common_major 3
+%define core_major 7
+%define dns_sd_major 1
+%define glib_major 1
+%define gobject_major 0
+%define howl_major 0
+%define qt3_major 1
+%define qt4_major 1
+%define ui_major 0
+%define ui_gtk3_major 0
 
-%define lib_client_name	%mklibname %{client_name} %{client_major}
-%define develnameclient	%mklibname -d %{client_name}
-%define lib_common_name	%mklibname %{common_name} %{common_major}
-%define develnamecommon	%mklibname -d %{common_name}
-%define lib_core_name	%mklibname %{core_name} %{core_major}
-%define develnamecore	%mklibname -d %{core_name}
-%define lib_dns_sd_name	%mklibname %{dns_sd_name} %{dns_sd_major}
-%define develnamedns_sd	%mklibname -d %{dns_sd_name}
-%define lib_glib_name	%mklibname %{glib_name} %{glib_major}
-%define develnameglib	%mklibname -d %{glib_name}
-%define lib_gobject_name	%mklibname %{gobject_name} %{gobject_major}
-%define develnamegobject	%mklibname -d %{gobject_name}
-%define lib_howl_name	%mklibname %{howl_name} %{howl_major}
-%define develnamehowl	%mklibname -d %{howl_name}
-%define lib_qt3_name	%mklibname %{qt3_name}_ %{qt3_major}
-%define develnameqt3	%mklibname -d %{qt3_name}
-%define lib_qt4_name	%mklibname %{qt4_name}_ %{qt4_major}
-%define develnameqt4	%mklibname -d %{qt4_name}
+%define lib_client_name %mklibname %{client_name} %{client_major}
+%define develnameclient %mklibname -d %{client_name}
+%define lib_common_name %mklibname %{common_name} %{common_major}
+%define develnamecommon %mklibname -d %{common_name}
+%define lib_core_name %mklibname %{core_name} %{core_major}
+%define develnamecore %mklibname -d %{core_name}
+%define lib_dns_sd_name %mklibname %{dns_sd_name} %{dns_sd_major}
+%define develnamedns_sd %mklibname -d %{dns_sd_name}
+%define lib_glib_name %mklibname %{glib_name} %{glib_major}
+%define develnameglib %mklibname -d %{glib_name}
+%define lib_gobject_name %mklibname %{gobject_name} %{gobject_major}
+%define develnamegobject %mklibname -d %{gobject_name}
+%define lib_howl_name %mklibname %{howl_name} %{howl_major}
+%define develnamehowl %mklibname -d %{howl_name}
+%define lib_qt3_name %mklibname %{qt3_name}_ %{qt3_major}
+%define develnameqt3 %mklibname -d %{qt3_name}
+%define lib_qt4_name %mklibname %{qt4_name}_ %{qt4_major}
+%define develnameqt4 %mklibname -d %{qt4_name}
 ### not worth it to fix now b/c 1 > 0, but ui_major should be used not qt3_major
-%define lib_ui_name		%mklibname %{ui_name} %{ui_major}
-%define develnameui		%mklibname -d %{ui_name}
-%define lib_ui_gtk3_name	%mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
-%define develnameui_gtk3	%mklibname -d %{ui_gtk3_name}
+%define lib_ui_name %mklibname %{ui_name} %{ui_major}
+%define develnameui %mklibname -d %{ui_name}
+%define lib_ui_gtk3_name %mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
+%define develnameui_gtk3 %mklibname -d %{ui_gtk3_name}
 
 %define build_mono 1
 %{?_with_mono: %{expand: %%global build_mono 1}} 
@@ -83,7 +83,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.6.31
-Release:	7
+Release:	8
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
