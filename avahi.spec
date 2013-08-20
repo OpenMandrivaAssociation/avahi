@@ -1,50 +1,50 @@
-%define client_name		%{name}-client
-%define common_name		%{name}-common
-%define core_name		%{name}-core
-%define dns_sd_name		%{name}-compat-libdns_sd
-%define glib_name		%{name}-glib
-%define gobject_name	%{name}-gobject
-%define howl_name		%{name}-compat-howl
-%define qt3_name		%{name}-qt3
-%define qt4_name		%{name}-qt4
-%define ui_name			%{name}-ui
-%define ui_gtk3_name	%{name}-ui-gtk3
+%define client_name %{name}-client
+%define common_name %{name}-common
+%define core_name %{name}-core
+%define dns_sd_name %{name}-compat-libdns_sd
+%define glib_name %{name}-glib
+%define gobject_name %{name}-gobject
+%define howl_name %{name}-compat-howl
+%define qt3_name %{name}-qt3
+%define qt4_name %{name}-qt4
+%define ui_name %{name}-ui
+%define ui_gtk3_name %{name}-ui-gtk3
 
-%define client_major	3
-%define common_major	3
-%define core_major	7
-%define dns_sd_major	1
-%define glib_major	1
-%define gobject_major	0
-%define howl_major	0
-%define qt3_major	1
-%define qt4_major	1
-%define ui_major	0
-%define ui_gtk3_major	0
+%define client_major 3
+%define common_major 3
+%define core_major 7
+%define dns_sd_major 1
+%define glib_major 1
+%define gobject_major 0
+%define howl_major 0
+%define qt3_major 1
+%define qt4_major 1
+%define ui_major 0
+%define ui_gtk3_major 0
 
-%define lib_client_name	%mklibname %{client_name} %{client_major}
-%define develnameclient	%mklibname -d %{client_name}
-%define lib_common_name	%mklibname %{common_name} %{common_major}
-%define develnamecommon	%mklibname -d %{common_name}
-%define lib_core_name	%mklibname %{core_name} %{core_major}
-%define develnamecore	%mklibname -d %{core_name}
-%define lib_dns_sd_name	%mklibname %{dns_sd_name} %{dns_sd_major}
-%define develnamedns_sd	%mklibname -d %{dns_sd_name}
-%define lib_glib_name	%mklibname %{glib_name} %{glib_major}
-%define develnameglib	%mklibname -d %{glib_name}
-%define lib_gobject_name	%mklibname %{gobject_name} %{gobject_major}
-%define develnamegobject	%mklibname -d %{gobject_name}
-%define lib_howl_name	%mklibname %{howl_name} %{howl_major}
-%define develnamehowl	%mklibname -d %{howl_name}
-%define lib_qt3_name	%mklibname %{qt3_name}_ %{qt3_major}
-%define develnameqt3	%mklibname -d %{qt3_name}
-%define lib_qt4_name	%mklibname %{qt4_name}_ %{qt4_major}
-%define develnameqt4	%mklibname -d %{qt4_name}
+%define lib_client_name %mklibname %{client_name} %{client_major}
+%define develnameclient %mklibname -d %{client_name}
+%define lib_common_name %mklibname %{common_name} %{common_major}
+%define develnamecommon %mklibname -d %{common_name}
+%define lib_core_name %mklibname %{core_name} %{core_major}
+%define develnamecore %mklibname -d %{core_name}
+%define lib_dns_sd_name %mklibname %{dns_sd_name} %{dns_sd_major}
+%define develnamedns_sd %mklibname -d %{dns_sd_name}
+%define lib_glib_name %mklibname %{glib_name} %{glib_major}
+%define develnameglib %mklibname -d %{glib_name}
+%define lib_gobject_name %mklibname %{gobject_name} %{gobject_major}
+%define develnamegobject %mklibname -d %{gobject_name}
+%define lib_howl_name %mklibname %{howl_name} %{howl_major}
+%define develnamehowl %mklibname -d %{howl_name}
+%define lib_qt3_name %mklibname %{qt3_name}_ %{qt3_major}
+%define develnameqt3 %mklibname -d %{qt3_name}
+%define lib_qt4_name %mklibname %{qt4_name}_ %{qt4_major}
+%define develnameqt4 %mklibname -d %{qt4_name}
 ### not worth it to fix now b/c 1 > 0, but ui_major should be used not qt3_major
-%define lib_ui_name		%mklibname %{ui_name} %{ui_major}
-%define develnameui		%mklibname -d %{ui_name}
-%define lib_ui_gtk3_name	%mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
-%define develnameui_gtk3	%mklibname -d %{ui_gtk3_name}
+%define lib_ui_name %mklibname %{ui_name} %{ui_major}
+%define develnameui %mklibname -d %{ui_name}
+%define lib_ui_gtk3_name %mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
+%define develnameui_gtk3 %mklibname -d %{ui_gtk3_name}
 
 %define build_mono 1
 %{?_with_mono: %{expand: %%global build_mono 1}} 
@@ -83,7 +83,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.6.31
-Release:	7
+Release:	8
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -116,6 +116,11 @@ Requires(pre,preun,post,postun): rpm-helper
 Requires(post,preun): dbus
 Suggests:	nss_mdns
 
+Requires(post):		rpm-helper
+Requires(preun):	rpm-helper
+Requires(post):		dbus
+Requires(preun):	dbus
+
 %description
 Avahi is a system which facilitates service discovery on a local
 network -- this means that you can plug your laptop or computer into a
@@ -129,6 +134,7 @@ Group:		System/Servers
 Summary:	Avahi DNS configuration server
 Requires:	%{name} = %{version}-%{release}
 Requires(post,preun):	rpm-helper
+Conflicts:	avahi < 0.6.31-8
 
 %description dnsconfd
 avahi-dnsconfd is a small daemon which may be used to configure
@@ -399,6 +405,9 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 
 %install
 %makeinstall_std
+
+mkdir -p %{buildroot}%{_localstatedir}/avahi
+
 rm -f %{buildroot}/%{_sysconfdir}/%{name}/services/ssh.service
 ln -s avahi-compat-howl.pc %{buildroot}%{_libdir}/pkgconfig/howl.pc
 %if "%{_lib}" != "lib" && %{build_mono}
@@ -415,6 +424,8 @@ install -m755 avahi-hostname.sh %{buildroot}/%{_sysconfdir}/sysconfig/network-sc
 rm -rf %{buildroot}%{_initrddir}/%{name}-daemon
 rm -rf %{buildroot}%{_initrddir}/%{name}-dnsconfd
 %endif
+
+rm -f %{buildroot}%{_sysconfdir}/avahi/services/sftp-ssh.service
 
 %find_lang %{name}
 
@@ -452,11 +463,11 @@ fi
 %config(noreplace) %{_sysconfdir}/%{name}/hosts
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}-daemon.conf
 %config(noreplace) %{_sysconfdir}/%{name}/avahi-autoipd.action
-%config(noreplace) %{_sysconfdir}/%{name}/services/sftp-ssh.service
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/%{name}-dbus.conf
 %if !%{build_systemd}
  %{_initrddir}/%{name}-daemon
 %endif
+%attr(0755,avahi,avahi) %dir %{_localstatedir}/avahi
 %{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 %{_bindir}/%{name}-browse
 %{_bindir}/%{name}-browse-domains
@@ -469,7 +480,6 @@ fi
 %{_bindir}/%{name}-set-host-name
 %{_sbindir}/%{name}-daemon
 %{_sbindir}/avahi-autoipd
-%{_sbindir}/avahi-dnsconfd
 %{_datadir}/%{name}/%{name}-service.dtd
 %{_datadir}/dbus-1/interfaces/*.xml
 %{_datadir}/%{name}/service-types
@@ -492,15 +502,17 @@ fi
 %if %{build_systemd}
 %{_unitdir}/avahi-daemon.service
 %{_unitdir}/avahi-daemon.socket
-%{_unitdir}/avahi-dnsconfd.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.Avahi.service
 %endif
 
 %files dnsconfd
 %{_sysconfdir}/%{name}/%{name}-dnsconfd.action
 %if !%{build_systemd}
- %{_initrddir}/%{name}-dnsconfd
-%endif%{_sbindir}/%{name}-dnsconfd
+%{_initrddir}/%{name}-dnsconfd
+%else
+%{_unitdir}/avahi-dnsconfd.service
+%endif
+%{_sbindir}/%{name}-dnsconfd
 %{_mandir}/man8/%{name}-dnsconfd.8*
 %{_mandir}/man8/%{name}-dnsconfd.action.8*
 
