@@ -115,7 +115,6 @@ BuildRequires:	systemd-units
 Requires(pre,preun,post,postun): rpm-helper
 Requires(post,preun): dbus
 Suggests:	nss_mdns
-Conflicts:	avahi < 0.6.31-8
 
 Requires(post):		rpm-helper
 Requires(preun):	rpm-helper
@@ -135,6 +134,7 @@ Group:		System/Servers
 Summary:	Avahi DNS configuration server
 Requires:	%{name} = %{version}-%{release}
 Requires(post,preun):	rpm-helper
+Conflicts:	avahi < 0.6.31-8
 
 %description dnsconfd
 avahi-dnsconfd is a small daemon which may be used to configure
@@ -480,7 +480,6 @@ fi
 %{_bindir}/%{name}-set-host-name
 %{_sbindir}/%{name}-daemon
 %{_sbindir}/avahi-autoipd
-%{_sbindir}/avahi-dnsconfd
 %{_datadir}/%{name}/%{name}-service.dtd
 %{_datadir}/dbus-1/interfaces/*.xml
 %{_datadir}/%{name}/service-types
