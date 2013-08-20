@@ -115,6 +115,7 @@ BuildRequires:	systemd-units
 Requires(pre,preun,post,postun): rpm-helper
 Requires(post,preun): dbus
 Suggests:	nss_mdns
+Conflicts:	avahi < 0.6.31-8
 
 %description
 Avahi is a system which facilitates service discovery on a local
@@ -399,6 +400,9 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 
 %install
 %makeinstall_std
+
+mkdir -p %{buildroot}%{_localstatedir}/avahi
+
 rm -f %{buildroot}/%{_sysconfdir}/%{name}/services/ssh.service
 ln -s avahi-compat-howl.pc %{buildroot}%{_libdir}/pkgconfig/howl.pc
 %if "%{_lib}" != "lib" && %{build_mono}
@@ -457,6 +461,7 @@ fi
 %if !%{build_systemd}
  %{_initrddir}/%{name}-daemon
 %endif
+%attr(0755,avahi,avahi) %dir %{_localstatedir}/avahi
 %{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 %{_bindir}/%{name}-browse
 %{_bindir}/%{name}-browse-domains
@@ -492,15 +497,17 @@ fi
 %if %{build_systemd}
 %{_unitdir}/avahi-daemon.service
 %{_unitdir}/avahi-daemon.socket
-%{_unitdir}/avahi-dnsconfd.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.Avahi.service
 %endif
 
 %files dnsconfd
 %{_sysconfdir}/%{name}/%{name}-dnsconfd.action
 %if !%{build_systemd}
- %{_initrddir}/%{name}-dnsconfd
-%endif%{_sbindir}/%{name}-dnsconfd
+%{_initrddir}/%{name}-dnsconfd
+%else
+%{_unitdir}/avahi-dnsconfd.service
+%endif
+%{_sbindir}/%{name}-dnsconfd
 %{_mandir}/man8/%{name}-dnsconfd.8*
 %{_mandir}/man8/%{name}-dnsconfd.action.8*
 
