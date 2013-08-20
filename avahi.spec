@@ -117,6 +117,11 @@ Requires(post,preun): dbus
 Suggests:	nss_mdns
 Conflicts:	avahi < 0.6.31-8
 
+Requires(post):		rpm-helper
+Requires(preun):	rpm-helper
+Requires(post):		dbus
+Requires(preun):	dbus
+
 %description
 Avahi is a system which facilitates service discovery on a local
 network -- this means that you can plug your laptop or computer into a
@@ -420,6 +425,8 @@ rm -rf %{buildroot}%{_initrddir}/%{name}-daemon
 rm -rf %{buildroot}%{_initrddir}/%{name}-dnsconfd
 %endif
 
+rm -f %{buildroot}%{_sysconfdir}/avahi/services/sftp-ssh.service
+
 %find_lang %{name}
 
 %pre
@@ -456,7 +463,6 @@ fi
 %config(noreplace) %{_sysconfdir}/%{name}/hosts
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}-daemon.conf
 %config(noreplace) %{_sysconfdir}/%{name}/avahi-autoipd.action
-%config(noreplace) %{_sysconfdir}/%{name}/services/sftp-ssh.service
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/%{name}-dbus.conf
 %if !%{build_systemd}
  %{_initrddir}/%{name}-daemon
