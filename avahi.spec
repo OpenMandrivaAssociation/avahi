@@ -50,7 +50,7 @@
 %{?_with_mono: %{expand: %%global build_mono 1}} 
 %{?_without_mono: %{expand: %%global build_mono 0}} 
 
-%ifarch %arm %mips
+%ifarch %arm %mips aarch64
 %define build_mono 0
 %endif
 
@@ -375,6 +375,10 @@ Devel library for avahi-gtk3.
 %prep
 %setup -q
 cp %{SOURCE1} avahi-hostname.sh
+for f in config.guess config.sub ; do
+        test -f /usr/share/libtool/config/$f || continue
+        find . -type f -name $f -exec cp /usr/share/libtool/config/$f \{\} \;
+done
 
 %build
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
