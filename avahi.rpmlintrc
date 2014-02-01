@@ -1,0 +1,2 @@
+# Intentional for avahi-sharp
+addFilter("E: devel-file-in-non-devel-package")
