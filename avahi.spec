@@ -83,7 +83,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.6.31
-Release:	13
+Release:	14
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -91,7 +91,7 @@ Source0:	http://avahi.org/download/%{name}-%{version}.tar.gz
 Source1:	avahi-hostname.sh
 Source100:	%{name}.rpmlintrc
 Patch0:		avahi-0.6.31-gtk-is-broken-beyond-repair-gtk-die-die-die.patch
-
+Patch1:		avahi-0.6.31.workaround.patch
 BuildRequires:	intltool
 BuildRequires:	pygtk2.0
 BuildRequires:	cap-devel
