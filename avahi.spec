@@ -50,7 +50,7 @@
 %{?_with_mono: %{expand: %%global build_mono 1}} 
 %{?_without_mono: %{expand: %%global build_mono 0}} 
 
-%ifarch %arm %mips
+%ifarch %arm %mips aarch64
 %define build_mono 0
 %endif
 
@@ -83,13 +83,15 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.6.31
-Release:	8
+Release:	14
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
 Source0:	http://avahi.org/download/%{name}-%{version}.tar.gz
 Source1:	avahi-hostname.sh
-
+Source100:	%{name}.rpmlintrc
+Patch0:		avahi-0.6.31-gtk-is-broken-beyond-repair-gtk-die-die-die.patch
+Patch1:		avahi-0.6.31.workaround.patch
 BuildRequires:	intltool
 BuildRequires:	pygtk2.0
 BuildRequires:	cap-devel
@@ -374,7 +376,16 @@ Devel library for avahi-gtk3.
 
 %prep
 %setup -q
+%apply_patches
 cp %{SOURCE1} avahi-hostname.sh
+find . -name "Makefile*" -o -name "*.in" -o -name "*.ac" |sort |uniq |xargs sed -i -e 's,localstatedir\@/run,localstatedir\@,g;s,localstatedir}/run,localstatedir},g'
+for f in config.guess config.sub ; do
+        test -f /usr/share/libtool/config/$f || continue
+        find . -type f -name $f -exec cp /usr/share/libtool/config/$f \{\} \;
+done
+aclocal -I common
+automake -a
+autoconf
 
 %build
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
@@ -389,7 +400,7 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %if !%{build_qt4}
 	--disable-qt4 \
 %endif
-	--localstatedir=%{_var} \
+	--localstatedir=/run \
 	--with-avahi-priv-access-group="avahi" \
 	--enable-compat-libdns_sd \
 	--enable-compat-howl \

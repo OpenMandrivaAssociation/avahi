@@ -1,0 +1,20 @@
+--- avahi-0.6.31/avahi-ui/avahi-ui.c.omv~	2014-02-01 11:58:05.074376160 +0100
++++ avahi-0.6.31/avahi-ui/avahi-ui.c	2014-02-01 12:01:18.867712046 +0100
+@@ -27,6 +27,7 @@
+ #include <stdarg.h>
+ #include <net/if.h>
+ 
++#undef GTK_DISABLE_DEPRECATED
+ #include <gtk/gtk.h>
+ 
+ #include <avahi-glib/glib-watch.h>
+--- avahi-0.6.31/avahi-ui/bssh.c.omv~	2014-02-01 12:01:29.224378878 +0100
++++ avahi-0.6.31/avahi-ui/bssh.c	2014-02-01 12:01:37.864378950 +0100
+@@ -28,6 +28,7 @@
+ #include <locale.h>
+ #include <getopt.h>
+ 
++#undef GTK_DISABLE_DEPRECATED
+ #include <gtk/gtk.h>
+ 
+ #include <avahi-client/client.h>
