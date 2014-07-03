@@ -23,34 +23,33 @@
 %define ui_gtk3_major 0
 
 %define lib_client_name %mklibname %{client_name} %{client_major}
-%define develnameclient %mklibname -d %{client_name}
+%define develnameclient %mklibname %{client_name} -d
 %define lib_common_name %mklibname %{common_name} %{common_major}
-%define develnamecommon %mklibname -d %{common_name}
+%define develnamecommon %mklibname %{common_name} -d
 %define lib_core_name %mklibname %{core_name} %{core_major}
-%define develnamecore %mklibname -d %{core_name}
+%define develnamecore %mklibname %{core_name} -d
 %define lib_dns_sd_name %mklibname %{dns_sd_name} %{dns_sd_major}
-%define develnamedns_sd %mklibname -d %{dns_sd_name}
+%define develnamedns_sd %mklibname %{dns_sd_name} -d
 %define lib_glib_name %mklibname %{glib_name} %{glib_major}
-%define develnameglib %mklibname -d %{glib_name}
+%define develnameglib %mklibname %{glib_name} -d
 %define lib_gobject_name %mklibname %{gobject_name} %{gobject_major}
-%define develnamegobject %mklibname -d %{gobject_name}
+%define develnamegobject %mklibname %{gobject_name} -d
 %define lib_howl_name %mklibname %{howl_name} %{howl_major}
-%define develnamehowl %mklibname -d %{howl_name}
+%define develnamehowl %mklibname %{howl_name} -d
 %define lib_qt3_name %mklibname %{qt3_name}_ %{qt3_major}
-%define develnameqt3 %mklibname -d %{qt3_name}
+%define develnameqt3 %mklibname %{qt3_name} -d
 %define lib_qt4_name %mklibname %{qt4_name}_ %{qt4_major}
-%define develnameqt4 %mklibname -d %{qt4_name}
-### not worth it to fix now b/c 1 > 0, but ui_major should be used not qt3_major
+%define develnameqt4 %mklibname %{qt4_name} -d
 %define lib_ui_name %mklibname %{ui_name} %{ui_major}
-%define develnameui %mklibname -d %{ui_name}
+%define develnameui %mklibname %{ui_name} -d
 %define lib_ui_gtk3_name %mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
-%define develnameui_gtk3 %mklibname -d %{ui_gtk3_name}
+%define develnameui_gtk3 %mklibname %{ui_gtk3_name} -d
 
 %define build_mono 1
 %{?_with_mono: %{expand: %%global build_mono 1}} 
 %{?_without_mono: %{expand: %%global build_mono 0}} 
 
-%ifarch %arm %mips aarch64
+%ifarch %{arm} %{mips} aarch64
 %define build_mono 0
 %endif
 
@@ -83,7 +82,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.6.31
-Release:	15
+Release:	16
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -131,10 +130,74 @@ with, find printers to print to or find files being shared. This kind
 of technology is already found in MacOS X (branded 'Rendezvous',
 'Bonjour' and sometimes 'ZeroConf') and is very convenient.
 
+%files -f avahi.lang
+%dir %{_sysconfdir}/%{name}/
+%dir %{_sysconfdir}/%{name}/services/
+%config(noreplace) %{_sysconfdir}/%{name}/hosts
+%config(noreplace) %{_sysconfdir}/%{name}/%{name}-daemon.conf
+%config(noreplace) %{_sysconfdir}/%{name}/avahi-autoipd.action
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/%{name}-dbus.conf
+%if !%{build_systemd}
+ %{_initrddir}/%{name}-daemon
+%endif
+%attr(0755,avahi,avahi) %dir %{_localstatedir}/avahi
+%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
+%{_bindir}/%{name}-browse
+%{_bindir}/%{name}-browse-domains
+%{_bindir}/%{name}-publish
+%{_bindir}/%{name}-publish-address
+%{_bindir}/%{name}-publish-service
+%{_bindir}/%{name}-resolve
+%{_bindir}/%{name}-resolve-address
+%{_bindir}/%{name}-resolve-host-name
+%{_bindir}/%{name}-set-host-name
+%{_sbindir}/%{name}-daemon
+%{_sbindir}/avahi-autoipd
+%{_datadir}/%{name}/%{name}-service.dtd
+%{_datadir}/dbus-1/interfaces/*.xml
+%{_datadir}/%{name}/service-types
+%{_mandir}/man1/%{name}-browse-domains.1*
+%{_mandir}/man1/%{name}-browse.1*
+%{_mandir}/man1/%{name}-publish.1*
+%{_mandir}/man1/%{name}-publish-address.1*
+%{_mandir}/man1/%{name}-publish-service.1*
+%{_mandir}/man1/%{name}-resolve.1*
+%{_mandir}/man1/%{name}-resolve-address.1*
+%{_mandir}/man1/%{name}-resolve-host-name.1*
+%{_mandir}/man1/%{name}-set-host-name.1*
+%{_mandir}/man5/%{name}-daemon.conf.5*
+%{_mandir}/man5/%{name}.hosts.5*
+%{_mandir}/man5/%{name}.service.5*
+%{_mandir}/man8/%{name}-daemon.8*
+%{_mandir}/man8/avahi-autoipd*
+%dir %{_libdir}/avahi
+%{_libdir}/avahi/service-types.db
+%if %{build_systemd}
+%{_unitdir}/avahi-daemon.service
+%{_unitdir}/avahi-daemon.socket
+%{_datadir}/dbus-1/system-services/org.freedesktop.Avahi.service
+%endif
+
+%pre
+%_pre_useradd %{name} %{_var}/%{name} /bin/false
+%_pre_useradd %{name}-autoipd %{_var}/%{name} /bin/false
+
+%postun
+%_postun_userdel %{name}
+%_postun_userdel %{name}-autoipd
+
+%post
+%_post_service %{name}-daemon
+
+%preun
+%_preun_service %{name}-daemon
+
+#----------------------------------------------------------------------------
+
 %package dnsconfd
-Group:		System/Servers
 Summary:	Avahi DNS configuration server
-Requires:	%{name} = %{version}-%{release}
+Group:		System/Servers
+Requires:	%{name} = %{EVRD}
 Requires(post,preun):	rpm-helper
 Conflicts:	avahi < 0.6.31-8
 
@@ -143,236 +206,449 @@ avahi-dnsconfd is a small daemon which may be used to configure
 conventional DNS servers using mDNS in a DHCP-like fashion.
 Especially useful on IPv6.
 
+%files dnsconfd
+%{_sysconfdir}/%{name}/%{name}-dnsconfd.action
+%if !%{build_systemd}
+%{_initrddir}/%{name}-dnsconfd
+%else
+%{_unitdir}/avahi-dnsconfd.service
+%endif
+%{_sbindir}/%{name}-dnsconfd
+%{_mandir}/man8/%{name}-dnsconfd.8*
+%{_mandir}/man8/%{name}-dnsconfd.action.8*
+
+%post dnsconfd
+%_post_service %{name}-dnsconfd
+
+%preun dnsconfd
+%_preun_service %{name}-dnsconfd
+
+#----------------------------------------------------------------------------
+
 %package x11
-Group:		System/Servers
 Summary:	Graphical tools for Avahi
-Requires:	%{name} = %{version}-%{release}
+Group:		System/Servers
+Requires:	%{name} = %{EVRD}
 
 %description x11
 Graphical tools for Avahi.
 It includes avahi-discover-standalone.
 
-%package	python
-Group:		System/Libraries
+%files x11
+%{_bindir}/%{name}-discover-standalone
+%{_bindir}/bshell
+%{_bindir}/bssh
+%{_bindir}/bvnc
+%{_datadir}/applications/bssh.desktop
+%{_datadir}/applications/bvnc.desktop
+%{_mandir}/man1/bssh.1*
+%{_mandir}/man1/bvnc.1*
+%{_datadir}/applications/%{name}-discover.desktop
+%{_datadir}/%{name}/interfaces/%{name}-discover.ui
+
+#----------------------------------------------------------------------------
+
+%package python
 Summary:	Python bindings and utilities for Avahi
+Group:		System/Libraries
 Requires:	pygtk2.0-libglade
 Requires:	python-twisted-core
 Requires:	python-twisted-web
 Requires:	python-dbus
-Requires:	%{name} 
+Requires:	%{name}
 Requires:	%{name}-x11
 
 %description python
 Python bindings and utilities for Avahi.
 It includes avahi-bookmarks and avahi-discover.
 
+%files python
+%{_bindir}/%{name}-bookmarks
+%{_bindir}/%{name}-discover
+%{py_puresitedir}/%{name}/*.py*
+%{py_puresitedir}/avahi_discover/
+%{_mandir}/man1/%{name}-discover.1*
+%{_mandir}/man1/%{name}-bookmarks.1*
+
+#----------------------------------------------------------------------------
+
 %if %{build_mono}
 %package sharp
-Group:		System/Libraries
 Summary:	Mono bindings for Avahi
-BuildRequires:	mono-devel mono-tools
+Group:		System/Libraries
+BuildRequires:	mono-tools
+BuildRequires:	mono-devel
 BuildRequires:	pkgconfig(gtk-sharp-2.0)
 #gw this is needed by mono-find-requires:
 #BuildRequires:	avahi-ui-devel
-Requires:	%{lib_client_name} = %{version}-%{release}
-Requires:	%{lib_common_name} = %{version}-%{release}
-Requires:	%{lib_glib_name} = %{version}-%{release}
+Requires:	%{lib_client_name} = %{EVRD}
+Requires:	%{lib_common_name} = %{EVRD}
+Requires:	%{lib_glib_name} = %{EVRD}
 
 %description sharp
 Mono bindings for Avahi.
 
+%files sharp
+%{_prefix}/lib/mono/%{name}-sharp/%{name}-sharp.dll
+%{_prefix}/lib/mono/gac/%{name}-sharp/
+%{_libdir}/pkgconfig/%{name}-sharp.pc
+%{_prefix}/lib/mono/%{name}-ui-sharp/%{name}-ui-sharp.dll
+%{_prefix}/lib/mono/gac/%{name}-ui-sharp/
+%{_libdir}/pkgconfig/%{name}-ui-sharp.pc
+%endif
+
+#----------------------------------------------------------------------------
+
+%if %{build_mono}
 %package sharp-doc
 Summary:	Development documentation for avahi-sharp
 Group:		Development/Other
-Requires(post,postun):	mono-tools >= 1.1.9
+Requires(post,postun):	mono-tools
 
 %description sharp-doc
 This package contains the API documentation for the avahi-sharp in
 Monodoc format.
+
+%files sharp-doc
+%{_usr}/lib/monodoc/sources/%{name}-sharp-docs.source
+%{_usr}/lib/monodoc/sources/%{name}-sharp-docs.tree
+%{_usr}/lib/monodoc/sources/%{name}-sharp-docs.zip
+%{_usr}/lib/monodoc/sources/%{name}-ui-sharp-docs.source
+%{_usr}/lib/monodoc/sources/%{name}-ui-sharp-docs.tree
+%{_usr}/lib/monodoc/sources/%{name}-ui-sharp-docs.zip
+
+%post sharp-doc
+%{_bindir}/monodoc --make-index > /dev/null
+
+%postun sharp-doc
+if [ "$1" = "0" -a -x %{_bindir}/monodoc ]; then %{_bindir}/monodoc --make-index > /dev/null
+fi
+
 %endif
 
+#----------------------------------------------------------------------------
+
 %package -n %{lib_client_name}
-Group:		System/Libraries
 Summary:	Library for avahi-client
+Group:		System/Libraries
 
 %description -n %{lib_client_name}
 Library for avahi-client.
 
+%files -n %{lib_client_name}
+%{_libdir}/lib%{name}-client.so.%{client_major}*
+
+#----------------------------------------------------------------------------
+
 %package -n %{develnameclient}
-Group:		Development/C
 Summary:	Devel library for avahi-client
-Provides:	%{client_name}-devel = %{version}-%{release}
-Requires:	%{lib_client_name} = %{version}-%{release}
+Group:		Development/C
+Requires:	%{lib_client_name} = %{EVRD}
+Provides:	%{client_name}-devel = %{EVRD}
 
 %description -n %{develnameclient}
 Devel library for avahi-client.
 
+%files -n %{develnameclient}
+%{_includedir}/%{name}-client
+%{_libdir}/lib%{name}-client.so
+%{_libdir}/pkgconfig/%{name}-client.pc
+
+#----------------------------------------------------------------------------
+
 %package -n %{lib_common_name}
-Group:		System/Libraries
 Summary:	Library for avahi-common
+Group:		System/Libraries
 
 %description -n %{lib_common_name}
 Library for avahi-common.
 
+%files -n %{lib_common_name}
+%{_libdir}/lib%{name}-common.so.%{common_major}*
+
+#----------------------------------------------------------------------------
+
 %package -n %{develnamecommon}
-Group:		Development/C
 Summary:	Devel library for avahi-common
-Provides:	%{common_name}-devel = %{version}-%{release}
-Requires:	%{lib_common_name} = %{version}-%{release}
+Group:		Development/C
+Requires:	%{lib_common_name} = %{EVRD}
+Provides:	%{common_name}-devel = %{EVRD}
 
 %description -n %{develnamecommon}
 Devel library for avahi-common.
 
+%files -n %{develnamecommon}
+%{_includedir}/%{name}-common
+%{_libdir}/lib%{name}-common.so
+
+#----------------------------------------------------------------------------
+
 %package -n %{lib_core_name}
-Group:		System/Libraries
 Summary:	Library for avahi-core
+Group:		System/Libraries
 
 %description -n %{lib_core_name}
 Library for avahi-core.
 
+%files -n %{lib_core_name}
+%{_libdir}/lib%{name}-core.so.%{core_major}*
+
+#----------------------------------------------------------------------------
+
 %package -n %{develnamecore}
-Group:		Development/C
 Summary:	Devel library for avahi-core
-Provides:	%{core_name}-devel = %{version}-%{release}
-Requires:	%{lib_core_name} = %{version}-%{release}
+Group:		Development/C
+Requires:	%{lib_core_name} = %{EVRD}
+Provides:	%{core_name}-devel = %{EVRD}
 
 %description -n %{develnamecore}
 Devel library for avahi-core.
 
+%files -n %{develnamecore}
+%{_includedir}/%{name}-core
+%{_libdir}/lib%{name}-core.so
+%{_libdir}/pkgconfig/%{name}-core.pc
+
+#----------------------------------------------------------------------------
+
 %package -n %{lib_dns_sd_name}
-Group:		System/Libraries
 Summary:	Avahi compatibility library for libdns_sd
+Group:		System/Libraries
 
 %description -n %{lib_dns_sd_name}
-Avahi compatibility library for libdns_sd
+Avahi compatibility library for libdns_sd.
+
+%files -n %{lib_dns_sd_name}
+%{_libdir}/libdns_sd.so.%{dns_sd_major}*
+
+#----------------------------------------------------------------------------
 
 %package -n %{develnamedns_sd}
-Group:		Development/C
 Summary:	Avahi devel compatibility library for libdns_sd
-Provides:	%{dns_sd_name}-devel = %{version}-%{release}
-Requires:	%{lib_dns_sd_name} = %{version}-%{release}
+Group:		Development/C
+Requires:	%{lib_dns_sd_name} = %{EVRD}
+Provides:	%{dns_sd_name}-devel = %{EVRD}
 
 %description -n %{develnamedns_sd}
 Avahi devel compatibility library for libdns_sd.
 
+%files -n %{develnamedns_sd}
+%{_includedir}/%{name}-compat-libdns_sd
+%{_libdir}/libdns_sd.so
+%{_libdir}/pkgconfig/%{name}-compat-libdns_sd.pc
+
+#----------------------------------------------------------------------------
+
 %package -n %{lib_glib_name}
-Group:		System/Libraries
 Summary:	Library for avahi-glib
+Group:		System/Libraries
 
 %description -n %{lib_glib_name}
 Library for avahi-glib.
 
+%files -n %{lib_glib_name}
+%{_libdir}/lib%{name}-glib.so.%{glib_major}*
+
+#----------------------------------------------------------------------------
+
 %package -n %{develnameglib}
-Group:		Development/C
 Summary:	Devel library for avahi-glib
-Provides:	%{glib_name}-devel = %{version}-%{release}
-Requires:	%{lib_glib_name} = %{version}-%{release}
+Group:		Development/C
+Requires:	%{lib_glib_name} = %{EVRD}
+Provides:	%{glib_name}-devel = %{EVRD}
 
 %description -n %{develnameglib}
 Devel library for avahi-glib.
 
+%files -n %{develnameglib}
+%{_includedir}/%{name}-glib
+%{_libdir}/lib%{name}-glib.so
+%{_libdir}/pkgconfig/%{name}-glib.pc
+
+#----------------------------------------------------------------------------
+
 %package -n %{lib_gobject_name}
-Group:		System/Libraries
 Summary:	Library for avahi-gobject
+Group:		System/Libraries
 
 %description -n %{lib_gobject_name}
 Library for avahi-gobject.
 
+%files -n %{lib_gobject_name}
+%{_libdir}/lib%{name}-gobject.so.%{gobject_major}*
+
+#----------------------------------------------------------------------------
+
 %package -n %{develnamegobject}
-Group:		Development/C
 Summary:	Devel library for avahi-gobject
-Provides:	%{gobject_name}-devel = %{version}-%{release}
-Requires:	%{lib_gobject_name} = %{version}-%{release}
+Group:		Development/C
+Requires:	%{lib_gobject_name} = %{EVRD}
+Provides:	%{gobject_name}-devel = %{EVRD}
 
 %description -n %{develnamegobject}
 Devel library for avahi-gobject.
 
+%files -n %{develnamegobject}
+%{_includedir}/%{name}-gobject
+%{_libdir}/lib%{name}-gobject.so
+%{_libdir}/pkgconfig/%{name}-gobject.pc
+
+#----------------------------------------------------------------------------
+
 %package -n %{lib_howl_name}
-Group:		System/Libraries
 Summary:	Avahi compatibility library for howl
+Group:		System/Libraries
 
 %description -n %{lib_howl_name}
 Avahi compatibility library for howl.
 
+%files -n %{lib_howl_name}
+%{_libdir}/libhowl.so.%{howl_major}*
+
+#----------------------------------------------------------------------------
+
 %package -n %{develnamehowl}
-Group:		Development/C
 Summary:	Avahi devel compatibility library for libdns_sd for howl
-Provides:	%{howl_name}-devel = %{version}-%{release}
-Requires:	%{lib_howl_name} = %{version}-%{release}
+Group:		Development/C
+Requires:	%{lib_howl_name} = %{EVRD}
+Provides:	%{howl_name}-devel = %{EVRD}
 
 %description -n %{develnamehowl}
 Avahi devel compatibility library for libdns_sd for howl.
 
+%files -n %{develnamehowl}
+%{_includedir}/%{name}-compat-howl
+%{_libdir}/libhowl.so
+%{_libdir}/pkgconfig/%{name}-compat-howl.pc
+%{_libdir}/pkgconfig/howl.pc
+
+#----------------------------------------------------------------------------
+
 %if %{build_qt3}
 %package -n %{lib_qt3_name}
-Group:		System/Libraries
 Summary:	Library for avahi-qt3
+Group:		System/Libraries
+Conflicts:	%{_lib}libavahi-ui1 < 0.6.31-15
+Obsoletes:	%{_lib}libavahi-ui1 < 0.6.31-15
 
 %description -n %{lib_qt3_name}
 Library for avahi-qt3.
 
+%files -n %{lib_qt3_name}
+%{_libdir}/lib%{name}-qt3.so.%{qt3_major}*
+%endif
+
+#----------------------------------------------------------------------------
+
+%if %{build_qt3}
 %package -n %{develnameqt3}
-Group:		Development/C
 Summary:	Devel library for avahi-qt3
-Provides:	%{qt3_name}-devel = %{version}-%{release}
-Requires:	%{lib_qt3_name} = %{version}-%{release}
+Group:		Development/C
+Requires:	%{lib_qt3_name} = %{EVRD}
+Provides:	%{qt3_name}-devel = %{EVRD}
 
 %description -n %{develnameqt3}
 Devel library for avahi-qt3.
+
+%files -n %{develnameqt3}
+%{_includedir}/%{name}-qt3
+%{_libdir}/lib%{name}-qt3.so
+%{_libdir}/pkgconfig/%{name}-qt3.pc
 %endif
+
+#----------------------------------------------------------------------------
 
 %if %{build_qt4}
 %package -n %{lib_qt4_name}
-Group:		System/Libraries
 Summary:	Library for avahi-qt4
+Group:		System/Libraries
 
 %description -n %{lib_qt4_name}
 Library for avahi-qt4.
 
+%files -n %{lib_qt4_name}
+%{_libdir}/lib%{name}-qt4.so.%{qt4_major}*
+%endif
+
+#----------------------------------------------------------------------------
+
+%if %{build_qt4}
 %package -n %{develnameqt4}
-Group:		Development/C
 Summary:	Devel library for avahi-qt4
-Provides:	%{qt4_name}-devel = %{version}-%{release}
-Requires:	%{lib_qt4_name} = %{version}-%{release}
+Group:		Development/C
+Provides:	%{qt4_name}-devel = %{EVRD}
+Requires:	%{lib_qt4_name} = %{EVRD}
 
 %description -n %{develnameqt4}
 Devel library for avahi-qt4.
+
+%files -n %{develnameqt4}
+%{_includedir}/%{name}-qt4
+%{_libdir}/lib%{name}-qt4.so
+%{_libdir}/pkgconfig/%{name}-qt4.pc
 %endif
 
+#----------------------------------------------------------------------------
+
 %package -n %{lib_ui_name}
-Group:		System/Libraries
 Summary:	Library for avahi-ui
+Group:		System/Libraries
 
 %description -n %{lib_ui_name}
 Library for avahi-ui.
 
+%files -n %{lib_ui_name}
+%{_libdir}/lib%{name}-ui.so.%{ui_major}*
+
+#----------------------------------------------------------------------------
+
 %package -n %{develnameui}
-Group:		Development/C
 Summary:	Devel library for avahi-ui
-Provides:	%{ui_name}-devel = %{version}-%{release}
-Requires:	%{lib_ui_name} = %{version}-%{release}
+Group:		Development/C
+Requires:	%{lib_ui_name} = %{EVRD}
+Provides:	%{ui_name}-devel = %{EVRD}
 Obsoletes:	%{_lib}avahi-ui1 < 0.6.31-6
 
 %description -n %{develnameui}
 Devel library for avahi-ui.
 
+%files -n %{develnameui}
+%{_includedir}/%{name}-ui
+%{_libdir}/lib%{name}-ui.so
+%{_libdir}/pkgconfig/%{name}-ui.pc
+
+#----------------------------------------------------------------------------
+
 %if %{build_gtk3}
 %package -n %{lib_ui_gtk3_name}
-Group:		System/Libraries
 Summary:	Library for avahi-gtk3
+Group:		System/Libraries
 
 %description -n %{lib_ui_gtk3_name}
 Library for avahi-gtk3.
 
+%files -n %{lib_ui_gtk3_name}
+%{_libdir}/lib%{name}-ui-gtk3.so.%{ui_gtk3_major}*
+%endif
+
+#----------------------------------------------------------------------------
+
+%if %{build_gtk3}
 %package -n %{develnameui_gtk3}
-Group:		Development/C
 Summary:	Devel library for avahi-gtk3
-Provides:	%{ui_gtk3_name}-devel = %{version}-%{release}
-Requires:	%{lib_ui_gtk3_name} = %{version}-%{release}
+Group:		Development/C
+Requires:	%{lib_ui_gtk3_name} = %{EVRD}
+Provides:	%{ui_gtk3_name}-devel = %{EVRD}
 
 %description -n %{develnameui_gtk3}
 Devel library for avahi-gtk3.
+
+%files -n %{develnameui_gtk3}
+%{_libdir}/libavahi-ui-gtk3.so
+%{_libdir}/pkgconfig/avahi-ui-gtk3.pc
 %endif
+
+#----------------------------------------------------------------------------
 
 %prep
 %setup -q
@@ -439,227 +715,4 @@ rm -rf %{buildroot}%{_initrddir}/%{name}-dnsconfd
 rm -f %{buildroot}%{_sysconfdir}/avahi/services/sftp-ssh.service
 
 %find_lang %{name}
-
-%pre
-%_pre_useradd %{name} %{_var}/%{name} /bin/false
-%_pre_useradd %{name}-autoipd %{_var}/%{name} /bin/false
-
-%postun
-%_postun_userdel %{name}
-%_postun_userdel %{name}-autoipd
-
-%post
-%_post_service %{name}-daemon
-
-%preun
-%_preun_service %{name}-daemon
-
-%post dnsconfd
-%_post_service %{name}-dnsconfd
-
-%preun dnsconfd
-%_preun_service %{name}-dnsconfd
-
-%if %{build_mono}
-%post sharp-doc
-%{_bindir}/monodoc --make-index > /dev/null
-%postun sharp-doc
-if [ "$1" = "0" -a -x %{_bindir}/monodoc ]; then %{_bindir}/monodoc --make-index > /dev/null
-fi
-%endif
-
-%files -f avahi.lang
-%dir %{_sysconfdir}/%{name}/
-%dir %{_sysconfdir}/%{name}/services/
-%config(noreplace) %{_sysconfdir}/%{name}/hosts
-%config(noreplace) %{_sysconfdir}/%{name}/%{name}-daemon.conf
-%config(noreplace) %{_sysconfdir}/%{name}/avahi-autoipd.action
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/%{name}-dbus.conf
-%if !%{build_systemd}
- %{_initrddir}/%{name}-daemon
-%endif
-%attr(0755,avahi,avahi) %dir %{_localstatedir}/avahi
-%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
-%{_bindir}/%{name}-browse
-%{_bindir}/%{name}-browse-domains
-%{_bindir}/%{name}-publish
-%{_bindir}/%{name}-publish-address
-%{_bindir}/%{name}-publish-service
-%{_bindir}/%{name}-resolve
-%{_bindir}/%{name}-resolve-address
-%{_bindir}/%{name}-resolve-host-name
-%{_bindir}/%{name}-set-host-name
-%{_sbindir}/%{name}-daemon
-%{_sbindir}/avahi-autoipd
-%{_datadir}/%{name}/%{name}-service.dtd
-%{_datadir}/dbus-1/interfaces/*.xml
-%{_datadir}/%{name}/service-types
-%{_mandir}/man1/%{name}-browse-domains.1*
-%{_mandir}/man1/%{name}-browse.1*
-%{_mandir}/man1/%{name}-publish.1*
-%{_mandir}/man1/%{name}-publish-address.1*
-%{_mandir}/man1/%{name}-publish-service.1*
-%{_mandir}/man1/%{name}-resolve.1*
-%{_mandir}/man1/%{name}-resolve-address.1*
-%{_mandir}/man1/%{name}-resolve-host-name.1*
-%{_mandir}/man1/%{name}-set-host-name.1*
-%{_mandir}/man5/%{name}-daemon.conf.5*
-%{_mandir}/man5/%{name}.hosts.5*
-%{_mandir}/man5/%{name}.service.5*
-%{_mandir}/man8/%{name}-daemon.8*
-%{_mandir}/man8/avahi-autoipd*
-%dir %{_libdir}/avahi
-%{_libdir}/avahi/service-types.db
-%if %{build_systemd}
-%{_unitdir}/avahi-daemon.service
-%{_unitdir}/avahi-daemon.socket
-%{_datadir}/dbus-1/system-services/org.freedesktop.Avahi.service
-%endif
-
-%files dnsconfd
-%{_sysconfdir}/%{name}/%{name}-dnsconfd.action
-%if !%{build_systemd}
-%{_initrddir}/%{name}-dnsconfd
-%else
-%{_unitdir}/avahi-dnsconfd.service
-%endif
-%{_sbindir}/%{name}-dnsconfd
-%{_mandir}/man8/%{name}-dnsconfd.8*
-%{_mandir}/man8/%{name}-dnsconfd.action.8*
-
-%files x11
-%{_bindir}/%{name}-discover-standalone
-%{_bindir}/bshell
-%{_bindir}/bssh
-%{_bindir}/bvnc
-%{_datadir}/applications/bssh.desktop
-%{_datadir}/applications/bvnc.desktop
-%{_mandir}/man1/bssh.1*
-%{_mandir}/man1/bvnc.1*
-%{_datadir}/applications/%{name}-discover.desktop
-%{_datadir}/%{name}/interfaces/%{name}-discover.ui
-
-%files python
-%{_bindir}/%{name}-bookmarks
-%{_bindir}/%{name}-discover
-%{py_puresitedir}/%{name}/*.py*
-%{py_puresitedir}/avahi_discover/
-%{_mandir}/man1/%{name}-discover.1*
-%{_mandir}/man1/%{name}-bookmarks.1*
-
-%if %{build_mono}
-%files sharp
-%{_prefix}/lib/mono/%{name}-sharp/%{name}-sharp.dll
-%{_prefix}/lib/mono/gac/%{name}-sharp/
-%{_libdir}/pkgconfig/%{name}-sharp.pc
-%{_prefix}/lib/mono/%{name}-ui-sharp/%{name}-ui-sharp.dll
-%{_prefix}/lib/mono/gac/%{name}-ui-sharp/
-%{_libdir}/pkgconfig/%{name}-ui-sharp.pc
-
-%files sharp-doc
-%{_usr}/lib/monodoc/sources/%{name}-sharp-docs.source
-%{_usr}/lib/monodoc/sources/%{name}-sharp-docs.tree
-%{_usr}/lib/monodoc/sources/%{name}-sharp-docs.zip
-%{_usr}/lib/monodoc/sources/%{name}-ui-sharp-docs.source
-%{_usr}/lib/monodoc/sources/%{name}-ui-sharp-docs.tree
-%{_usr}/lib/monodoc/sources/%{name}-ui-sharp-docs.zip
-%endif
-
-%files -n %{lib_client_name}
-%{_libdir}/lib%{name}-client.so.%{client_major}*
-
-%files -n %{lib_common_name}
-%{_libdir}/lib%{name}-common.so.%{common_major}*
-
-%files -n %{lib_core_name}
-%{_libdir}/lib%{name}-core.so.%{core_major}*
-
-%files -n %{lib_dns_sd_name}
-%{_libdir}/libdns_sd.so.%{dns_sd_major}*
-
-%files -n %{lib_glib_name}
-%{_libdir}/lib%{name}-glib.so.%{glib_major}*
-
-%files -n %{lib_gobject_name}
-%{_libdir}/lib%{name}-gobject.so.%{gobject_major}*
-
-%files -n %{lib_howl_name}
-%{_libdir}/libhowl.so.%{howl_major}*
-
-%if %{build_qt3}
-%files -n %{lib_qt3_name}
-%{_libdir}/lib%{name}-qt3.so.%{qt3_major}*
-%endif
-
-%if %{build_qt4}
-%files -n %{lib_qt4_name}
-%{_libdir}/lib%{name}-qt4.so.%{qt4_major}*
-%endif
-
-%files -n %{lib_ui_name}
-%{_libdir}/lib%{name}-ui.so.%{ui_major}*
-
-%files -n %{develnameclient}
-%{_includedir}/%{name}-client
-%{_libdir}/lib%{name}-client.so
-%{_libdir}/pkgconfig/%{name}-client.pc
-
-%files -n %{develnamecommon}
-%{_includedir}/%{name}-common
-%{_libdir}/lib%{name}-common.so
-
-%files -n %{develnamecore}
-%{_includedir}/%{name}-core
-%{_libdir}/lib%{name}-core.so
-%{_libdir}/pkgconfig/%{name}-core.pc
-
-%files -n %{develnamedns_sd}
-%{_includedir}/%{name}-compat-libdns_sd
-%{_libdir}/libdns_sd.so
-%{_libdir}/pkgconfig/%{name}-compat-libdns_sd.pc
-
-%files -n %{develnameglib}
-%{_includedir}/%{name}-glib
-%{_libdir}/lib%{name}-glib.so
-%{_libdir}/pkgconfig/%{name}-glib.pc
-
-%files -n %{develnamegobject}
-%{_includedir}/%{name}-gobject
-%{_libdir}/lib%{name}-gobject.so
-%{_libdir}/pkgconfig/%{name}-gobject.pc
-
-
-%files -n %{develnamehowl}
-%{_includedir}/%{name}-compat-howl
-%{_libdir}/libhowl.so
-%{_libdir}/pkgconfig/%{name}-compat-howl.pc
-%{_libdir}/pkgconfig/howl.pc
-
-%if %{build_qt3}
-%files -n %{develnameqt3}
-%{_includedir}/%{name}-qt3
-%{_libdir}/lib%{name}-qt3.so
-%{_libdir}/pkgconfig/%{name}-qt3.pc
-%endif
-
-%if %{build_qt4}
-%files -n %{develnameqt4}
-%{_includedir}/%{name}-qt4
-%{_libdir}/lib%{name}-qt4.so
-%{_libdir}/pkgconfig/%{name}-qt4.pc
-%endif
-
-%files -n %{develnameui}
-%{_includedir}/%{name}-ui
-%{_libdir}/lib%{name}-ui.so
-%{_libdir}/pkgconfig/%{name}-ui.pc
-
-%if %{build_gtk3}
-%files -n %{lib_ui_gtk3_name}
-%{_libdir}/lib%{name}-ui-gtk3.so.%{ui_gtk3_major}*
-
-%files -n %{develnameui_gtk3}
-%{_libdir}/libavahi-ui-gtk3.so
-%{_libdir}/pkgconfig/avahi-ui-gtk3.pc
-%endif
 
