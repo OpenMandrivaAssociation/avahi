@@ -45,39 +45,18 @@
 %define lib_ui_gtk3_name %mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
 %define develnameui_gtk3 %mklibname %{ui_gtk3_name} -d
 
-%define build_mono 1
-%{?_with_mono: %{expand: %%global build_mono 1}} 
-%{?_without_mono: %{expand: %%global build_mono 0}} 
-
-%ifarch %{arm} %{mips} aarch64
-%define build_mono 0
+%ifnarch %{arm} %{mips} aarch64
+%bcond_without mono
+%else
+%bcond_with mono
 %endif
 
-%define build_qt3 0
-%{?_with_qt3: %{expand: %%global build_qt3 1}}
-%{?_without_qt3: %{expand: %%global build_qt3 0}}
-
-%define build_qt4 1
-%{?_with_qt4: %{expand: %%global build_qt4 1}}
-%{?_without_qt4: %{expand: %%global build_qt4 0}}
-
-%define build_gtk3 1
-%{?_with_gtk3: %{expand: %%global build_gtk3 1}}
-%{?_without_gtk3: %{expand: %%global build_gtk3 0}}
-
-%define build_systemd 1
-%{?_with_systemd: %{expand: %%global build_systemd 1}}
-%{?_without_systemd: %{expand: %%global build_systemd 0}}
-
-%define build_bootstrap 0
-%{?_with_bootstrap: %{expand: %%global build_bootstrap 1}}
-%if %{build_bootstrap}
-%define build_mono 0
-%define build_qt3 0
-%define build_qt4 0
-%define build_gtk3 0
-%define build_systemd 0
-%endif
+%bcond_with	qt3
+%bcond_without	qt4
+%bcond_without	gtk3
+%bcond_with	pygtk
+%bcond_without	systemd
+%bcond_with	python
 
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
@@ -92,24 +71,28 @@ Source100:	%{name}.rpmlintrc
 Patch0:		avahi-0.6.31-gtk-is-broken-beyond-repair-gtk-die-die-die.patch
 Patch1:		avahi-0.6.31.workaround.patch
 BuildRequires:	intltool
+%if %{with pygtk}
 BuildRequires:	pygtk2.0
+%endif
 BuildRequires:	cap-devel
 BuildRequires:	expat-devel >= 2.0.1
 BuildRequires:	gdbm-devel
 BuildRequires:	pkgconfig(dbus-1)
+%if %{with python}
 BuildRequires:	pkgconfig(dbus-python)
+%endif
 BuildRequires:	pkgconfig(libdaemon)
 BuildRequires:	pkgconfig(libglade-2.0)
-%if %{build_qt3}
+%if %{with qt3}
 BuildRequires:	pkgconfig(qt-mt)
 %endif
-%if %{build_qt4}
+%if %{with qt4}
 BuildRequires:	pkgconfig(QtCore)
 %endif
-%if %{build_gtk3}
+%if %{with gtk3}
 BuildRequires:	pkgconfig(gtk+-3.0)
 %endif
-%if %{build_systemd}
+%if %{with systemd}
 BuildRequires:	systemd-units
 %endif
 
@@ -137,7 +120,7 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}-daemon.conf
 %config(noreplace) %{_sysconfdir}/%{name}/avahi-autoipd.action
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/%{name}-dbus.conf
-%if !%{build_systemd}
+%if !%{with systemd}
  %{_initrddir}/%{name}-daemon
 %endif
 %attr(0755,avahi,avahi) %dir %{_localstatedir}/avahi
@@ -171,8 +154,10 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %{_mandir}/man8/%{name}-daemon.8*
 %{_mandir}/man8/avahi-autoipd*
 %dir %{_libdir}/avahi
+%if %{with python}
 %{_libdir}/avahi/service-types.db
-%if %{build_systemd}
+%endif
+%if %{with systemd}
 %{_unitdir}/avahi-daemon.service
 %{_unitdir}/avahi-daemon.socket
 %{_datadir}/dbus-1/system-services/org.freedesktop.Avahi.service
@@ -208,7 +193,7 @@ Especially useful on IPv6.
 
 %files dnsconfd
 %{_sysconfdir}/%{name}/%{name}-dnsconfd.action
-%if !%{build_systemd}
+%if !%{with systemd}
 %{_initrddir}/%{name}-dnsconfd
 %else
 %{_unitdir}/avahi-dnsconfd.service
@@ -243,11 +228,14 @@ It includes avahi-discover-standalone.
 %{_datadir}/applications/bvnc.desktop
 %{_mandir}/man1/bssh.1*
 %{_mandir}/man1/bvnc.1*
+%if %{with python}
 %{_datadir}/applications/%{name}-discover.desktop
+%endif
 %{_datadir}/%{name}/interfaces/%{name}-discover.ui
 
 #----------------------------------------------------------------------------
 
+%if %{with python}
 %package python
 Summary:	Python bindings and utilities for Avahi
 Group:		System/Libraries
@@ -269,10 +257,11 @@ It includes avahi-bookmarks and avahi-discover.
 %{py_puresitedir}/avahi_discover/
 %{_mandir}/man1/%{name}-discover.1*
 %{_mandir}/man1/%{name}-bookmarks.1*
+%endif
 
 #----------------------------------------------------------------------------
 
-%if %{build_mono}
+%if %{with mono}
 %package sharp
 Summary:	Mono bindings for Avahi
 Group:		System/Libraries
@@ -299,7 +288,7 @@ Mono bindings for Avahi.
 
 #----------------------------------------------------------------------------
 
-%if %{build_mono}
+%if %{with mono}
 %package sharp-doc
 Summary:	Development documentation for avahi-sharp
 Group:		Development/Other
@@ -524,7 +513,7 @@ Avahi devel compatibility library for libdns_sd for howl.
 
 #----------------------------------------------------------------------------
 
-%if %{build_qt3}
+%if %{with qt3}
 %package -n %{lib_qt3_name}
 Summary:	Library for avahi-qt3
 Group:		System/Libraries
@@ -540,7 +529,7 @@ Library for avahi-qt3.
 
 #----------------------------------------------------------------------------
 
-%if %{build_qt3}
+%if %{with qt3}
 %package -n %{develnameqt3}
 Summary:	Devel library for avahi-qt3
 Group:		Development/C
@@ -558,7 +547,7 @@ Devel library for avahi-qt3.
 
 #----------------------------------------------------------------------------
 
-%if %{build_qt4}
+%if %{with qt4}
 %package -n %{lib_qt4_name}
 Summary:	Library for avahi-qt4
 Group:		System/Libraries
@@ -572,7 +561,7 @@ Library for avahi-qt4.
 
 #----------------------------------------------------------------------------
 
-%if %{build_qt4}
+%if %{with qt4}
 %package -n %{develnameqt4}
 Summary:	Devel library for avahi-qt4
 Group:		Development/C
@@ -619,7 +608,7 @@ Devel library for avahi-ui.
 
 #----------------------------------------------------------------------------
 
-%if %{build_gtk3}
+%if %{with gtk3}
 %package -n %{lib_ui_gtk3_name}
 Summary:	Library for avahi-gtk3
 Group:		System/Libraries
@@ -633,7 +622,7 @@ Library for avahi-gtk3.
 
 #----------------------------------------------------------------------------
 
-%if %{build_gtk3}
+%if %{with gtk3}
 %package -n %{develnameui_gtk3}
 Summary:	Devel library for avahi-gtk3
 Group:		Development/C
@@ -665,15 +654,16 @@ autoconf
 
 %build
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
-%configure2_5x \
+%configure \
 	--disable-static \
-%if !%{build_mono}
+	--with-distro=mandriva \
+%if !%{with mono}
 	--disable-mono \
 %endif
-%if !%{build_qt3}
+%if !%{with qt3}
 	--disable-qt3 \
 %endif
-%if !%{build_qt4}
+%if !%{with qt4}
 	--disable-qt4 \
 %endif
 	--localstatedir=/run \
@@ -681,11 +671,15 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 	--enable-compat-libdns_sd \
 	--enable-compat-howl \
 	--enable-introspection=no \
-%if %{build_systemd}
+%if %{with systemd}
 	--with-systemdsystemunitdir=%{_unitdir} \
 %endif
-%if !%{build_gtk3}
-	--disable-gtk3
+%if !%{with gtk3}
+	--disable-gtk3 \
+%endif
+%if !%{with pygtk}
+	--disable-pygtk \
+	--disable-python
 %endif
 
 %make
@@ -697,7 +691,7 @@ mkdir -p %{buildroot}%{_localstatedir}/avahi
 
 rm -f %{buildroot}/%{_sysconfdir}/%{name}/services/ssh.service
 ln -s avahi-compat-howl.pc %{buildroot}%{_libdir}/pkgconfig/howl.pc
-%if "%{_lib}" != "lib" && %{build_mono}
+%if "%{_lib}" != "lib" && %{with mono}
 mkdir -p %{buildroot}%{_prefix}/lib
 mv %{buildroot}%{_libdir}/mono %{buildroot}%{_prefix}/lib
 perl -pi -e "s/%{_lib}/lib/" %{buildroot}%{_libdir}/pkgconfig/avahi-{,ui-}sharp.pc
@@ -707,7 +701,7 @@ perl -pi -e "s/%{_lib}/lib/" %{buildroot}%{_libdir}/pkgconfig/avahi-{,ui-}sharp.
 mkdir -p %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/
 install -m755 avahi-hostname.sh %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 
-%if %{build_systemd}
+%if %{with systemd}
 rm -rf %{buildroot}%{_initrddir}/%{name}-daemon
 rm -rf %{buildroot}%{_initrddir}/%{name}-dnsconfd
 %endif
