@@ -679,6 +679,8 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %endif
 %if !%{with pygtk}
 	--disable-pygtk \
+%endif
+%if !%{with python}
 	--disable-python
 %endif
 
