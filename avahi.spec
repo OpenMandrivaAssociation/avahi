@@ -61,7 +61,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.6.31
-Release:	17
+Release:	18
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -172,10 +172,10 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %_postun_userdel %{name}-autoipd
 
 %post
-%_post_service %{name}-daemon
+%systemd_post %{name}-daemon
 
 %preun
-%_preun_service %{name}-daemon
+%systemd_preun %{name}-daemon
 
 #----------------------------------------------------------------------------
 
@@ -203,10 +203,10 @@ Especially useful on IPv6.
 %{_mandir}/man8/%{name}-dnsconfd.action.8*
 
 %post dnsconfd
-%_post_service %{name}-dnsconfd
+%systemd_post %{name}-dnsconfd
 
 %preun dnsconfd
-%_preun_service %{name}-dnsconfd
+%systemd_preun %{name}-dnsconfd
 
 #----------------------------------------------------------------------------
 
