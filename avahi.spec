@@ -61,7 +61,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.6.31
-Release:	18
+Release:	19
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -98,7 +98,7 @@ BuildRequires:	systemd-units
 
 Requires(pre,preun,post,postun): rpm-helper
 Requires(post,preun): dbus
-Suggests:	nss_mdns
+Requires:	nss_mdns
 
 Requires(post):		rpm-helper
 Requires(preun):	rpm-helper
