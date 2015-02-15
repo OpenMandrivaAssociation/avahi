@@ -54,14 +54,14 @@
 %bcond_with	qt3
 %bcond_without	qt4
 %bcond_without	gtk3
-%bcond_with	pygtk
+%bcond_without	pygtk
 %bcond_without	systemd
-%bcond_with	python
+%bcond_without	python
 
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.6.31
-Release:	20
+Release:	21
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -253,8 +253,8 @@ It includes avahi-bookmarks and avahi-discover.
 %files python
 %{_bindir}/%{name}-bookmarks
 %{_bindir}/%{name}-discover
-%{py_puresitedir}/%{name}/*.py*
-%{py_puresitedir}/avahi_discover/
+%{py2_puresitedir}/%{name}/*.py*
+%{py2_puresitedir}/avahi_discover/
 %{_mandir}/man1/%{name}-discover.1*
 %{_mandir}/man1/%{name}-bookmarks.1*
 %endif
@@ -681,8 +681,9 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 	--disable-pygtk \
 %endif
 %if !%{with python}
-	--disable-python
+	--disable-python \
 %endif
+    PYTHON=%__python2
 
 %make
 
