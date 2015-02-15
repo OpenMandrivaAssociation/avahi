@@ -683,7 +683,7 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %if !%{with python}
 	--disable-python \
 %endif
-    PYTHON=%__python2 || cat config.log
+    PYTHON=%__python2
 
 %make
 
