@@ -72,7 +72,7 @@ Patch0:		avahi-0.6.31-gtk-is-broken-beyond-repair-gtk-die-die-die.patch
 Patch1:		avahi-0.6.31.workaround.patch
 BuildRequires:	intltool
 %if %{with pygtk}
-BuildRequires:	pygtk2.0
+BuildRequires:	pygtk2.0-devel
 %endif
 BuildRequires:	cap-devel
 BuildRequires:	expat-devel >= 2.0.1
