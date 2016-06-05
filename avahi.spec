@@ -5,7 +5,6 @@
 %define glib_name %{name}-glib
 %define gobject_name %{name}-gobject
 %define howl_name %{name}-compat-howl
-%define qt3_name %{name}-qt3
 %define qt4_name %{name}-qt4
 %define ui_name %{name}-ui
 %define ui_gtk3_name %{name}-ui-gtk3
@@ -17,7 +16,6 @@
 %define glib_major 1
 %define gobject_major 0
 %define howl_major 0
-%define qt3_major 1
 %define qt4_major 1
 %define ui_major 0
 %define ui_gtk3_major 0
@@ -36,8 +34,6 @@
 %define develnamegobject %mklibname %{gobject_name} -d
 %define lib_howl_name %mklibname %{howl_name} %{howl_major}
 %define develnamehowl %mklibname %{howl_name} -d
-%define lib_qt3_name %mklibname %{qt3_name}_ %{qt3_major}
-%define develnameqt3 %mklibname %{qt3_name} -d
 %define lib_qt4_name %mklibname %{qt4_name}_ %{qt4_major}
 %define develnameqt4 %mklibname %{qt4_name} -d
 %define lib_ui_name %mklibname %{ui_name} %{ui_major}
@@ -51,17 +47,15 @@
 %bcond_with mono
 %endif
 
-%bcond_with	qt3
 %bcond_without	qt4
 %bcond_without	gtk3
 %bcond_with	pygtk
-%bcond_without	systemd
 %bcond_with	python
 
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
-Version:	0.6.31
-Release:	24
+Version:	0.6.32
+Release:	1
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -83,27 +77,17 @@ BuildRequires:	pkgconfig(dbus-python)
 %endif
 BuildRequires:	pkgconfig(libdaemon)
 BuildRequires:	pkgconfig(libglade-2.0)
-%if %{with qt3}
-BuildRequires:	pkgconfig(qt-mt)
-%endif
 %if %{with qt4}
 BuildRequires:	pkgconfig(QtCore)
 %endif
 %if %{with gtk3}
 BuildRequires:	pkgconfig(gtk+-3.0)
 %endif
-%if %{with systemd}
-BuildRequires:	systemd-units
-%endif
+BuildRequires:	pkgconfig(libsystemd)
 
 Requires(pre,preun,post,postun): rpm-helper
 Requires(post,preun): dbus
 Requires:	nss_mdns
-
-Requires(post):		rpm-helper
-Requires(preun):	rpm-helper
-Requires(post):		dbus
-Requires(preun):	dbus
 
 %description
 Avahi is a system which facilitates service discovery on a local
@@ -120,10 +104,8 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}-daemon.conf
 %config(noreplace) %{_sysconfdir}/%{name}/avahi-autoipd.action
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/%{name}-dbus.conf
-%if !%{with systemd}
- %{_initrddir}/%{name}-daemon
-%endif
 %attr(0755,avahi,avahi) %dir %{_localstatedir}/avahi
+%attr(0755,avahi,avahi) %dir %{_localstatedir}/run/avahi-daemon
 %{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 %{_bindir}/%{name}-browse
 %{_bindir}/%{name}-browse-domains
@@ -157,11 +139,10 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %if %{with python}
 %{_libdir}/avahi/service-types.db
 %endif
-%if %{with systemd}
+%{_presetdir}/86-avahi-daemon.preset
 %{_unitdir}/avahi-daemon.service
 %{_unitdir}/avahi-daemon.socket
 %{_datadir}/dbus-1/system-services/org.freedesktop.Avahi.service
-%endif
 
 %pre
 %_pre_useradd %{name} %{_var}/%{name} /bin/false
@@ -171,19 +152,12 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %_postun_userdel %{name}
 %_postun_userdel %{name}-autoipd
 
-%post
-%systemd_post %{name}-daemon
-
-%preun
-%systemd_preun %{name}-daemon
-
 #----------------------------------------------------------------------------
 
 %package dnsconfd
 Summary:	Avahi DNS configuration server
 Group:		System/Servers
 Requires:	%{name} = %{EVRD}
-Requires(post,preun):	rpm-helper
 Conflicts:	avahi < 0.6.31-8
 
 %description dnsconfd
@@ -193,20 +167,11 @@ Especially useful on IPv6.
 
 %files dnsconfd
 %{_sysconfdir}/%{name}/%{name}-dnsconfd.action
-%if !%{with systemd}
-%{_initrddir}/%{name}-dnsconfd
-%else
+%{_presetdir}/86-avahi-dnsconfd.preset
 %{_unitdir}/avahi-dnsconfd.service
-%endif
 %{_sbindir}/%{name}-dnsconfd
 %{_mandir}/man8/%{name}-dnsconfd.8*
 %{_mandir}/man8/%{name}-dnsconfd.action.8*
-
-%post dnsconfd
-%systemd_post %{name}-dnsconfd
-
-%preun dnsconfd
-%systemd_preun %{name}-dnsconfd
 
 #----------------------------------------------------------------------------
 
@@ -425,6 +390,7 @@ Avahi devel compatibility library for libdns_sd.
 %{_includedir}/%{name}-compat-libdns_sd
 %{_libdir}/libdns_sd.so
 %{_libdir}/pkgconfig/%{name}-compat-libdns_sd.pc
+%{_libdir}/pkgconfig/libdns_sd.pc
 
 #----------------------------------------------------------------------------
 
@@ -510,40 +476,6 @@ Avahi devel compatibility library for libdns_sd for howl.
 %{_libdir}/libhowl.so
 %{_libdir}/pkgconfig/%{name}-compat-howl.pc
 %{_libdir}/pkgconfig/howl.pc
-
-#----------------------------------------------------------------------------
-
-%if %{with qt3}
-%package -n %{lib_qt3_name}
-Summary:	Library for avahi-qt3
-Group:		System/Libraries
-Conflicts:	%{_lib}libavahi-ui1 < 0.6.31-15
-Obsoletes:	%{_lib}libavahi-ui1 < 0.6.31-15
-
-%description -n %{lib_qt3_name}
-Library for avahi-qt3.
-
-%files -n %{lib_qt3_name}
-%{_libdir}/lib%{name}-qt3.so.%{qt3_major}*
-%endif
-
-#----------------------------------------------------------------------------
-
-%if %{with qt3}
-%package -n %{develnameqt3}
-Summary:	Devel library for avahi-qt3
-Group:		Development/C
-Requires:	%{lib_qt3_name} = %{EVRD}
-Provides:	%{qt3_name}-devel = %{EVRD}
-
-%description -n %{develnameqt3}
-Devel library for avahi-qt3.
-
-%files -n %{develnameqt3}
-%{_includedir}/%{name}-qt3
-%{_libdir}/lib%{name}-qt3.so
-%{_libdir}/pkgconfig/%{name}-qt3.pc
-%endif
 
 #----------------------------------------------------------------------------
 
@@ -643,26 +575,18 @@ Devel library for avahi-gtk3.
 %setup -q
 %apply_patches
 cp %{SOURCE1} avahi-hostname.sh
-find . -name "Makefile*" -o -name "*.in" -o -name "*.ac" |sort |uniq |xargs sed -i -e 's,localstatedir\@/run,localstatedir\@,g;s,localstatedir}/run,localstatedir},g'
-for f in config.guess config.sub ; do
-        test -f /usr/share/libtool/config/$f || continue
-        find . -type f -name $f -exec cp /usr/share/libtool/config/$f \{\} \;
-done
-aclocal -I common
-automake -a
-autoconf
 
 %build
 export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %configure \
+	--localstatedir=%{_var} \
 	--disable-static \
+	--with-xml=expat \
 	--with-distro=mandriva \
 %if !%{with mono}
 	--disable-mono \
 %endif
-%if !%{with qt3}
 	--disable-qt3 \
-%endif
 %if !%{with qt4}
 	--disable-qt4 \
 %endif
@@ -671,9 +595,7 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 	--enable-compat-libdns_sd \
 	--enable-compat-howl \
 	--enable-introspection=no \
-%if %{with systemd}
 	--with-systemdsystemunitdir=%{_unitdir} \
-%endif
 %if !%{with gtk3}
 	--disable-gtk3 \
 %endif
@@ -690,9 +612,11 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %makeinstall_std
 
 mkdir -p %{buildroot}%{_localstatedir}/avahi
+mkdir -p %{buildroot}%{_localstatedir}/run/avahi-daemon
 
-rm -f %{buildroot}/%{_sysconfdir}/%{name}/services/ssh.service
 ln -s avahi-compat-howl.pc %{buildroot}%{_libdir}/pkgconfig/howl.pc
+ln -s avahi-compat-libdns_sd.pc %{buildroot}%{_libdir}/pkgconfig/libdns_sd.pc
+
 %if "%{_lib}" != "lib" && %{with mono}
 mkdir -p %{buildroot}%{_prefix}/lib
 mv %{buildroot}%{_libdir}/mono %{buildroot}%{_prefix}/lib
@@ -703,12 +627,23 @@ perl -pi -e "s/%{_lib}/lib/" %{buildroot}%{_libdir}/pkgconfig/avahi-{,ui-}sharp.
 mkdir -p %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/
 install -m755 avahi-hostname.sh %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 
-%if %{with systemd}
+# (tpg) enable services
+install -d %{buildroot}%{_presetdir}
+cat > %{buildroot}%{_presetdir}/86-avahi-daemon.preset << EOF
+enable avahi-daemon.socket
+enable avahi-daemon.service
+EOF
+
+cat > %{buildroot}%{_presetdir}/86-avahi-dnsconfd.preset << EOF
+enable avahi-dnsconfd.service
+EOF
+
+# (tpg) remove this crap
 rm -rf %{buildroot}%{_initrddir}/%{name}-daemon
 rm -rf %{buildroot}%{_initrddir}/%{name}-dnsconfd
-%endif
 
-rm -f %{buildroot}%{_sysconfdir}/avahi/services/sftp-ssh.service
+# remove example
+rm -fv %{buildroot}%{_sysconfdir}/avahi/services/ssh.service
+rm -fv %{buildroot}%{_sysconfdir}/avahi/services/sftp-ssh.service
 
 %find_lang %{name}
-
