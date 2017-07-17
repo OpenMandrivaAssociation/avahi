@@ -54,7 +54,7 @@
 
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
-Version:	0.6.32
+Version:	0.7
 Release:	1
 License:	LGPLv2+
 Group:		System/Servers
@@ -120,7 +120,6 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %{_sbindir}/avahi-autoipd
 %{_datadir}/%{name}/%{name}-service.dtd
 %{_datadir}/dbus-1/interfaces/*.xml
-%{_datadir}/%{name}/service-types
 %{_mandir}/man1/%{name}-browse-domains.1*
 %{_mandir}/man1/%{name}-browse.1*
 %{_mandir}/man1/%{name}-publish.1*
