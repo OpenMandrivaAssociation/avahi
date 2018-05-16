@@ -47,7 +47,7 @@
 %bcond_with mono
 %endif
 
-%bcond_without	qt4
+%bcond_with	qt4
 %bcond_without	gtk3
 %bcond_with	pygtk
 %bcond_with	python
@@ -55,7 +55,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.7
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
