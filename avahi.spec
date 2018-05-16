@@ -55,7 +55,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.7
-Release:	3
+Release:	4
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -86,6 +86,8 @@ BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(libsystemd)
 # For _presetdir and friends
 BuildRequires:	systemd
+# useradd etc.
+BuildRequires:	rpm-helper
 
 Requires(pre,preun,post,postun): rpm-helper
 Requires(post,preun): dbus
