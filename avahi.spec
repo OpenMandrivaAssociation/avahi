@@ -84,6 +84,8 @@ BuildRequires:	pkgconfig(QtCore)
 BuildRequires:	pkgconfig(gtk+-3.0)
 %endif
 BuildRequires:	pkgconfig(libsystemd)
+# For _presetdir and friends
+BuildRequires:	systemd
 
 Requires(pre,preun,post,postun): rpm-helper
 Requires(post,preun): dbus
