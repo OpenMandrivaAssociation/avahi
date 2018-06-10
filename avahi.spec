@@ -55,7 +55,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.7
-Release:	4
+Release:	5
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -301,6 +301,7 @@ Library for avahi-client.
 Summary:	Devel library for avahi-client
 Group:		Development/C
 Requires:	%{lib_client_name} = %{EVRD}
+Requires:	%{develnamecommon} = %{EVRD}
 Provides:	%{client_name}-devel = %{EVRD}
 
 %description -n %{develnameclient}
@@ -356,6 +357,7 @@ Library for avahi-core.
 Summary:	Devel library for avahi-core
 Group:		Development/C
 Requires:	%{lib_core_name} = %{EVRD}
+Requires:	%{develnamecommon} = %{EVRD}
 Provides:	%{core_name}-devel = %{EVRD}
 
 %description -n %{develnamecore}
@@ -384,6 +386,7 @@ Avahi compatibility library for libdns_sd.
 Summary:	Avahi devel compatibility library for libdns_sd
 Group:		Development/C
 Requires:	%{lib_dns_sd_name} = %{EVRD}
+Requires:	%{develnameclient} = %{EVRD}
 Provides:	%{dns_sd_name}-devel = %{EVRD}
 
 %description -n %{develnamedns_sd}
@@ -413,6 +416,7 @@ Library for avahi-glib.
 Summary:	Devel library for avahi-glib
 Group:		Development/C
 Requires:	%{lib_glib_name} = %{EVRD}
+Requires:	%{develnamecommon} = %{EVRD}
 Provides:	%{glib_name}-devel = %{EVRD}
 
 %description -n %{develnameglib}
@@ -441,6 +445,7 @@ Library for avahi-gobject.
 Summary:	Devel library for avahi-gobject
 Group:		Development/C
 Requires:	%{lib_gobject_name} = %{EVRD}
+Requires:	%{develnameglib} = %{EVRD}
 Provides:	%{gobject_name}-devel = %{EVRD}
 
 %description -n %{develnamegobject}
@@ -469,6 +474,7 @@ Avahi compatibility library for howl.
 Summary:	Avahi devel compatibility library for libdns_sd for howl
 Group:		Development/C
 Requires:	%{lib_howl_name} = %{EVRD}
+Requires:	%{develnamecore} = %{EVRD}
 Provides:	%{howl_name}-devel = %{EVRD}
 
 %description -n %{develnamehowl}
@@ -502,6 +508,7 @@ Summary:	Devel library for avahi-qt4
 Group:		Development/C
 Provides:	%{qt4_name}-devel = %{EVRD}
 Requires:	%{lib_qt4_name} = %{EVRD}
+Requires:	%{develnamecore} = %{EVRD}
 
 %description -n %{develnameqt4}
 Devel library for avahi-qt4.
@@ -530,6 +537,7 @@ Library for avahi-ui.
 Summary:	Devel library for avahi-ui
 Group:		Development/C
 Requires:	%{lib_ui_name} = %{EVRD}
+Requires:	%{develnamecommon} = %{EVRD}
 Provides:	%{ui_name}-devel = %{EVRD}
 Obsoletes:	%{_lib}avahi-ui1 < 0.6.31-6
 
@@ -562,6 +570,7 @@ Library for avahi-gtk3.
 Summary:	Devel library for avahi-gtk3
 Group:		Development/C
 Requires:	%{lib_ui_gtk3_name} = %{EVRD}
+Requires:	%{develnamecommon} = %{EVRD}
 Provides:	%{ui_gtk3_name}-devel = %{EVRD}
 
 %description -n %{develnameui_gtk3}
