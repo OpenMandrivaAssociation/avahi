@@ -55,12 +55,13 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.7
-Release:	5
+Release:	6
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
 Source0:	http://avahi.org/download/%{name}-%{version}.tar.gz
 Source1:	avahi-hostname.sh
+Source2:	%{name}.sysusers
 Source100:	%{name}.rpmlintrc
 Patch0:		avahi-0.6.31-gtk-is-broken-beyond-repair-gtk-die-die-die.patch
 Patch1:		avahi-0.6.31.workaround.patch
@@ -85,7 +86,7 @@ BuildRequires:	pkgconfig(gtk+-3.0)
 %endif
 BuildRequires:	pkgconfig(libsystemd)
 # For _presetdir and friends
-BuildRequires:	systemd
+BuildRequires:	systemd-macros
 # useradd etc.
 BuildRequires:	rpm-helper
 
@@ -145,6 +146,7 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %{_presetdir}/86-avahi-daemon.preset
 %{_unitdir}/avahi-daemon.service
 %{_unitdir}/avahi-daemon.socket
+%{_sysusersdir}/%{name}.conf
 %{_datadir}/dbus-1/system-services/org.freedesktop.Avahi.service
 
 %pre
@@ -584,8 +586,7 @@ Devel library for avahi-gtk3.
 #----------------------------------------------------------------------------
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p1
 cp %{SOURCE1} avahi-hostname.sh
 
 %build
@@ -618,10 +619,10 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 	--disable-python
 %endif
 
-%make
+%make_build
 
 %install
-%makeinstall_std
+%make_install
 
 mkdir -p %{buildroot}%{_localstatedir}/avahi
 mkdir -p %{buildroot}%{_localstatedir}/run/avahi-daemon
@@ -638,6 +639,8 @@ perl -pi -e "s/%{_lib}/lib/" %{buildroot}%{_libdir}/pkgconfig/avahi-{,ui-}sharp.
 # install hostname.d hook
 mkdir -p %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/
 install -m755 avahi-hostname.sh %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
+
+install -D -m644 %{SOURCE2} %{buildroot}%{_sysusersdir}/%{name}.conf
 
 # (tpg) enable services
 install -d %{buildroot}%{_presetdir}
