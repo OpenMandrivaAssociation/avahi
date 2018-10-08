@@ -1,0 +1,4 @@
+g avahi - -
+g avahi-autoipd - -
+u avahi - "Avahi mDNS/DNS-SD daemon" /var/lib/avahi /bin/false
+u avahi-autoipd - "Avahi mDNS/DNS-SD daemon /var/lib/avahi /bin/false
