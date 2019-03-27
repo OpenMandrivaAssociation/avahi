@@ -526,6 +526,7 @@ Devel library for avahi-qt4.
 
 #----------------------------------------------------------------------------
 
+%if %{with gtk3}
 %package -n %{lib_ui_name}
 Summary:	Library for avahi-ui
 Group:		System/Libraries
@@ -556,7 +557,6 @@ Devel library for avahi-ui.
 
 #----------------------------------------------------------------------------
 
-%if %{with gtk3}
 %package -n %{lib_ui_gtk3_name}
 Summary:	Library for avahi-gtk3
 Group:		System/Libraries
