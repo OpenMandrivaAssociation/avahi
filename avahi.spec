@@ -72,6 +72,7 @@ BuildRequires:	pygtk2.0
 BuildRequires:	cap-devel
 BuildRequires:	expat-devel >= 2.0.1
 BuildRequires:	gdbm-devel
+BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(dbus-1)
 %if %{with python}
 BuildRequires:	pkgconfig(dbus-python)
