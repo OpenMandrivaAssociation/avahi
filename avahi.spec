@@ -48,7 +48,7 @@
 %endif
 
 %bcond_with qt4
-%bcond_with gtk3
+%bcond_without gtk3
 %bcond_with pygtk
 %bcond_with python
 
