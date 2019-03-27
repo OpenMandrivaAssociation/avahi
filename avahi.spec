@@ -613,6 +613,7 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %if !%{with gtk3}
 	--disable-gtk3 \
 %endif
+	--disable-gtk \
 %if !%{with pygtk}
 	--disable-pygtk \
 %endif
