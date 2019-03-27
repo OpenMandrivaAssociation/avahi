@@ -41,14 +41,14 @@
 %define lib_ui_gtk3_name %mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
 %define develnameui_gtk3 %mklibname %{ui_gtk3_name} -d
 
-%ifnarch %{arm} %{mips} aarch64 %{ix86}
+%ifnarch %{arm} %{mips} aarch64 %{ix86} riscv64
 %bcond_without mono
 %else
 %bcond_with mono
 %endif
 
 %bcond_with qt4
-%bcond_without gtk3
+%bcond_with gtk3
 %bcond_with pygtk
 %bcond_with python
 
@@ -77,7 +77,6 @@ BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	pkgconfig(dbus-python)
 %endif
 BuildRequires:	pkgconfig(libdaemon)
-BuildRequires:	pkgconfig(libglade-2.0)
 %if %{with qt4}
 BuildRequires:	pkgconfig(QtCore)
 %endif
