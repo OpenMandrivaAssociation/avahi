@@ -75,6 +75,7 @@ BuildRequires:	gdbm-devel
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(dbus-1)
+BuildRequires:	pkgconfig(libevent)
 %if %{with python}
 BuildRequires:	pkgconfig(dbus-python)
 %endif
