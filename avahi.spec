@@ -83,6 +83,7 @@ BuildRequires:	pkgconfig(libdaemon)
 %if %{with qt4}
 BuildRequires:	pkgconfig(QtCore)
 %endif
+BuildRequires:	pkgconfig(Qt5Core)
 %if %{with gtk3}
 BuildRequires:	pkgconfig(gtk+-3.0)
 %endif
