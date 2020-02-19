@@ -42,7 +42,7 @@
 %define develnameui_gtk3 %mklibname %{ui_gtk3_name} -d
 
 %ifnarch %{arm} %{mips} aarch64 %{ix86} riscv64
-%bcond_without mono
+%bcond_with mono
 %else
 %bcond_with mono
 %endif
