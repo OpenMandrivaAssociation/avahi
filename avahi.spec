@@ -5,7 +5,6 @@
 %define glib_name %{name}-glib
 %define gobject_name %{name}-gobject
 %define howl_name %{name}-compat-howl
-%define qt4_name %{name}-qt4
 %define ui_name %{name}-ui
 %define ui_gtk3_name %{name}-ui-gtk3
 
@@ -16,7 +15,6 @@
 %define glib_major 1
 %define gobject_major 0
 %define howl_major 0
-%define qt4_major 1
 %define ui_major 0
 %define ui_gtk3_major 0
 
@@ -34,8 +32,6 @@
 %define develnamegobject %mklibname %{gobject_name} -d
 %define lib_howl_name %mklibname %{howl_name} %{howl_major}
 %define develnamehowl %mklibname %{howl_name} -d
-%define lib_qt4_name %mklibname %{qt4_name}_ %{qt4_major}
-%define develnameqt4 %mklibname %{qt4_name} -d
 %define lib_ui_name %mklibname %{ui_name} %{ui_major}
 %define develnameui %mklibname %{ui_name} -d
 %define lib_ui_gtk3_name %mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
@@ -47,7 +43,6 @@
 %bcond_with mono
 %endif
 
-%bcond_with qt4
 %bcond_without gtk3
 %bcond_with pygtk
 %bcond_with python
@@ -66,6 +61,7 @@ Source100:	%{name}.rpmlintrc
 Patch0:		avahi-0.6.31-gtk-is-broken-beyond-repair-gtk-die-die-die.patch
 Patch1:		avahi-0.6.31.workaround.patch
 BuildRequires:	intltool
+BuildRequires:	doxygen
 %if %{with pygtk}
 BuildRequires:	pygtk2.0
 %endif
@@ -80,9 +76,6 @@ BuildRequires:	pkgconfig(libevent)
 BuildRequires:	pkgconfig(dbus-python)
 %endif
 BuildRequires:	pkgconfig(libdaemon)
-%if %{with qt4}
-BuildRequires:	pkgconfig(QtCore)
-%endif
 BuildRequires:	pkgconfig(Qt5Core)
 %if %{with gtk3}
 BuildRequires:	pkgconfig(gtk+-3.0)
@@ -495,39 +488,6 @@ Avahi devel compatibility library for libdns_sd for howl.
 
 #----------------------------------------------------------------------------
 
-%if %{with qt4}
-%package -n %{lib_qt4_name}
-Summary:	Library for avahi-qt4
-Group:		System/Libraries
-
-%description -n %{lib_qt4_name}
-Library for avahi-qt4.
-
-%files -n %{lib_qt4_name}
-%{_libdir}/lib%{name}-qt4.so.%{qt4_major}*
-%endif
-
-#----------------------------------------------------------------------------
-
-%if %{with qt4}
-%package -n %{develnameqt4}
-Summary:	Devel library for avahi-qt4
-Group:		Development/C
-Provides:	%{qt4_name}-devel = %{EVRD}
-Requires:	%{lib_qt4_name} = %{EVRD}
-Requires:	%{develnamecore} = %{EVRD}
-
-%description -n %{develnameqt4}
-Devel library for avahi-qt4.
-
-%files -n %{develnameqt4}
-%{_includedir}/%{name}-qt4
-%{_libdir}/lib%{name}-qt4.so
-%{_libdir}/pkgconfig/%{name}-qt4.pc
-%endif
-
-#----------------------------------------------------------------------------
-
 %if %{with gtk3}
 %package -n %{lib_ui_name}
 Summary:	Library for avahi-ui
@@ -595,7 +555,6 @@ Devel library for avahi-gtk3.
 cp %{SOURCE1} avahi-hostname.sh
 
 %build
-export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 %configure \
 	--localstatedir=%{_var} \
 	--disable-static \
@@ -605,9 +564,6 @@ export PKG_CONFIG_PATH=/usr/lib/qt4/%{_lib}/pkgconfig
 	--disable-mono \
 %endif
 	--disable-qt3 \
-%if !%{with qt4}
-	--disable-qt4 \
-%endif
 	--localstatedir=/run \
 	--with-avahi-priv-access-group="avahi" \
 	--enable-compat-libdns_sd \
