@@ -195,8 +195,6 @@ It includes avahi-discover-standalone.
 %{_bindir}/bvnc
 %{_datadir}/applications/bssh.desktop
 %{_datadir}/applications/bvnc.desktop
-%{_mandir}/man1/bssh.1*
-%{_mandir}/man1/bvnc.1*
 %{_datadir}/%{name}/interfaces/%{name}-discover.ui
 %if %{with python}
 %{_datadir}/applications/%{name}-discover.desktop
