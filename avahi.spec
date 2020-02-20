@@ -5,6 +5,8 @@
 %define glib_name %{name}-glib
 %define gobject_name %{name}-gobject
 %define howl_name %{name}-compat-howl
+%define libevent_name %{name}-libevent
+%define qt5_name %{name}-qt5
 %define ui_gtk3_name %{name}-ui-gtk3
 
 %define client_major 3
@@ -14,6 +16,8 @@
 %define glib_major 1
 %define gobject_major 0
 %define howl_major 0
+%define libevent_major 1
+%define qt5_major 1
 %define ui_major 0
 %define ui_gtk3_major 0
 
@@ -31,6 +35,10 @@
 %define develnamegobject %mklibname %{gobject_name} -d
 %define lib_howl_name %mklibname %{howl_name} %{howl_major}
 %define develnamehowl %mklibname %{howl_name} -d
+%define lib_libevent_name %mklibname %{libevent_name}_ %{libevent_major}
+%define develnamelibevent %mklibname %{libevent_name} -d
+%define lib_qt5_name %mklibname %{qt5_name}_ %{qt5_major}
+%define develnameqt5 %mklibname %{qt5_name} -d
 %define lib_ui_gtk3_name %mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
 %define develnameui_gtk3 %mklibname %{ui_gtk3_name} -d
 
@@ -481,6 +489,60 @@ Avahi devel compatibility library for libdns_sd for howl.
 
 #----------------------------------------------------------------------------
 
+%package -n %{lib_libevent_name}
+Summary:	Library for avahi-libevent
+Group:		System/Libraries
+
+%description -n %{lib_libevent_name}
+Library for avahi-libevent.
+
+%files -n %{lib_libevent_name}
+%{_libdir}/lib%{name}-libevent.so.%{libevent_major}*
+
+%package -n %{develnamelibevent}
+Summary:	Devel library for avahi-libevent
+Group:		Development/C
+Provides:	%{libevent_name}-devel = %{EVRD}
+Requires:	%{lib_libevent_name} = %{EVRD}
+Requires:	%{develnamecore} = %{EVRD}
+
+%description -n %{develnamelibevent}
+Devel library for avahi-libevent.
+
+%files -n %{develnamelibevent}
+%{_includedir}/%{name}-libevent
+%{_libdir}/lib%{name}-libevent.so
+%{_libdir}/pkgconfig/%{name}-libevent.pc
+
+#----------------------------------------------------------------------------
+
+%package -n %{lib_qt5_name}
+Summary:	Library for avahi-qt5
+Group:		System/Libraries
+
+%description -n %{lib_qt5_name}
+Library for avahi-qt5.
+
+%files -n %{lib_qt5_name}
+%{_libdir}/lib%{name}-qt5.so.%{qt5_major}*
+
+%package -n %{develnameqt5}
+Summary:	Devel library for avahi-qt5
+Group:		Development/C
+Provides:	%{qt5_name}-devel = %{EVRD}
+Requires:	%{lib_qt5_name} = %{EVRD}
+Requires:	%{develnamecore} = %{EVRD}
+
+%description -n %{develnameqt5}
+Devel library for avahi-qt5.
+
+%files -n %{develnameqt5}
+%{_includedir}/%{name}-qt5
+%{_libdir}/lib%{name}-qt5.so
+%{_libdir}/pkgconfig/%{name}-qt5.pc
+
+#----------------------------------------------------------------------------
+
 %if %{with gtk3}
 %package -n %{lib_ui_gtk3_name}
 Summary:	Library for avahi-gtk3
@@ -505,6 +567,7 @@ Provides:	%{ui_gtk3_name}-devel = %{EVRD}
 Devel library for avahi-gtk3.
 
 %files -n %{develnameui_gtk3}
+%{_includedir}/avahi-ui/avahi-ui.h
 %{_libdir}/libavahi-ui-gtk3.so
 %{_libdir}/pkgconfig/avahi-ui-gtk3.pc
 %endif
