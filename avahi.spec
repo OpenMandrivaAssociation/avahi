@@ -491,7 +491,6 @@ Library for avahi-gtk3.
 
 %files -n %{lib_ui_gtk3_name}
 %{_libdir}/lib%{name}-ui-gtk3.so.%{ui_gtk3_major}*
-%endif
 
 #----------------------------------------------------------------------------
 
