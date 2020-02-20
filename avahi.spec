@@ -64,6 +64,7 @@ Source2:	%{name}.sysusers
 Source100:	%{name}.rpmlintrc
 Patch0:		avahi-0.6.31-gtk-is-broken-beyond-repair-gtk-die-die-die.patch
 Patch1:		avahi-0.6.31.workaround.patch
+Patch2:		avahi-0.8-fix-avahi-libevent.pc.in.patch
 BuildRequires:	intltool
 BuildRequires:	doxygen
 BuildRequires:	xmltoman
