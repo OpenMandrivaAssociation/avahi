@@ -5,7 +5,6 @@
 %define glib_name %{name}-glib
 %define gobject_name %{name}-gobject
 %define howl_name %{name}-compat-howl
-%define ui_name %{name}-ui
 %define ui_gtk3_name %{name}-ui-gtk3
 
 %define client_major 3
@@ -32,8 +31,6 @@
 %define develnamegobject %mklibname %{gobject_name} -d
 %define lib_howl_name %mklibname %{howl_name} %{howl_major}
 %define develnamehowl %mklibname %{howl_name} -d
-%define lib_ui_name %mklibname %{ui_name} %{ui_major}
-%define develnameui %mklibname %{ui_name} -d
 %define lib_ui_gtk3_name %mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
 %define develnameui_gtk3 %mklibname %{ui_gtk3_name} -d
 
@@ -44,7 +41,6 @@
 %endif
 
 %bcond_without gtk3
-%bcond_with pygtk
 %bcond_with python
 
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
@@ -64,9 +60,6 @@ BuildRequires:	intltool
 BuildRequires:	doxygen
 BuildRequires:	xmltoman
 BuildRequires:	graphviz
-%if %{with pygtk}
-BuildRequires:	pygtk2.0
-%endif
 BuildRequires:	cap-devel
 BuildRequires:	expat-devel >= 2.0.1
 BuildRequires:	gdbm-devel
@@ -489,36 +482,6 @@ Avahi devel compatibility library for libdns_sd for howl.
 #----------------------------------------------------------------------------
 
 %if %{with gtk3}
-%package -n %{lib_ui_name}
-Summary:	Library for avahi-ui
-Group:		System/Libraries
-
-%description -n %{lib_ui_name}
-Library for avahi-ui.
-
-%files -n %{lib_ui_name}
-%{_libdir}/lib%{name}-ui.so.%{ui_major}*
-
-#----------------------------------------------------------------------------
-
-%package -n %{develnameui}
-Summary:	Devel library for avahi-ui
-Group:		Development/C
-Requires:	%{lib_ui_name} = %{EVRD}
-Requires:	%{develnamecommon} = %{EVRD}
-Provides:	%{ui_name}-devel = %{EVRD}
-Obsoletes:	%{_lib}avahi-ui1 < 0.6.31-6
-
-%description -n %{develnameui}
-Devel library for avahi-ui.
-
-%files -n %{develnameui}
-%{_includedir}/%{name}-ui
-%{_libdir}/lib%{name}-ui.so
-%{_libdir}/pkgconfig/%{name}-ui.pc
-
-#----------------------------------------------------------------------------
-
 %package -n %{lib_ui_gtk3_name}
 Summary:	Library for avahi-gtk3
 Group:		System/Libraries
@@ -532,7 +495,6 @@ Library for avahi-gtk3.
 
 #----------------------------------------------------------------------------
 
-%if %{with gtk3}
 %package -n %{develnameui_gtk3}
 Summary:	Devel library for avahi-gtk3
 Group:		Development/C
@@ -574,9 +536,6 @@ cp %{SOURCE1} avahi-hostname.sh
 	--disable-gtk3 \
 %endif
 	--disable-gtk \
-%if !%{with pygtk}
-	--disable-pygtk \
-%endif
 %if !%{with python}
 	--disable-python
 %endif
