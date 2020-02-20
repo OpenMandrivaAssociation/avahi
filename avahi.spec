@@ -62,6 +62,8 @@ Patch0:		avahi-0.6.31-gtk-is-broken-beyond-repair-gtk-die-die-die.patch
 Patch1:		avahi-0.6.31.workaround.patch
 BuildRequires:	intltool
 BuildRequires:	doxygen
+BuildRequires:	xmltoman
+BuildRequires:	graphviz
 %if %{with pygtk}
 BuildRequires:	pygtk2.0
 %endif
