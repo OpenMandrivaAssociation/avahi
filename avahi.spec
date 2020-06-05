@@ -119,6 +119,7 @@ BuildRequires:	devel(libsystemd)
 BuildRequires:	devel(libevent-2.1)
 BuildRequires:	devel(libgdbm)
 BuildRequires:	devel(libdaemon)
+BuildRequires:	devel(libglib-2.0)
 %endif
 
 Requires(pre,preun,post,postun): rpm-helper
