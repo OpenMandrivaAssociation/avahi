@@ -1,3 +1,8 @@
+# pulseaudio uses avahi, wine uses pulseaudio
+%ifarch %{x86_64}
+%bcond_without compat32
+%endif
+
 %define client_name %{name}-client
 %define common_name %{name}-common
 %define core_name %{name}-core
@@ -42,6 +47,23 @@
 %define lib_ui_gtk3_name %mklibname %{ui_gtk3_name}_ %{ui_gtk3_major}
 %define develnameui_gtk3 %mklibname %{ui_gtk3_name} -d
 
+%define lib32_client_name %mklib32name %{client_name} %{client_major}
+%define devel32nameclient %mklib32name %{client_name} -d
+%define lib32_common_name %mklib32name %{common_name} %{common_major}
+%define devel32namecommon %mklib32name %{common_name} -d
+%define lib32_core_name %mklib32name %{core_name} %{core_major}
+%define devel32namecore %mklib32name %{core_name} -d
+%define lib32_dns_sd_name %mklib32name %{dns_sd_name} %{dns_sd_major}
+%define devel32namedns_sd %mklib32name %{dns_sd_name} -d
+%define lib32_glib_name %mklib32name %{glib_name} %{glib_major}
+%define devel32nameglib %mklib32name %{glib_name} -d
+%define lib32_gobject_name %mklib32name %{gobject_name} %{gobject_major}
+%define devel32namegobject %mklib32name %{gobject_name} -d
+%define lib32_howl_name %mklib32name %{howl_name} %{howl_major}
+%define devel32namehowl %mklib32name %{howl_name} -d
+%define lib32_libevent_name %mklib32name %{libevent_name}_ %{libevent_major}
+%define devel32namelibevent %mklib32name %{libevent_name} -d
+
 %ifnarch %{arm} %{mips} aarch64 %{ix86} riscv64
 %bcond_with mono
 %else
@@ -54,7 +76,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.8
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -89,6 +111,15 @@ BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	systemd-macros
 # useradd etc.
 BuildRequires:	rpm-helper
+%if %{with compat32}
+BuildRequires:	devel(libintl)
+BuildRequires:	devel(libexpat)
+BuildRequires:	devel(libdbus-1)
+BuildRequires:	devel(libsystemd)
+BuildRequires:	devel(libevent-2.1)
+BuildRequires:	devel(libgdbm)
+BuildRequires:	devel(libdaemon)
+%endif
 
 Requires(pre,preun,post,postun): rpm-helper
 Requires(post,preun): dbus
@@ -575,11 +606,259 @@ Devel library for avahi-gtk3.
 
 #----------------------------------------------------------------------------
 
+%if %{with compat32}
+%package -n %{lib32_client_name}
+Summary:	Library for avahi-client (32-bit)
+Group:		System/Libraries
+
+%description -n %{lib32_client_name}
+Library for avahi-client.
+
+%files -n %{lib32_client_name}
+%{_prefix}/lib/lib%{name}-client.so.%{client_major}*
+
+#----------------------------------------------------------------------------
+
+%package -n %{devel32nameclient}
+Summary:	Devel library for avahi-client (32-bit)
+Group:		Development/C
+Requires:	%{lib32_client_name} = %{EVRD}
+Requires:	%{devel32namecommon} = %{EVRD}
+Requires:	%{develnameclient} = %{EVRD}
+
+%description -n %{devel32nameclient}
+Devel library for avahi-client.
+
+%files -n %{devel32nameclient}
+%{_prefix}/lib/lib%{name}-client.so
+%{_prefix}/lib/pkgconfig/%{name}-client.pc
+
+#----------------------------------------------------------------------------
+
+%package -n %{lib32_common_name}
+Summary:	Library for avahi-common (32-bit)
+Group:		System/Libraries
+
+%description -n %{lib32_common_name}
+Library for avahi-common.
+
+%files -n %{lib32_common_name}
+%{_prefix}/lib/lib%{name}-common.so.%{common_major}*
+
+#----------------------------------------------------------------------------
+
+%package -n %{devel32namecommon}
+Summary:	Devel library for avahi-common (32-bit)
+Group:		Development/C
+Requires:	%{develnamecommon} = %{EVRD}
+Requires:	%{lib32_common_name} = %{EVRD}
+
+%description -n %{devel32namecommon}
+Devel library for avahi-common.
+
+%files -n %{devel32namecommon}
+%{_prefix}/lib/lib%{name}-common.so
+
+#----------------------------------------------------------------------------
+
+%package -n %{lib32_core_name}
+Summary:	Library for avahi-core (32-bit)
+Group:		System/Libraries
+
+%description -n %{lib32_core_name}
+Library for avahi-core.
+
+%files -n %{lib32_core_name}
+%{_prefix}/lib/lib%{name}-core.so.%{core_major}*
+
+#----------------------------------------------------------------------------
+
+%package -n %{devel32namecore}
+Summary:	Devel library for avahi-core (32-bit)
+Group:		Development/C
+Requires:	%{develnamecore} = %{EVRD}
+Requires:	%{lib32_core_name} = %{EVRD}
+Requires:	%{devel32namecommon} = %{EVRD}
+
+%description -n %{devel32namecore}
+Devel library for avahi-core.
+
+%files -n %{devel32namecore}
+%{_prefix}/lib/lib%{name}-core.so
+%{_prefix}/lib/pkgconfig/%{name}-core.pc
+
+#----------------------------------------------------------------------------
+
+%package -n %{lib32_dns_sd_name}
+Summary:	Avahi compatibility library for libdns_sd (32-bit)
+Group:		System/Libraries
+
+%description -n %{lib32_dns_sd_name}
+Avahi compatibility library for libdns_sd.
+
+%files -n %{lib32_dns_sd_name}
+%{_prefix}/lib/libdns_sd.so.%{dns_sd_major}*
+
+#----------------------------------------------------------------------------
+
+%package -n %{devel32namedns_sd}
+Summary:	Avahi devel compatibility library for libdns_sd (32-bit)
+Group:		Development/C
+Requires:	%{lib32_dns_sd_name} = %{EVRD}
+Requires:	%{devel32nameclient} = %{EVRD}
+Requires:	%{develnamedns_sd} = %{EVRD}
+
+%description -n %{devel32namedns_sd}
+Avahi devel compatibility library for libdns_sd.
+
+%files -n %{devel32namedns_sd}
+%{_prefix}/lib/libdns_sd.so
+%{_prefix}/lib/pkgconfig/%{name}-compat-libdns_sd.pc
+%{_prefix}/lib/pkgconfig/libdns_sd.pc
+
+#----------------------------------------------------------------------------
+
+%package -n %{lib32_glib_name}
+Summary:	Library for avahi-glib (32-bit)
+Group:		System/Libraries
+
+%description -n %{lib32_glib_name}
+Library for avahi-glib.
+
+%files -n %{lib32_glib_name}
+%{_prefix}/lib/lib%{name}-glib.so.%{glib_major}*
+
+#----------------------------------------------------------------------------
+
+%package -n %{devel32nameglib}
+Summary:	Devel library for avahi-glib (32-bit)
+Group:		Development/C
+Requires:	%{develnameglib} = %{EVRD}
+Requires:	%{lib32_glib_name} = %{EVRD}
+Requires:	%{devel32namecommon} = %{EVRD}
+
+%description -n %{devel32nameglib}
+Devel library for avahi-glib.
+
+%files -n %{devel32nameglib}
+%{_prefix}/lib/lib%{name}-glib.so
+%{_prefix}/lib/pkgconfig/%{name}-glib.pc
+
+#----------------------------------------------------------------------------
+
+%package -n %{lib32_gobject_name}
+Summary:	Library for avahi-gobject (32-bit)
+Group:		System/Libraries
+
+%description -n %{lib32_gobject_name}
+Library for avahi-gobject.
+
+%files -n %{lib32_gobject_name}
+%{_prefix}/lib/lib%{name}-gobject.so.%{gobject_major}*
+
+#----------------------------------------------------------------------------
+
+%package -n %{devel32namegobject}
+Summary:	Devel library for avahi-gobject (32-bit)
+Group:		Development/C
+Requires:	%{develnamegobject} = %{EVRD}
+Requires:	%{lib32_gobject_name} = %{EVRD}
+Requires:	%{devel32nameglib} = %{EVRD}
+
+%description -n %{devel32namegobject}
+Devel library for avahi-gobject.
+
+%files -n %{devel32namegobject}
+%{_prefix}/lib/lib%{name}-gobject.so
+%{_prefix}/lib/pkgconfig/%{name}-gobject.pc
+
+#----------------------------------------------------------------------------
+
+%package -n %{lib32_howl_name}
+Summary:	Avahi compatibility library for howl (32-bit)
+Group:		System/Libraries
+
+%description -n %{lib32_howl_name}
+Avahi compatibility library for howl.
+
+%files -n %{lib32_howl_name}
+%{_prefix}/lib/libhowl.so.%{howl_major}*
+
+#----------------------------------------------------------------------------
+
+%package -n %{devel32namehowl}
+Summary:	Avahi devel compatibility library for libdns_sd for howl (32-bit)
+Group:		Development/C
+Requires:	%{develnamehowl} = %{EVRD}
+Requires:	%{lib32_howl_name} = %{EVRD}
+Requires:	%{devel32namecore} = %{EVRD}
+
+%description -n %{devel32namehowl}
+Avahi devel compatibility library for libdns_sd for howl.
+
+%files -n %{devel32namehowl}
+%{_prefix}/lib/libhowl.so
+%{_prefix}/lib/pkgconfig/%{name}-compat-howl.pc
+%{_prefix}/lib/pkgconfig/howl.pc
+
+#----------------------------------------------------------------------------
+
+%package -n %{lib32_libevent_name}
+Summary:	Library for avahi-libevent (32-bit)
+Group:		System/Libraries
+
+%description -n %{lib32_libevent_name}
+Library for avahi-libevent.
+
+%files -n %{lib32_libevent_name}
+%{_prefix}/lib/lib%{name}-libevent.so.%{libevent_major}*
+
+%package -n %{devel32namelibevent}
+Summary:	Devel library for avahi-libevent (32-bit)
+Group:		Development/C
+Requires:	%{develnamelibevent} = %{EVRD}
+Requires:	%{lib32_libevent_name} = %{EVRD}
+Requires:	%{devel32namecore} = %{EVRD}
+
+%description -n %{devel32namelibevent}
+Devel library for avahi-libevent.
+
+%files -n %{devel32namelibevent}
+%{_prefix}/lib/lib%{name}-libevent.so
+%{_prefix}/lib/pkgconfig/%{name}-libevent.pc
+%endif
+
 %prep
 %autosetup -p1
 cp %{SOURCE1} avahi-hostname.sh
 
-%build
+export CONFIGURE_TOP="$(pwd)"
+
+%if %{with compat32}
+mkdir build32
+cd build32
+%configure32 \
+	--localstatedir=%{_var} \
+	--disable-static \
+	--with-xml=expat \
+	--with-distro=mandriva \
+	--disable-mono \
+	--disable-qt3 \
+	--disable-qt5 \
+	--localstatedir=/run \
+	--with-avahi-priv-access-group="avahi" \
+	--enable-compat-libdns_sd \
+	--enable-compat-howl \
+	--enable-introspection=no \
+	--with-systemdsystemunitdir=%{_unitdir} \
+	--disable-gtk3 \
+	--disable-gtk \
+	--disable-python
+cd ..
+%endif
+
+mkdir build
+cd build
 %configure \
 	--localstatedir=%{_var} \
 	--disable-static \
@@ -603,10 +882,20 @@ cp %{SOURCE1} avahi-hostname.sh
 	--disable-python
 %endif
 
-%make_build
+
+%build
+%if %{with compat32}
+%make_build -C build32
+%endif
+%make_build -C build
 
 %install
-%make_install
+%if %{with compat32}
+%make_install -C build32
+ln -s avahi-compat-howl.pc %{buildroot}%{_prefix}/lib/pkgconfig/howl.pc
+ln -s avahi-compat-libdns_sd.pc %{buildroot}%{_prefix}/lib/pkgconfig/libdns_sd.pc
+%endif
+%make_install -C build
 
 mkdir -p %{buildroot}%{_localstatedir}/avahi
 mkdir -p %{buildroot}%{_localstatedir}/run/avahi-daemon
