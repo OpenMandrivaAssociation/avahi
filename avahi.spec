@@ -121,6 +121,7 @@ BuildRequires:	devel(libgdbm)
 BuildRequires:	devel(libdaemon)
 BuildRequires:	devel(libglib-2.0)
 BuildRequires:	devel(libffi)
+BuildRequires:	devel(libcap)
 %endif
 
 Requires(pre,preun,post,postun): rpm-helper
