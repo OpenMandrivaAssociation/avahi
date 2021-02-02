@@ -76,7 +76,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.8
-Release:	4
+Release:	5
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -190,9 +190,16 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %_pre_useradd %{name} %{_var}/%{name} /bin/false
 %_pre_useradd %{name}-autoipd %{_var}/%{name} /bin/false
 
+%post
+%systemd_post avahi-daemon.socket
+
+%preun
+%systemd_preun avahi-daemon.socket
+
 %postun
 %_postun_userdel %{name}
 %_postun_userdel %{name}-autoipd
+%systemd_postun_with_restart avahi-daemon.socket
 
 #----------------------------------------------------------------------------
 
@@ -206,6 +213,15 @@ Conflicts:	avahi < 0.6.31-8
 avahi-dnsconfd is a small daemon which may be used to configure
 conventional DNS servers using mDNS in a DHCP-like fashion.
 Especially useful on IPv6.
+
+%post dnsconfd
+%systemd_post avahi-dnsconfd.service
+
+%preun dnsconfd
+%systemd_preun avahi-dnsconfd.service
+
+%postun dnsconfd
+%systemd_postun_with_restart avahi-dnsconfd.service
 
 %files dnsconfd
 %{_sysconfdir}/%{name}/%{name}-dnsconfd.action
