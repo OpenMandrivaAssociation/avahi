@@ -112,8 +112,6 @@ BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(libsystemd)
 # For _presetdir and friends
 BuildRequires:	systemd-macros
-# useradd etc.
-BuildRequires:	rpm-helper
 %if %{with compat32}
 BuildRequires:	devel(libintl)
 BuildRequires:	devel(libexpat)
@@ -126,8 +124,7 @@ BuildRequires:	devel(libglib-2.0)
 BuildRequires:	devel(libffi)
 BuildRequires:	devel(libcap)
 %endif
-
-Requires(pre,preun,post,postun): rpm-helper
+%systemd_requires
 Requires(post,preun): dbus
 Requires:	nss_mdns
 
@@ -186,10 +183,6 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %{_sysusersdir}/%{name}.conf
 %{_datadir}/dbus-1/system-services/org.freedesktop.Avahi.service
 
-%pre
-%_pre_useradd %{name} %{_var}/%{name} /bin/false
-%_pre_useradd %{name}-autoipd %{_var}/%{name} /bin/false
-
 %post
 %systemd_post avahi-daemon.socket
 
@@ -197,8 +190,6 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %systemd_preun avahi-daemon.socket
 
 %postun
-%_postun_userdel %{name}
-%_postun_userdel %{name}-autoipd
 %systemd_postun_with_restart avahi-daemon.socket
 
 #----------------------------------------------------------------------------
