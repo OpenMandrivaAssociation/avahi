@@ -76,7 +76,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.8
-Release:	6
+Release:	7
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -137,8 +137,8 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 'Bonjour' and sometimes 'ZeroConf') and is very convenient.
 
 %files -f avahi.lang
-%dir %{_sysconfdir}/%{name}/
-%dir %{_sysconfdir}/%{name}/services/
+%dir %{_sysconfdir}/%{name}
+%dir %{_sysconfdir}/%{name}/services
 %config(noreplace) %{_sysconfdir}/%{name}/hosts
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}-daemon.conf
 %config(noreplace) %{_sysconfdir}/%{name}/avahi-autoipd.action
@@ -324,7 +324,8 @@ Monodoc format.
 %{_bindir}/monodoc --make-index > /dev/null
 
 %postun sharp-doc
-if [ "$1" = "0" -a -x %{_bindir}/monodoc ]; then %{_bindir}/monodoc --make-index > /dev/null
+if [ "$1" = "0" ] && [ -x %{_bindir}/monodoc ]; then
+    %{_bindir}/monodoc --make-index > /dev/null
 fi
 
 %endif
