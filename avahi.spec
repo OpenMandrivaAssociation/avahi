@@ -76,7 +76,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.8
-Release:	7
+Release:	8
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -126,6 +126,9 @@ BuildRequires:	devel(libcap)
 %endif
 %systemd_requires
 Requires(post,preun): dbus
+Requires(pre):	glibc
+Requires(pre):	shadow
+Requires(pre):	passwd
 Requires:	nss_mdns
 
 %description
@@ -143,8 +146,7 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}-daemon.conf
 %config(noreplace) %{_sysconfdir}/%{name}/avahi-autoipd.action
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/%{name}-dbus.conf
-%attr(0755,avahi,avahi) %dir %{_localstatedir}/avahi
-%attr(0755,avahi,avahi) %dir %{_localstatedir}/run/avahi-daemon
+%attr(0755,avahi,avahi) %dir %{_localstatedir}/lib/avahi
 %{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 %{_bindir}/%{name}-browse
 %{_bindir}/%{name}-browse-domains
@@ -182,6 +184,15 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %{_unitdir}/avahi-daemon.socket
 %{_sysusersdir}/%{name}.conf
 %{_datadir}/dbus-1/system-services/org.freedesktop.Avahi.service
+
+%pre
+getent group %{name} >/dev/null || groupadd -r %{name}
+getent passwd %{name} >/dev/null || useradd -r -g %{name} -d %{_localstatedir}/lib/avahi -s /bin/false -c "Avahi mDNS/DNS-SD daemon" %{name}
+
+getent group %{name}-autoipd >/dev/null || groupadd -r %{name}-autoipd
+getent passwd %{name}-autoipd >/dev/null || useradd -r -g %{name}-autoipd -d %{_localstatedir}/lib/avahi -s /bin/false -c "Avahi IPv4LL daemon" %{name}-autoipd
+
+exit 0
 
 %post
 %systemd_post avahi-daemon.socket
@@ -859,7 +870,6 @@ cd build32
 	--disable-mono \
 	--disable-qt3 \
 	--disable-qt5 \
-	--localstatedir=/run \
 	--with-avahi-priv-access-group="avahi" \
 	--enable-compat-libdns_sd \
 	--enable-compat-howl \
@@ -882,7 +892,6 @@ cd build
 	--disable-mono \
 %endif
 	--disable-qt3 \
-	--localstatedir=/run \
 	--with-avahi-priv-access-group="avahi" \
 	--enable-compat-libdns_sd \
 	--enable-compat-howl \
@@ -911,8 +920,7 @@ ln -s avahi-compat-libdns_sd.pc %{buildroot}%{_prefix}/lib/pkgconfig/libdns_sd.p
 %endif
 %make_install -C build
 
-mkdir -p %{buildroot}%{_localstatedir}/avahi
-mkdir -p %{buildroot}%{_localstatedir}/run/avahi-daemon
+mkdir -p %{buildroot}%{_localstatedir}/lib/avahi
 
 ln -s avahi-compat-howl.pc %{buildroot}%{_libdir}/pkgconfig/howl.pc
 ln -s avahi-compat-libdns_sd.pc %{buildroot}%{_libdir}/pkgconfig/libdns_sd.pc

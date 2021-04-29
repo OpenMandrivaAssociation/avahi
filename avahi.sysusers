@@ -1,2 +1,2 @@
 u avahi - "Avahi mDNS/DNS-SD daemon" /var/lib/avahi /bin/false
-u avahi-autoipd - "Avahi mDNS/DNS-SD daemon" /var/lib/avahi /bin/false
+u avahi-autoipd - "Avahi IPv4LL daemon" /var/lib/avahi /bin/false
