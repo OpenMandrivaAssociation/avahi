@@ -76,7 +76,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.8
-Release:	9
+Release:	10
 License:	LGPLv2+
 Group:		System/Servers
 Url:		http://avahi.org/
@@ -90,12 +90,13 @@ Patch2:		avahi-0.8-fix-avahi-libevent.pc.in.patch
 Patch3:		0006-avahi-dnsconfd.service-Drop-Also-avahi-daemon.socket.patch
 Patch4:		0010-fix-bytestring-decoding-for-proper-display.patch
 Patch5:		0011-avahi_dns_packet_consume_uint32-fix-potential-undefi.patch
+Patch6:		https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c.patch
 BuildRequires:	intltool
 BuildRequires:	doxygen
 BuildRequires:	xmltoman
 BuildRequires:	graphviz
-BuildRequires:	cap-devel
-BuildRequires:	expat-devel >= 2.0.1
+BuildRequires:	pkgconfig(libcap)
+BuildRequires:	pkgconfig(expat)
 BuildRequires:	gdbm-devel
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(glib-2.0)
@@ -111,7 +112,7 @@ BuildRequires:	pkgconfig(gtk+-3.0)
 %endif
 BuildRequires:	pkgconfig(libsystemd)
 # For _presetdir and friends
-BuildRequires:	systemd-macros
+BuildRequires:	systemd-rpm-macros
 %if %{with compat32}
 BuildRequires:	devel(libintl)
 BuildRequires:	devel(libexpat)
@@ -161,20 +162,20 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %{_sbindir}/avahi-autoipd
 %{_datadir}/%{name}/%{name}-service.dtd
 %{_datadir}/dbus-1/interfaces/*.xml
-%{_mandir}/man1/%{name}-browse-domains.1*
-%{_mandir}/man1/%{name}-browse.1*
-%{_mandir}/man1/%{name}-publish.1*
-%{_mandir}/man1/%{name}-publish-address.1*
-%{_mandir}/man1/%{name}-publish-service.1*
-%{_mandir}/man1/%{name}-resolve.1*
-%{_mandir}/man1/%{name}-resolve-address.1*
-%{_mandir}/man1/%{name}-resolve-host-name.1*
-%{_mandir}/man1/%{name}-set-host-name.1*
-%{_mandir}/man5/%{name}-daemon.conf.5*
-%{_mandir}/man5/%{name}.hosts.5*
-%{_mandir}/man5/%{name}.service.5*
-%{_mandir}/man8/%{name}-daemon.8*
-%{_mandir}/man8/avahi-autoipd*
+%doc %{_mandir}/man1/%{name}-browse-domains.1*
+%doc %{_mandir}/man1/%{name}-browse.1*
+%doc %{_mandir}/man1/%{name}-publish.1*
+%doc %{_mandir}/man1/%{name}-publish-address.1*
+%doc %{_mandir}/man1/%{name}-publish-service.1*
+%doc %{_mandir}/man1/%{name}-resolve.1*
+%doc %{_mandir}/man1/%{name}-resolve-address.1*
+%doc %{_mandir}/man1/%{name}-resolve-host-name.1*
+%doc %{_mandir}/man1/%{name}-set-host-name.1*
+%doc %{_mandir}/man5/%{name}-daemon.conf.5*
+%doc %{_mandir}/man5/%{name}.hosts.5*
+%doc %{_mandir}/man5/%{name}.service.5*
+%doc %{_mandir}/man8/%{name}-daemon.8*
+%doc %{_mandir}/man8/avahi-autoipd*
 %dir %{_libdir}/avahi
 %if %{with python}
 %{_libdir}/avahi/service-types.db
@@ -230,8 +231,8 @@ Especially useful on IPv6.
 %{_presetdir}/86-avahi-dnsconfd.preset
 %{_unitdir}/avahi-dnsconfd.service
 %{_sbindir}/%{name}-dnsconfd
-%{_mandir}/man8/%{name}-dnsconfd.8*
-%{_mandir}/man8/%{name}-dnsconfd.action.8*
+%doc %{_mandir}/man8/%{name}-dnsconfd.8*
+%doc %{_mandir}/man8/%{name}-dnsconfd.action.8*
 
 #----------------------------------------------------------------------------
 
@@ -280,8 +281,8 @@ It includes avahi-bookmarks and avahi-discover.
 %{_bindir}/%{name}-discover
 %{py_puresitedir}/%{name}/*.py*
 %{py_puresitedir}/avahi_discover/
-%{_mandir}/man1/%{name}-discover.1*
-%{_mandir}/man1/%{name}-bookmarks.1*
+%doc %{_mandir}/man1/%{name}-discover.1*
+%doc %{_mandir}/man1/%{name}-bookmarks.1*
 %endif
 
 #----------------------------------------------------------------------------
