@@ -114,7 +114,7 @@ BuildRequires:	pkgconfig(libsystemd)
 # For _presetdir and friends
 BuildRequires:	systemd-rpm-macros
 %if %{with compat32}
-BuildRequires:	devel(libintl)
+#BuildRequires:	devel(libintl)
 BuildRequires:	devel(libexpat)
 BuildRequires:	devel(libdbus-1)
 BuildRequires:	devel(libsystemd)
