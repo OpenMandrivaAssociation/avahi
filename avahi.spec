@@ -76,11 +76,11 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.8
-Release:	17
+Release:	18
 License:	LGPLv2+
 Group:		System/Servers
-Url:		http://avahi.org/
-Source0:	http://avahi.org/download/%{name}-%{version}.tar.gz
+Url:		https://avahi.org/
+Source0:	https://avahi.org/download/%{name}-%{version}.tar.gz
 Source1:	avahi-hostname.sh
 Source2:	%{name}.sysusers
 Source100:	%{name}.rpmlintrc
