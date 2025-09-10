@@ -860,7 +860,7 @@ Devel library for avahi-libevent.
 cp %{SOURCE1} avahi-hostname.sh
 
 export CONFIGURE_TOP="$(pwd)"
-
+autoreconf
 %if %{with compat32}
 mkdir build32
 cd build32
