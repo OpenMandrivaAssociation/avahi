@@ -75,12 +75,13 @@
 
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
-Version:	0.8
-Release:	20
+Version:	0.9.rc2
+Release:	1
 License:	LGPLv2+
 Group:		System/Servers
 Url:		https://avahi.org/
-Source0:	https://avahi.org/download/%{name}-%{version}.tar.gz
+#Source0:	https://avahi.org/download/%{name}-%{version}.tar.gz
+Source0:	https://github.com/avahi/avahi/archive//v0.9-rc2/avahi-0.9-rc2.tar.gz
 Source1:	avahi-hostname.sh
 Source2:	%{name}.sysusers
 Source100:	%{name}.rpmlintrc
@@ -855,7 +856,7 @@ Devel library for avahi-libevent.
 %endif
 
 %prep
-%autosetup -p1
+%autosetup -n avahi-0.9-rc2 -p1
 cp %{SOURCE1} avahi-hostname.sh
 
 export CONFIGURE_TOP="$(pwd)"
