@@ -87,11 +87,11 @@ Source2:	%{name}.sysusers
 Source100:	%{name}.rpmlintrc
 Patch0:		avahi-0.6.31-gtk-is-broken-beyond-repair-gtk-die-die-die.patch
 Patch1:		avahi-0.6.31.workaround.patch
-Patch2:		avahi-0.8-fix-avahi-libevent.pc.in.patch
+#Patch2:		avahi-0.8-fix-avahi-libevent.pc.in.patch
 Patch3:		0006-avahi-dnsconfd.service-Drop-Also-avahi-daemon.socket.patch
 Patch4:		0010-fix-bytestring-decoding-for-proper-display.patch
 Patch5:		0011-avahi_dns_packet_consume_uint32-fix-potential-undefi.patch
-Patch6:		https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c.patch
+#Patch6:		https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c.patch
 BuildRequires:	intltool
 BuildRequires:	doxygen
 BuildRequires:	xmltoman
