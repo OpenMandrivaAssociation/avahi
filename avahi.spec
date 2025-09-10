@@ -75,22 +75,23 @@
 
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
-Version:	0.8
-Release:	20
+Version:	0.9.rc2
+Release:	1
 License:	LGPLv2+
 Group:		System/Servers
 Url:		https://avahi.org/
-Source0:	https://avahi.org/download/%{name}-%{version}.tar.gz
+#Source0:	https://avahi.org/download/%{name}-%{version}.tar.gz
+Source0:	https://github.com/avahi/avahi/archive//v0.9-rc2/avahi-0.9-rc2.tar.gz
 Source1:	avahi-hostname.sh
 Source2:	%{name}.sysusers
 Source100:	%{name}.rpmlintrc
 Patch0:		avahi-0.6.31-gtk-is-broken-beyond-repair-gtk-die-die-die.patch
 Patch1:		avahi-0.6.31.workaround.patch
-Patch2:		avahi-0.8-fix-avahi-libevent.pc.in.patch
-Patch3:		0006-avahi-dnsconfd.service-Drop-Also-avahi-daemon.socket.patch
-Patch4:		0010-fix-bytestring-decoding-for-proper-display.patch
-Patch5:		0011-avahi_dns_packet_consume_uint32-fix-potential-undefi.patch
-Patch6:		https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c.patch
+#Patch2:		avahi-0.8-fix-avahi-libevent.pc.in.patch
+#Patch3:		0006-avahi-dnsconfd.service-Drop-Also-avahi-daemon.socket.patch
+#Patch4:		0010-fix-bytestring-decoding-for-proper-display.patch
+#Patch5:		0011-avahi_dns_packet_consume_uint32-fix-potential-undefi.patch
+#Patch6:		https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c.patch
 BuildRequires:	intltool
 BuildRequires:	doxygen
 BuildRequires:	xmltoman
@@ -146,7 +147,7 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %config(noreplace) %{_sysconfdir}/%{name}/hosts
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}-daemon.conf
 %config(noreplace) %{_sysconfdir}/%{name}/avahi-autoipd.action
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/%{name}-dbus.conf
+%config(noreplace) %{_datadir}/dbus-1/system.d/avahi-dbus.conf
 %attr(0755,avahi,avahi) %dir %{_localstatedir}/lib/avahi
 %{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 %{_bindir}/%{name}-browse
@@ -171,6 +172,9 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %doc %{_mandir}/man1/%{name}-resolve-address.1*
 %doc %{_mandir}/man1/%{name}-resolve-host-name.1*
 %doc %{_mandir}/man1/%{name}-set-host-name.1*
+%doc %{_mandir}/man1/bshell.1.*
+%doc %{_mandir}/man1/bssh.1.*
+%doc %{_mandir}/man1/bvnc.1.*
 %doc %{_mandir}/man5/%{name}-daemon.conf.5*
 %doc %{_mandir}/man5/%{name}.hosts.5*
 %doc %{_mandir}/man5/%{name}.service.5*
@@ -855,11 +859,11 @@ Devel library for avahi-libevent.
 %endif
 
 %prep
-%autosetup -p1
+%autosetup -n avahi-0.9-rc2 -p1
 cp %{SOURCE1} avahi-hostname.sh
 
 export CONFIGURE_TOP="$(pwd)"
-
+autoreconf
 %if %{with compat32}
 mkdir build32
 cd build32
