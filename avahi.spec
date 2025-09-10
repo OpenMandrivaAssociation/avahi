@@ -147,7 +147,7 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %config(noreplace) %{_sysconfdir}/%{name}/hosts
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}-daemon.conf
 %config(noreplace) %{_sysconfdir}/%{name}/avahi-autoipd.action
-#config(noreplace) #{_sysconfdir}/dbus-1/system.d/%{name}-dbus.conf
+%config(noreplace) %{_datadir}/dbus-1/system.d/avahi-dbus.conf
 %attr(0755,avahi,avahi) %dir %{_localstatedir}/lib/avahi
 %{_sysconfdir}/sysconfig/network-scripts/hostname.d/avahi
 %{_bindir}/%{name}-browse
@@ -172,6 +172,9 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %doc %{_mandir}/man1/%{name}-resolve-address.1*
 %doc %{_mandir}/man1/%{name}-resolve-host-name.1*
 %doc %{_mandir}/man1/%{name}-set-host-name.1*
+%doc %{_mandir}/man1/bshell.1.*
+%doc %{_mandir}/man1/bssh.1.*
+%doc %{_mandir}/man1/bvnc.1.*
 %doc %{_mandir}/man5/%{name}-daemon.conf.5*
 %doc %{_mandir}/man5/%{name}.hosts.5*
 %doc %{_mandir}/man5/%{name}.service.5*
