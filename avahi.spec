@@ -92,6 +92,11 @@ Patch1:		avahi-0.6.31.workaround.patch
 #Patch4:		0010-fix-bytestring-decoding-for-proper-display.patch
 #Patch5:		0011-avahi_dns_packet_consume_uint32-fix-potential-undefi.patch
 #Patch6:		https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	intltool
 BuildRequires:	doxygen
 BuildRequires:	xmltoman
