@@ -185,7 +185,7 @@ of technology is already found in MacOS X (branded 'Rendezvous',
 %doc %{_mandir}/man5/%{name}.service.5*
 %doc %{_mandir}/man8/%{name}-daemon.8*
 %doc %{_mandir}/man8/avahi-autoipd*
-%dir %{_libdir}/avahi
+#dir %{_libdir}/avahi
 %if %{with python}
 %{_libdir}/avahi/service-types.db
 %endif
