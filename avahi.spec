@@ -130,6 +130,11 @@ BuildRequires:	devel(libdaemon)
 BuildRequires:	devel(libglib-2.0)
 BuildRequires:	devel(libffi)
 BuildRequires:	devel(libcap)
+BuildRequires:	cross-i686-openmandriva-linux-gnu-binutils
+BuildRequires:	cross-i686-openmandriva-linux-gnu-libc
+BuildRequires:	cross-i686-openmandriva-linux-gnu-gcc
+BuildRequires:	cross-i686-openmandriva-linux-gnu-kernel-headers
+BuildRequires:	cross-i686-openmandriva-linux-gnu-clang
 %endif
 %systemd_requires
 Requires(post,preun): dbus
