@@ -76,7 +76,7 @@
 Summary:	Avahi service discovery (mDNS/DNS-SD) suite
 Name:		avahi
 Version:	0.9.rc3
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		System/Servers
 Url:		https://avahi.org/
